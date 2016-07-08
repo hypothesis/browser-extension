@@ -1,3 +1,5 @@
+'use strict';
+
 function getLastError() {
   if (typeof chrome !== 'undefined' && chrome.extension) {
     return chrome.extension.lastError;

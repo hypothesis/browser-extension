@@ -19,15 +19,11 @@ module.exports = function(config) {
 
     // list of files / patterns to load in the browser
     files: [
-      // Polyfills for PhantomJS
-      '../../static/scripts/karma-phantomjs-polyfill.js',
-
       {
         pattern: 'test/settings.json',
         included: false,
       },
-
-      './lib/polyfills.js',
+      './lib/karma-phantomjs-polyfill.js',
       './test/bootstrap.js',
       './test/*.js',
     ],
@@ -39,7 +35,6 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '../../static/scripts/karma-phantomjs-polyfill.js': ['browserify'],
       './lib/*.js': ['browserify'],
       './test/*.js': ['browserify'],
     },

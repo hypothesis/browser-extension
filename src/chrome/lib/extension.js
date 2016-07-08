@@ -1,4 +1,7 @@
-var raven = require('../../../static/scripts/raven');
+'use strict';
+
+var raven = require('./raven');
+
 if (window.EXTENSION_CONFIG.raven) {
   raven.init(window.EXTENSION_CONFIG.raven);
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-var toResult = require('../../../static/scripts/test/promise-util').toResult;
+var toResult = require('./promise-util').toResult;
 
 // The root URL for the extension returned by the
 // extensionURL(path) fake

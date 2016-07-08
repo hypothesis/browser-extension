@@ -2,7 +2,7 @@
 
 var proxyquire = require('proxyquire');
 
-var toResult = require('../../../static/scripts/test/promise-util').toResult;
+var toResult = require('./promise-util').toResult;
 
 var errors = require('../lib/errors');
 var TabState = require('../lib/tab-state');
