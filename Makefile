@@ -27,7 +27,7 @@ build/chrome: build/chrome/manifest.json
 build/chrome: build/chrome/public
 build/chrome: build/chrome/public/app.html
 build/chrome: build/chrome/public/embed.js
-build/chrome: build/chrome/settings-data.json
+build/chrome: build/chrome/settings-data.js
 build/chrome: $(addprefix build/chrome/,$(CHROME_SRC))
 build/chrome/extension.bundle.js: src/common/extension.js
 	$(BROWSERIFY) -d $< | $(EXORCIST) $(addsuffix .map,$@) >$@
@@ -47,8 +47,8 @@ build/chrome/public/app.html: src/client/app.html.mustache build/chrome/public $
 	tools/template-context-app | $(MUSTACHE) - $< >$@
 build/chrome/public/embed.js: src/client/embed.js.mustache build/chrome/public $(SETTINGS_FILE)
 	tools/template-context-embed | $(MUSTACHE) - $< >$@
-build/chrome/settings-data.json: $(SETTINGS_FILE)
-	cp $< $@
+build/chrome/settings-data.js: src/chrome/settings-data.js.mustache build/chrome/public $(SETTINGS_FILE)
+	tools/template-context-settings | $(MUSTACHE) - $< >$@
 build/chrome/%: src/chrome/%
 	cp -R $</ $@
 

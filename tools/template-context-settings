@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+/**
+ * Outputs a JSON object representing the appropriate template context for the
+ * `settings-data.js` file.
+ */
+
+'use strict';
+
+const settings = require('../settings.json');
+
+function extensionSettings(settings) {
+  let result = {};
+  result.buildType = settings.buildType;
+  result.apiUrl = settings.apiUrl;
+  result.serviceUrl = settings.serviceUrl;
+  if (settings.sentryPublicDSN) {
+    result.raven = {
+      dsn: settings.sentryPublicDSN,
+      release: settings.version,
+    };
+  }
+  return result;
+}
+
+console.log(JSON.stringify({
+  'settings': JSON.stringify(extensionSettings(settings)),
+}));
