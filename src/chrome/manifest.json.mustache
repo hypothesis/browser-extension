@@ -2,24 +2,23 @@
   "name": "Hypothesis - Web & PDF Annotation",
   "short_name": "Hypothesis",
   "version": "{{ version }}",
-  "version_name": "{{ version }} ({{ version_name }})",
+  "version_name": "{{ version }} ({{ versionName }})",
   "manifest_version": 2,
 
-  {% if browser == 'chrome' %}
+  {{#browserIsChrome}}
   "minimum_chrome_version": "38",
-  {% endif %}
+  {{/browserIsChrome}}
 
-  {% if browser == 'firefox' %}
+  {{#browserIsFirefox}}
   "applications": {
     "gecko": {
       "id": "firefox@hypothes.is",
-
-      {# Firefox v48 is required for
-         https://bugzilla.mozilla.org/show_bug.cgi?id=1210583 #}
+      {{! Firefox v48 is required for
+          https://bugzilla.mozilla.org/show_bug.cgi?id=1210583 }}
       "strict_min_version": "48.0.0"
     }
   },
-  {% endif %}
+  {{/browserIsFirefox}}
 
   "description": "Collaboratively annotate, highlight, and tag web pages and PDF documents.",
   "icons": {
@@ -44,13 +43,12 @@
     "storage",
     "tabs"
   ],
-  "content_security_policy":
-    "script-src 'self' 'unsafe-eval' {{ script_src }}; object-src 'self'; font-src 'self' data:;",
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'; font-src 'self' data:;",
 
   "background": {
-    {% if browser == 'chrome' %}
+    {{#browserIsChrome}}
     "persistent": true,
-    {% endif %}
+    {{/browserIsChrome}}
     "scripts": [
       "settings-data.js",
       "public/scripts/raven.bundle.js",
@@ -71,6 +69,6 @@
     "content/web/viewer.html"
   ],
   "externally_connectable": {
-    {% if bouncer %}"matches": ["{{ bouncer }}"]{% endif %}
+    {{#bouncerUrl}}"matches": ["{{&bouncerUrl}}*"]{{/bouncerUrl}}
   }
 }
