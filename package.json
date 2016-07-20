@@ -13,6 +13,7 @@
     "check-dependencies": "^0.12.0",
     "core-js": "^1.2.5",
     "diff": "^2.2.2",
+    "exorcist": "^0.4.0",
     "hypothesis": "^0.32.0",
     "js-polyfills": "^0.1.16",
     "jscs": "^3.0.2",
