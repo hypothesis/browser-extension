@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    {{! At the moment we use Angular's $location service in HTML5 mode with
+        html5Mode.requireBase left at its default value (true), so this is
+        required. In future we should be able to remove this. }}
+    <base href="/">
+    {{#stylesheets}}
+    <link rel="stylesheet" href="{{&.}}">
+    {{/stylesheets}}
+  </head>
+  <body>
+    <hypothesis-app></hypothesis-app>
+
+    <script class="js-hypothesis-settings" type="application/json">
+    {{&settings}}
+    </script>
+
+    {{#scripts}}
+    <script src="{{&.}}"></script>
+    {{/scripts}}
+  </body>
+</html>

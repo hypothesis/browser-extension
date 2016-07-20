@@ -24,8 +24,10 @@ clean:
 CHROME_SRC := content help images lib
 build/chrome: build/chrome/extension.bundle.js
 build/chrome: build/chrome/manifest.json
-build/chrome: build/chrome/settings-data.json
 build/chrome: build/chrome/public
+build/chrome: build/chrome/public/app.html
+build/chrome: build/chrome/public/embed.js
+build/chrome: build/chrome/settings-data.json
 build/chrome: $(addprefix build/chrome/,$(CHROME_SRC))
 build/chrome/extension.bundle.js: src/common/extension.js
 	$(BROWSERIFY) -d $< | $(EXORCIST) $(addsuffix .map,$@) >$@
@@ -39,10 +41,14 @@ build/chrome/extension.bundle.js: src/common/extension.js
 		>build/extension.bundle.deps
 build/chrome/manifest.json: src/chrome/manifest.json.mustache $(SETTINGS_FILE)
 	$(MUSTACHE) $(SETTINGS_FILE) $< > $@
-build/chrome/settings-data.json: $(SETTINGS_FILE)
-	cp $< $@
 build/chrome/public:
 	cp -R node_modules/hypothesis/build/ $@
+build/chrome/public/app.html: src/client/app.html.mustache build/chrome/public $(SETTINGS_FILE)
+	tools/template-context-app | $(MUSTACHE) - $< >$@
+build/chrome/public/embed.js: src/client/embed.js.mustache build/chrome/public $(SETTINGS_FILE)
+	tools/template-context-embed | $(MUSTACHE) - $< >$@
+build/chrome/settings-data.json: $(SETTINGS_FILE)
+	cp $< $@
 build/chrome/%: src/chrome/%
 	cp -R $</ $@
 
