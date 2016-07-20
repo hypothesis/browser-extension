@@ -10,7 +10,7 @@ describe('errors', function () {
     fakeRaven = {
       report: sinon.stub(),
     };
-    errors = proxyquire('../lib/errors', {
+    errors = proxyquire('../../src/common/errors', {
       './raven': fakeRaven,
       '@noCallThru': true
     });

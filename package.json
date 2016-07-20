@@ -36,6 +36,6 @@
     "whatwg-fetch": "^0.10.1"
   },
   "scripts": {
-    "test": "karma start src/chrome/karma.config.js --single-run"
+    "test": "karma start tests/karma.config.js --single-run"
   }
 }

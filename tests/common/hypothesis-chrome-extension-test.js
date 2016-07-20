@@ -2,10 +2,10 @@
 
 var proxyquire = require('proxyquire');
 
-var toResult = require('./promise-util').toResult;
+var toResult = require('../promise-util').toResult;
 
-var errors = require('../lib/errors');
-var TabState = require('../lib/tab-state');
+var errors = require('../../src/common/errors');
+var TabState = require('../../src/common/tab-state');
 
 // Creates a constructor function which takes no arguments
 // and has a given prototype.
@@ -114,7 +114,7 @@ describe('HypothesisChromeExtension', function () {
     }
     FakeTabState.prototype = fakeTabState;
 
-    HypothesisChromeExtension = proxyquire('../lib/hypothesis-chrome-extension', {
+    HypothesisChromeExtension = proxyquire('../../src/common/hypothesis-chrome-extension', {
       './tab-state': FakeTabState,
       './tab-store': createConstructor(fakeTabStore),
       './help-page': createConstructor(fakeHelpPage),

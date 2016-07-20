@@ -14,4 +14,4 @@ require('js-polyfills/url');
 // Additional polyfills for newer features.
 // Be careful that any polyfills used here match what is used in the
 // app itself.
-require('./polyfills');
+require('../src/common/polyfills');

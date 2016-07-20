@@ -2,7 +2,7 @@
 
 var proxyquire = require('proxyquire');
 
-var TabState = require('../lib/tab-state');
+var TabState = require('../../src/common/tab-state');
 
 describe('TabState', function () {
   var states = TabState.states;
@@ -130,7 +130,7 @@ describe('TabState', function () {
 
     it('queries the service and sets the annotation count', function () {
       var queryStub = sinon.stub().returns(Promise.resolve({total: 42}));
-      var TabState = proxyquire('../lib/tab-state', {
+      var TabState = proxyquire('../../src/common/tab-state', {
         './uri-info': {
           query: queryStub,
         }
@@ -145,7 +145,7 @@ describe('TabState', function () {
 
     it('resets the count if an error occurred', function () {
       var queryStub = sinon.stub().returns(Promise.reject(new Error('err')));
-      var TabState = proxyquire('../lib/tab-state', {
+      var TabState = proxyquire('../../src/common/tab-state', {
         './uri-info': {
           query: queryStub,
         }
