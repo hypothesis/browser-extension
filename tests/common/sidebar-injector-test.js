@@ -273,7 +273,7 @@ describe('SidebarInjector', function () {
         isAlreadyInjected = true;
         return injector.removeFromTab({id: 1, url: 'http://example.com/foo.html'}).then(function () {
           assert.calledWith(fakeChromeTabs.executeScript, 1, {
-            file: sinon.match('/public/destroy.js')
+            file: sinon.match('/lib/destroy.js')
           });
         });
       });
