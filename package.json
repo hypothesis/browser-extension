@@ -33,5 +33,8 @@
     "sinon": "^1.17.3",
     "watchify": "^3.7.0",
     "whatwg-fetch": "^0.10.1"
+  },
+  "scripts": {
+    "test": "karma start src/chrome/karma.config.js --single-run"
   }
 }
