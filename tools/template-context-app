@@ -7,6 +7,8 @@
 
 'use strict';
 
+const path = require('path');
+
 const stylesheets = [
   'styles/angular-csp.css',
   'styles/angular-toastr.css',
@@ -26,7 +28,6 @@ const scripts = [
 ];
 
 const manifest = require('../node_modules/hypothesis/build/manifest.json');
-const settings = require('../settings.json');
 
 function appSettings(settings) {
   let result = {};
@@ -44,6 +45,13 @@ function appSettings(settings) {
   }
   return result;
 }
+
+if (process.argv.length !== 3) {
+  console.error("Usage: %s <settings.json>", path.basename(process.argv[1]));
+  process.exit(1);
+}
+
+const settings = require(path.join(process.cwd(), process.argv[2]));
 
 console.log(JSON.stringify({
   'stylesheets': stylesheets.map(s => '/public/' + manifest[s]),

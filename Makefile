@@ -1,4 +1,4 @@
-SETTINGS_FILE := settings.json
+SETTINGS_FILE := settings/chrome-prod.json
 
 BROWSERIFY := node_modules/.bin/browserify
 EXORCIST := node_modules/.bin/exorcist
@@ -44,11 +44,11 @@ build/public:
 	@# will complain.
 	rm $@/manifest.json
 build/public/app.html: src/client/app.html.mustache build/public $(SETTINGS_FILE)
-	tools/template-context-app | $(MUSTACHE) - $< >$@
-build/public/embed.js: src/client/embed.js.mustache build/public $(SETTINGS_FILE)
+	tools/template-context-app $(SETTINGS_FILE) | $(MUSTACHE) - $< >$@
+build/public/embed.js: src/client/embed.js.mustache build/public
 	tools/template-context-embed | $(MUSTACHE) - $< >$@
 build/settings-data.js: src/chrome/settings-data.js.mustache build/public $(SETTINGS_FILE)
-	tools/template-context-settings | $(MUSTACHE) - $< >$@
+	tools/template-context-settings $(SETTINGS_FILE) | $(MUSTACHE) - $< >$@
 build/%: src/chrome/%
 	@mkdir -p $@
 	cp -R $</* $@
