@@ -9,7 +9,7 @@ default: extension
 
 .PHONY: clean
 clean:
-	rm -rf build/*
+	rm -rf build/* build/.settings.json build/.*.deps
 	rm -rf dist/*
 
 ################################################################################
