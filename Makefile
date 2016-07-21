@@ -51,11 +51,11 @@ build/public: node_modules/hypothesis/build/manifest.json
 	@# will complain.
 	rm $@/manifest.json
 build/public/app.html: src/client/app.html.mustache build/public build/.settings.json
-	tools/template-context-app build/.settings.json | $(MUSTACHE) - $< >$@
+	tools/template-context-app.js build/.settings.json | $(MUSTACHE) - $< >$@
 build/public/embed.js: src/client/embed.js.mustache build/public
-	tools/template-context-embed | $(MUSTACHE) - $< >$@
+	tools/template-context-embed.js | $(MUSTACHE) - $< >$@
 build/settings-data.js: src/chrome/settings-data.js.mustache build/public build/.settings.json
-	tools/template-context-settings build/.settings.json | $(MUSTACHE) - $< >$@
+	tools/template-context-settings.js build/.settings.json | $(MUSTACHE) - $< >$@
 build/%: src/chrome/%
 	@mkdir -p $@
 	cp -R $</* $@
