@@ -44,7 +44,7 @@ build/extension.bundle.js: src/common/extension.js
 		>build/.extension.bundle.deps
 build/manifest.json: src/chrome/manifest.json.mustache build/.settings.json
 	$(MUSTACHE) build/.settings.json $< > $@
-build/public:
+build/public: node_modules/hypothesis/build/manifest.json
 	@mkdir -p $@
 	cp -R node_modules/hypothesis/build/* $@
 	@# We can't leave the client manifest in the build or the Chrome Web Store
