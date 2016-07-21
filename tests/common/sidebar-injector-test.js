@@ -1,6 +1,6 @@
 'use strict';
 
-var toResult = require('../../../static/scripts/test/promise-util').toResult;
+var toResult = require('../promise-util').toResult;
 
 // The root URL for the extension returned by the
 // extensionURL(path) fake
@@ -23,8 +23,8 @@ function createTestFrame() {
 }
 
 describe('SidebarInjector', function () {
-  var errors = require('../lib/errors');
-  var SidebarInjector = require('../lib/sidebar-injector');
+  var errors = require('../../src/common/errors');
+  var SidebarInjector = require('../../src/common/sidebar-injector');
   var injector;
   var fakeChromeTabs;
   var fakeFileAccess;
@@ -273,7 +273,7 @@ describe('SidebarInjector', function () {
         isAlreadyInjected = true;
         return injector.removeFromTab({id: 1, url: 'http://example.com/foo.html'}).then(function () {
           assert.calledWith(fakeChromeTabs.executeScript, 1, {
-            file: sinon.match('/public/destroy.js')
+            file: sinon.match('/lib/destroy.js')
           });
         });
       });

@@ -1,6 +1,6 @@
 'use strict';
 
-var raven = require('../../../static/scripts/raven');
+var raven = require('./raven');
 
 function ExtensionError(message) {
   Error.apply(this, arguments);

@@ -1,0 +1,14 @@
+{
+  "version": "0.34.0",
+  "versionName": "Official Build",
+
+  "buildType": "production",
+  "apiUrl": "https://hypothes.is/api/",
+  "bouncerUrl": "https://hyp.is/",
+  "serviceUrl": "https://hypothes.is/",
+  "websocketUrl": "wss://hypothes.is/ws",
+
+  "sentryPublicDSN": "https://934d4f62912b47d8bb03c28ae6670cf8@app.getsentry.com/69811",
+
+  "browserIsChrome": true
+}

@@ -4,8 +4,8 @@ var proxyquire = require('proxyquire');
 describe('BrowserAction', function () {
   'use strict';
 
-  var BrowserAction = require('../lib/browser-action');
-  var TabState = require('../lib/tab-state');
+  var BrowserAction = require('../../src/common/browser-action');
+  var TabState = require('../../src/common/tab-state');
   var action;
   var fakeChromeBrowserAction;
 
@@ -152,7 +152,7 @@ describe('BrowserAction', function () {
         buildType: 'staging',
         '@noCallThru': true,
       };
-      var BrowserAction = proxyquire('../lib/browser-action', {
+      var BrowserAction = proxyquire('../../src/common/browser-action', {
         './settings': fakeSettings,
       });
       action = new BrowserAction(fakeChromeBrowserAction);

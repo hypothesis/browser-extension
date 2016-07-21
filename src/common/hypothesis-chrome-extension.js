@@ -1,7 +1,6 @@
 'use strict';
 
-var annotationIDs = require('../../../static/scripts/util/annotation-ids');
-
+var annotationIDs = require('./annotation-ids');
 var errors = require('./errors');
 var TabState = require('./tab-state');
 var BrowserAction = require('./browser-action');

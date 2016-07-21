@@ -1,6 +1,6 @@
 describe('HelpPage', function () {
-  var errors = require('../lib/errors');
-  var HelpPage = require('../lib/help-page');
+  var errors = require('../../src/common/errors');
+  var HelpPage = require('../../src/common/help-page');
   var fakeChromeTabs;
   var help;
 
