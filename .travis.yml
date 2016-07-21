@@ -5,8 +5,8 @@ cache:
     - node_modules
 script:
   - npm test
-  - make --always-make SETTINGS_FILE=settings/chrome-prod.json dist/$(date +'%Y%m%d')-chrome-prod.zip
-  - make --always-make SETTINGS_FILE=settings/firefox-prod.json dist/$(date +'%Y%m%d')-firefox-prod.xpi
+  - make SETTINGS_FILE=settings/chrome-prod.json dist/$(date +'%Y%m%d')-chrome-prod.zip
+  - make SETTINGS_FILE=settings/firefox-prod.json dist/$(date +'%Y%m%d')-firefox-prod.xpi
 addons:
   artifacts:
     paths:

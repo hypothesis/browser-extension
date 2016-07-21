@@ -14,6 +14,13 @@ clean:
 
 ################################################################################
 
+# We write the settings found in SETTINGS_FILE to build/.settings.json (when the
+# contents change) in order to ensure that a different SETTINGS_FILE results in
+# the appropriate things being rebuilt.
+.PHONY: force
+build/.settings.json: force
+	@cmp -s $(SETTINGS_FILE) $@ || cat $(SETTINGS_FILE) >$@
+
 EXTENSION_SRC := content help images lib
 
 .PHONY: extension
@@ -35,20 +42,20 @@ build/extension.bundle.js: src/common/extension.js
 		grep -v node_modules | \
 		sed 's#^#$@: #' \
 		>build/.extension.bundle.deps
-build/manifest.json: src/chrome/manifest.json.mustache $(SETTINGS_FILE)
-	$(MUSTACHE) $(SETTINGS_FILE) $< > $@
+build/manifest.json: src/chrome/manifest.json.mustache build/.settings.json
+	$(MUSTACHE) build/.settings.json $< > $@
 build/public:
 	@mkdir -p $@
 	cp -R node_modules/hypothesis/build/* $@
 	@# We can't leave the client manifest in the build or the Chrome Web Store
 	@# will complain.
 	rm $@/manifest.json
-build/public/app.html: src/client/app.html.mustache build/public $(SETTINGS_FILE)
-	tools/template-context-app $(SETTINGS_FILE) | $(MUSTACHE) - $< >$@
+build/public/app.html: src/client/app.html.mustache build/public build/.settings.json
+	tools/template-context-app build/.settings.json | $(MUSTACHE) - $< >$@
 build/public/embed.js: src/client/embed.js.mustache build/public
 	tools/template-context-embed | $(MUSTACHE) - $< >$@
-build/settings-data.js: src/chrome/settings-data.js.mustache build/public $(SETTINGS_FILE)
-	tools/template-context-settings $(SETTINGS_FILE) | $(MUSTACHE) - $< >$@
+build/settings-data.js: src/chrome/settings-data.js.mustache build/public build/.settings.json
+	tools/template-context-settings build/.settings.json | $(MUSTACHE) - $< >$@
 build/%: src/chrome/%
 	@mkdir -p $@
 	cp -R $</* $@
