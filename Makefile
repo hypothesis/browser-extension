@@ -1,4 +1,4 @@
-SETTINGS_FILE := settings/chrome-prod.json
+SETTINGS_FILE := settings/chrome-dev.json
 
 BROWSERIFY := node_modules/.bin/browserify
 EXORCIST := node_modules/.bin/exorcist
@@ -19,7 +19,9 @@ clean:
 # the appropriate things being rebuilt.
 .PHONY: force
 build/.settings.json: force
-	@cmp -s $(SETTINGS_FILE) $@ || cat $(SETTINGS_FILE) >$@
+	@tools/settings.js $(SETTINGS_FILE) | \
+	cmp -s - $@ || \
+	tools/settings.js $(SETTINGS_FILE) >$@
 
 EXTENSION_SRC := content help images lib
 

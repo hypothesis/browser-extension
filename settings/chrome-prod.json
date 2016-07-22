@@ -1,8 +1,6 @@
 {
-  "version": "0.34.0",
-  "versionName": "Official Build",
-
   "buildType": "production",
+
   "apiUrl": "https://hypothes.is/api/",
   "bouncerUrl": "https://hyp.is/",
   "serviceUrl": "https://hypothes.is/",
