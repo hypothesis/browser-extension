@@ -70,6 +70,8 @@ built client from the client repository. Please consult the client's
 documentation for instructions on building the client in a development
 environment.
 
+See [Building the extension](docs/building.md) for more information.
+
 [client]: https://github.com/hypothesis/client/
 
 Community
