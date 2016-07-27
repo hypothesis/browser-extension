@@ -1,0 +1,12 @@
+{
+  "buildType": "staging",
+
+  "apiUrl": "https://stage.hypothes.is/api/",
+  "bouncerUrl": "https://bouncer-stage.hypothes.is/",
+  "serviceUrl": "https://stage.hypothes.is/",
+  "websocketUrl": "wss://stage.hypothes.is/ws",
+
+  "sentryPublicDSN": "https://cec276e804f94f83a11d5cf8522aa7e0@app.getsentry.com/69812",
+
+  "browserIsChrome": true
+}
