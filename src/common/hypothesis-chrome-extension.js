@@ -253,13 +253,14 @@ function HypothesisChromeExtension(dependencies) {
           }
           state.errorTab(tab.id, err);
         });
-    }
-    else if (state.isTabInactive(tab.id) && isInstalled) {
+    } else if (state.isTabInactive(tab.id) && isInstalled) {
       return sidebar.removeFromTab(tab).then(function () {
         state.setState(tab.id, {
           extensionSidebarInstalled: false,
         });
       });
+    } else {
+      return Promise.resolve();
     }
   }
 

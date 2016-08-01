@@ -1,3 +1,5 @@
+'use strict';
+
 describe('HelpPage', function () {
   var errors = require('../../src/common/errors');
   var HelpPage = require('../../src/common/help-page');

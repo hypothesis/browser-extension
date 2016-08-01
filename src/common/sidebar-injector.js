@@ -36,7 +36,7 @@ function addJSONScriptTagFn(name, content) {
  *
  * See https://developer.chrome.com/extensions/tabs#method-executeScript
  *
- * @param {Array<any>} result
+ * @param {Array<any>?} result
  */
 function extractContentScriptResult(result) {
   if (Array.isArray(result) && result.length > 0) {
@@ -46,7 +46,7 @@ function extractContentScriptResult(result) {
     // an array from executeScript()
     return result;
   } else {
-    return;
+    return null;
   }
 }
 

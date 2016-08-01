@@ -78,7 +78,7 @@ describe('TabState', function () {
   describe('.clearTab', function () {
     it('removes the state for the tab id provided', function () {
       state.clearTab(1);
-      assert.equal(state.isTabActive(1), false), 'expected isTabActive to return false';
+      assert.equal(state.isTabActive(1), false, 'expected isTabActive to return false');
       assert.equal(state.isTabInactive(1), true, 'expected isTabInactive to return true');
       assert.equal(state.isTabErrored(1), false, 'expected isTabInactive to return false');
     });

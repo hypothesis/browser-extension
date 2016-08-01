@@ -1,9 +1,9 @@
+'use strict';
+
 var assign = require('core-js/modules/$.object-assign');
 var proxyquire = require('proxyquire');
 
 describe('BrowserAction', function () {
-  'use strict';
-
   var BrowserAction = require('../../src/common/browser-action');
   var TabState = require('../../src/common/tab-state');
   var action;
