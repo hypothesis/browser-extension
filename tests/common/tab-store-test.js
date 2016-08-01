@@ -18,7 +18,7 @@ describe('TabStore', function () {
   describe('.get', function () {
     beforeEach(function () {
       fakeLocalStorage.data.state = JSON.stringify({
-        1: {state: 'active'}
+        1: {state: 'active'},
       });
       store.reload();
     });
@@ -36,7 +36,7 @@ describe('TabStore', function () {
 
     it('converts state-string keys to objects', function () {
       fakeLocalStorage.data.state = JSON.stringify({
-        1: 'active'
+        1: 'active',
       });
       store.reload();
       assert.deepEqual(store.get(1), { state: 'active' });
@@ -46,7 +46,7 @@ describe('TabStore', function () {
   describe('.set', function () {
     it('inserts a JSON string into the store for the tab id', function () {
       var expected = JSON.stringify({
-        1: { state: 'active' }
+        1: { state: 'active' },
       });
       store.set(1, { state: 'active' });
       assert.calledWith(fakeLocalStorage.setItem, 'state', expected);
@@ -64,7 +64,7 @@ describe('TabStore', function () {
 
     it('overrides existing properties on the serialized object', function () {
       var expected = JSON.stringify({
-        1: {state: 'inactive'}
+        1: {state: 'inactive'},
       });
       store.set(1, { state: 'active' });
       store.set(1, { state: 'inactive' });

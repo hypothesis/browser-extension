@@ -230,7 +230,7 @@ function HypothesisChromeExtension(dependencies) {
       });
 
       var config = {
-        annotations: state.getState(tab.id).directLinkedAnnotation
+        annotations: state.getState(tab.id).directLinkedAnnotation,
       };
 
       return sidebar.injectIntoTab(tab, config)

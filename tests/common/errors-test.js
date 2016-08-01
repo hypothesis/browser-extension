@@ -12,7 +12,7 @@ describe('errors', function () {
     };
     errors = proxyquire('../../src/common/errors', {
       './raven': fakeRaven,
-      '@noCallThru': true
+      '@noCallThru': true,
     });
     sinon.stub(console, 'error');
   });

@@ -27,7 +27,7 @@ describe('BrowserAction', function () {
       },
       setBadgeBackgroundColor: function (options) {
         this.badgeColor = options.color;
-      }
+      },
     };
     action = new BrowserAction(fakeChromeBrowserAction);
   });
@@ -91,7 +91,7 @@ describe('BrowserAction', function () {
   });
 
   describe('annotation counts', function () {
-    it("sets the badge text", function() {
+    it('sets the badge text', function() {
       action.update(1, {
         state: TabState.states.INACTIVE,
         annotationCount: 23,
@@ -101,25 +101,25 @@ describe('BrowserAction', function () {
 
     it("sets the badge title when there's 1 annotation",
       function () {
-      action.update(1, {
-        state: TabState.states.INACTIVE,
-        annotationCount: 1,
-      });
-      assert.equal(fakeChromeBrowserAction.title,
+        action.update(1, {
+          state: TabState.states.INACTIVE,
+          annotationCount: 1,
+        });
+        assert.equal(fakeChromeBrowserAction.title,
         "There's 1 annotation on this page");
-    });
+      });
 
     it("sets the badge title when there's >1 annotation",
         function() {
-      action.update(1, {
-        state: TabState.states.INACTIVE,
-        annotationCount: 23,
-      });
-      assert.equal(fakeChromeBrowserAction.title,
-        "There are 23 annotations on this page");
-    });
+          action.update(1, {
+            state: TabState.states.INACTIVE,
+            annotationCount: 23,
+          });
+          assert.equal(fakeChromeBrowserAction.title,
+        'There are 23 annotations on this page');
+        });
 
-    it("does not set the badge text if there are 0 annotations", function() {
+    it('does not set the badge text if there are 0 annotations', function() {
       action.update(1, {
         state: TabState.states.INACTIVE,
         annotationCount: 0,
@@ -127,7 +127,7 @@ describe('BrowserAction', function () {
       assert.equal(fakeChromeBrowserAction.badgeText, '');
     });
 
-    it("does not set the badge title if there are 0 annotations", function() {
+    it('does not set the badge title if there are 0 annotations', function() {
       action.update(1, {
         state: TabState.states.INACTIVE,
         annotationCount: 0,

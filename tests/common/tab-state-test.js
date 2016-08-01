@@ -13,7 +13,7 @@ describe('TabState', function () {
   beforeEach(function () {
     onChange = sinon.spy();
     state = new TabState({
-      1: {state: states.ACTIVE}
+      1: {state: states.ACTIVE},
     }, onChange);
   });
 
@@ -133,7 +133,7 @@ describe('TabState', function () {
       var TabState = proxyquire('../../src/common/tab-state', {
         './uri-info': {
           query: queryStub,
-        }
+        },
       });
       var tabState = new TabState({1: {state: states.ACTIVE}});
       return tabState.updateAnnotationCount(1, 'foobar.com')
@@ -148,7 +148,7 @@ describe('TabState', function () {
       var TabState = proxyquire('../../src/common/tab-state', {
         './uri-info': {
           query: queryStub,
-        }
+        },
       });
       var tabState = new TabState({1: {
         state: states.ACTIVE,

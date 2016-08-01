@@ -18,7 +18,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html#local-file'
+        url: 'CRX_PATH/help/index.html#local-file',
       });
     });
 
@@ -28,7 +28,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html#no-file-access'
+        url: 'CRX_PATH/help/index.html#no-file-access',
       });
     });
 
@@ -38,7 +38,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html#restricted-protocol'
+        url: 'CRX_PATH/help/index.html#restricted-protocol',
       });
     });
 
@@ -48,7 +48,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html#blocked-site'
+        url: 'CRX_PATH/help/index.html#blocked-site',
       });
     });
 
@@ -58,7 +58,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html?message=Unexpected%20Error#other-error'
+        url: 'CRX_PATH/help/index.html?message=Unexpected%20Error#other-error',
       });
     });
   });
@@ -70,7 +70,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html#local-file'
+        url: 'CRX_PATH/help/index.html#local-file',
       });
     });
   });
@@ -82,7 +82,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html#no-file-access'
+        url: 'CRX_PATH/help/index.html#no-file-access',
       });
     });
   });
@@ -94,7 +94,7 @@ describe('HelpPage', function () {
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
         openerTabId: 1,
-        url: 'CRX_PATH/help/index.html#restricted-protocol'
+        url: 'CRX_PATH/help/index.html#restricted-protocol',
       });
     });
   });

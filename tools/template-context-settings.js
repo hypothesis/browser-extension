@@ -24,7 +24,7 @@ function extensionSettings(settings) {
 }
 
 if (process.argv.length !== 3) {
-  console.error("Usage: %s <settings.json>", path.basename(process.argv[1]));
+  console.error('Usage: %s <settings.json>', path.basename(process.argv[1]));
   process.exit(1);
 }
 

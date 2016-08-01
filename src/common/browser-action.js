@@ -11,11 +11,11 @@ var states = TabState.states;
 var icons = {};
 icons[states.ACTIVE] = {
   19: 'images/browser-icon-active.png',
-  38: 'images/browser-icon-active@2x.png'
+  38: 'images/browser-icon-active@2x.png',
 };
 icons[states.INACTIVE] = {
   19: 'images/browser-icon-inactive.png',
-  38: 'images/browser-icon-inactive@2x.png'
+  38: 'images/browser-icon-inactive@2x.png',
 };
 
 var buildType = settings.buildType;
@@ -30,7 +30,7 @@ var badgeThemes = {
   'staging': {
     defaultText: 'STG',
     color: '#EDA061', // Porche orange-pink
-  }
+  },
 };
 
 // Fake localization function.
@@ -101,7 +101,7 @@ function BrowserAction(chromeBrowserAction) {
     chromeBrowserAction.setBadgeText({tabId: tabId, text: badgeText});
     chromeBrowserAction.setIcon({tabId: tabId, path: activeIcon});
     chromeBrowserAction.setTitle({tabId: tabId, title: title});
-  }
+  };
 }
 
 BrowserAction.icons = icons;

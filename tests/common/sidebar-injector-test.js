@@ -77,7 +77,7 @@ describe('SidebarInjector', function () {
       isAllowedFileSchemeAccess: fakeFileAccess,
       extensionURL: sinon.spy(function (path) {
         return EXTENSION_BASE_URL + path;
-      })
+      }),
     });
   });
 
@@ -99,18 +99,18 @@ describe('SidebarInjector', function () {
         var spy = fakeChromeTabs.executeScript;
         return toResult(injector.injectIntoTab({id: 1, url: url}))
           .then(function (result) {
-          assert.ok(result.error);
-          assert.instanceOf(result.error, errors.RestrictedProtocolError);
-          assert.notCalled(spy);
-        });
+            assert.ok(result.error);
+            assert.instanceOf(result.error, errors.RestrictedProtocolError);
+            assert.notCalled(spy);
+          });
       });
     });
 
     it('succeeds if the tab is already displaying the embedded PDF viewer', function () {
-        var url = PDF_VIEWER_BASE_URL +
+      var url = PDF_VIEWER_BASE_URL +
           encodeURIComponent('http://origin/foo.pdf');
-        return injector.injectIntoTab({id: 1, url: url});
-      }
+      return injector.injectIntoTab({id: 1, url: url});
+    }
     );
 
     describe('when viewing a remote PDF', function () {
@@ -121,7 +121,7 @@ describe('SidebarInjector', function () {
         var spy = fakeChromeTabs.update.yields({tab: 1});
         return injector.injectIntoTab({id: 1, url: url}).then(function() {
           assert.calledWith(spy, 1, {
-            url: PDF_VIEWER_BASE_URL + encodeURIComponent(url)
+            url: PDF_VIEWER_BASE_URL + encodeURIComponent(url),
           });
         });
       });
@@ -132,10 +132,10 @@ describe('SidebarInjector', function () {
         var hash = '#annotations:456';
         return injector.injectIntoTab({id: 1, url: url + hash})
           .then(function () {
-          assert.calledWith(spy, 1, {
-            url: PDF_VIEWER_BASE_URL + encodeURIComponent(url) + hash,
+            assert.calledWith(spy, 1, {
+              url: PDF_VIEWER_BASE_URL + encodeURIComponent(url) + hash,
+            });
           });
-        });
       });
     });
 
@@ -146,7 +146,7 @@ describe('SidebarInjector', function () {
 
         return injector.injectIntoTab({id: 1, url: url}).then(function() {
           assert.calledWith(spy, 1, {
-            file: sinon.match('/public/embed.js')
+            file: sinon.match('/public/embed.js'),
           });
         });
       });
@@ -156,9 +156,9 @@ describe('SidebarInjector', function () {
         var url = 'http://example.com';
         return toResult(injector.injectIntoTab({id: 1, url: url}))
           .then(function (result) {
-          assert.ok(result.error);
-          assert.instanceOf(result.error, errors.AlreadyInjectedError);
-        });
+            assert.ok(result.error);
+            assert.instanceOf(result.error, errors.AlreadyInjectedError);
+          });
       });
 
       it('injects config options into the page', function () {
@@ -186,7 +186,7 @@ describe('SidebarInjector', function () {
             function () {
               assert.called(spy);
               assert.calledWith(spy, 1, {
-                url: PDF_VIEWER_BASE_URL + encodeURIComponent('file:///foo.pdf')
+                url: PDF_VIEWER_BASE_URL + encodeURIComponent('file:///foo.pdf'),
               });
             }
           );
@@ -210,17 +210,17 @@ describe('SidebarInjector', function () {
         });
       });
 
-    describe('when viewing a local HTML file', function () {
-      it('returns an error', function () {
-        var url = 'file://foo.html';
-        var promise = injector.injectIntoTab({id: 1, url: url});
-        return toResult(promise).then(function (result) {
-          assert.instanceOf(result.error, errors.LocalFileError);
+      describe('when viewing a local HTML file', function () {
+        it('returns an error', function () {
+          var url = 'file://foo.html';
+          var promise = injector.injectIntoTab({id: 1, url: url});
+          return toResult(promise).then(function (result) {
+            assert.instanceOf(result.error, errors.LocalFileError);
+          });
         });
       });
     });
   });
-});
 
   describe('.removeFromTab', function () {
     it('bails early when trying to unload a chrome url', function () {
@@ -251,7 +251,7 @@ describe('SidebarInjector', function () {
           encodeURIComponent('http://example.com/foo.pdf') + '#foo';
         return injector.removeFromTab({id: 1, url: url}).then(function () {
           assert.calledWith(spy, 1, {
-            url: 'http://example.com/foo.pdf#foo'
+            url: 'http://example.com/foo.pdf#foo',
           });
         });
       });
@@ -262,7 +262,7 @@ describe('SidebarInjector', function () {
           encodeURIComponent('http://example.com/foo.pdf') + '#annotations:456';
         return injector.removeFromTab({id: 1, url: url}).then(function () {
           assert.calledWith(spy, 1, {
-            url: 'http://example.com/foo.pdf'
+            url: 'http://example.com/foo.pdf',
           });
         });
       });
@@ -273,7 +273,7 @@ describe('SidebarInjector', function () {
         isAlreadyInjected = true;
         return injector.removeFromTab({id: 1, url: 'http://example.com/foo.html'}).then(function () {
           assert.calledWith(fakeChromeTabs.executeScript, 1, {
-            file: sinon.match('/lib/destroy.js')
+            file: sinon.match('/lib/destroy.js'),
           });
         });
       });
