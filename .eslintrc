@@ -1,0 +1,6 @@
+{
+  "extends": "hypothesis",
+  "globals": {
+    "chrome": false
+  }
+}
