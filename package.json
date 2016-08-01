@@ -13,6 +13,8 @@
     "check-dependencies": "^0.12.0",
     "core-js": "^1.2.5",
     "diff": "^2.2.2",
+    "eslint": "^3.2.0",
+    "eslint-config-hypothesis": "^1.0.0",
     "exorcist": "^0.4.0",
     "git-describe": "^3.0.1",
     "hypothesis": "^0.36.0",

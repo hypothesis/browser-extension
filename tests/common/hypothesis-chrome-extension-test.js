@@ -52,15 +52,15 @@ describe('HypothesisChromeExtension', function () {
       chromeTabs: fakeChromeTabs,
       chromeBrowserAction: fakeChromeBrowserAction,
       extensionURL: sandbox.stub(),
-      isAllowedFileSchemeAccess: sandbox.stub().yields(true)
+      isAllowedFileSchemeAccess: sandbox.stub().yields(true),
     });
   }
 
   beforeEach(function () {
     fakeChromeStorage = {
       sync: {
-        get: sandbox.stub().callsArgWith(1, {badge: true})
-      }
+        get: sandbox.stub().callsArgWith(1, {badge: true}),
+      },
     };
     fakeChromeTabs = {
       onCreated: new FakeListener(),
@@ -74,7 +74,7 @@ describe('HypothesisChromeExtension', function () {
       onClicked: new FakeListener(),
     };
     fakeHelpPage = {
-      showHelpForError: sandbox.spy()
+      showHelpForError: sandbox.spy(),
     };
     fakeTabStore = {
       all: sandbox.spy(),
@@ -120,7 +120,7 @@ describe('HypothesisChromeExtension', function () {
       './help-page': createConstructor(fakeHelpPage),
       './browser-action': createConstructor(fakeBrowserAction),
       './sidebar-injector': createConstructor(fakeSidebarInjector),
-      './errors': fakeErrors
+      './errors': fakeErrors,
     });
 
     ext = createExt();
@@ -139,7 +139,7 @@ describe('HypothesisChromeExtension', function () {
       savedState =  {
         1: {
           state: TabState.states.ACTIVE,
-        }
+        },
       };
       tabs.push({id: 1, url: 'http://example.com'});
       fakeChromeTabs.query = sandbox.stub().yields(tabs);
@@ -168,7 +168,7 @@ describe('HypothesisChromeExtension', function () {
       ext.firstRun({});
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
-        url: 'https://hypothes.is/welcome'
+        url: 'https://hypothes.is/welcome',
       });
     });
 
@@ -368,7 +368,7 @@ describe('HypothesisChromeExtension', function () {
     var injectErrorCases = [
       errors.LocalFileError,
       errors.NoFileAccessError,
-      errors.RestrictedProtocolError
+      errors.RestrictedProtocolError,
     ];
 
     injectErrorCases.forEach(function (ErrorType) {
@@ -452,7 +452,7 @@ describe('HypothesisChromeExtension', function () {
     beforeEach(function () {
       tab = {id: 1, status: 'complete'};
       fakeChromeTabs.get = sandbox.stub().yields(tab);
-      onChangeHandler = ext._onTabStateChange
+      onChangeHandler = ext._onTabStateChange;
     });
 
     it('updates the browser icon', function () {
@@ -512,7 +512,7 @@ describe('HypothesisChromeExtension', function () {
       fakeChromeTabs.get = sandbox.stub().yields({
         id: 1,
         status: 'complete',
-      })
+      });
       onTabStateChange(tabStates.INACTIVE, tabStates.ACTIVE);
       assert.calledWith(fakeSidebarInjector.removeFromTab, tab);
     });

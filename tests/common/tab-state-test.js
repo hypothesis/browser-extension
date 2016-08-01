@@ -13,7 +13,7 @@ describe('TabState', function () {
   beforeEach(function () {
     onChange = sinon.spy();
     state = new TabState({
-      1: {state: states.ACTIVE}
+      1: {state: states.ACTIVE},
     }, onChange);
   });
 
@@ -78,7 +78,7 @@ describe('TabState', function () {
   describe('.clearTab', function () {
     it('removes the state for the tab id provided', function () {
       state.clearTab(1);
-      assert.equal(state.isTabActive(1), false), 'expected isTabActive to return false';
+      assert.equal(state.isTabActive(1), false, 'expected isTabActive to return false');
       assert.equal(state.isTabInactive(1), true, 'expected isTabInactive to return true');
       assert.equal(state.isTabErrored(1), false, 'expected isTabInactive to return false');
     });
@@ -133,7 +133,7 @@ describe('TabState', function () {
       var TabState = proxyquire('../../src/common/tab-state', {
         './uri-info': {
           query: queryStub,
-        }
+        },
       });
       var tabState = new TabState({1: {state: states.ACTIVE}});
       return tabState.updateAnnotationCount(1, 'foobar.com')
@@ -148,7 +148,7 @@ describe('TabState', function () {
       var TabState = proxyquire('../../src/common/tab-state', {
         './uri-info': {
           query: queryStub,
-        }
+        },
       });
       var tabState = new TabState({1: {
         state: states.ACTIVE,

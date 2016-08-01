@@ -1,0 +1,5 @@
+build/**
+**/vendor/**/*.js
+
+# Ignore PDF.js build
+src/chrome/content

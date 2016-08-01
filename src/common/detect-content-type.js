@@ -25,9 +25,10 @@ function detectContentType(document_) {
     // see this document, open the inspector on a PDF viewer tab with
     // Ctrl+Shift+I rather than right-clicking on the viewport and selecting the
     // 'Inspect' option which will instead show the _inner_ document.
-    if (!!document_.querySelector('embed[type="application/pdf"][name="plugin"]')) {
+    if (document_.querySelector('embed[type="application/pdf"][name="plugin"]')) {
       return {type: 'PDF'};
     }
+    return null;
   }
 
   function detectFirefoxPDFViewer() {
@@ -43,6 +44,7 @@ function detectContentType(document_) {
     if (document_.baseURI.indexOf('resource://pdf.js') === 0) {
       return {type: 'PDF'};
     }
+    return null;
   }
 
   var detectFns = [detectChromePDFViewer, detectFirefoxPDFViewer];

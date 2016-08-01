@@ -1,3 +1,5 @@
+'use strict';
+
 /** Parse a query string into an object mapping param names to values. */
 function parseQuery(query) {
   if (query.charAt(0) === '?') {

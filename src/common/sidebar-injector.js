@@ -36,7 +36,7 @@ function addJSONScriptTagFn(name, content) {
  *
  * See https://developer.chrome.com/extensions/tabs#method-executeScript
  *
- * @param {Array<any>} result
+ * @param {Array<any>?} result
  */
 function extractContentScriptResult(result) {
   if (Array.isArray(result) && result.length > 0) {
@@ -46,7 +46,7 @@ function extractContentScriptResult(result) {
     // an array from executeScript()
     return result;
   } else {
-    return;
+    return null;
   }
 }
 
@@ -162,20 +162,20 @@ function SidebarInjector(chromeTabs, dependencies) {
     return canInjectScript(tab.url).then(function (canInject) {
       if (canInject) {
         return executeScriptFn(tab.id, {
-            code: toIIFEString(detectContentType)
-          }).then(function (frameResults) {
-            var result = extractContentScriptResult(frameResults);
-            if (result) {
-              return result.type;
-            } else {
+          code: toIIFEString(detectContentType),
+        }).then(function (frameResults) {
+          var result = extractContentScriptResult(frameResults);
+          if (result) {
+            return result.type;
+          } else {
               // If the content script threw an exception,
               // frameResults may be null or undefined.
               //
               // In that case, fall back to guessing based on the
               // tab URL
-              return guessContentTypeFromURL(tab.url);
-            }
-          });
+            return guessContentTypeFromURL(tab.url);
+          }
+        });
       } else {
         // We cannot inject a content script in order to determine the
         // file type, so fall back to a URL-based mechanism
@@ -193,7 +193,7 @@ function SidebarInjector(chromeTabs, dependencies) {
   }
 
   function isFileURL(url) {
-    return url.indexOf("file:") === 0;
+    return url.indexOf('file:') === 0;
   }
 
   function isSupportedURL(url) {

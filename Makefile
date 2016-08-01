@@ -1,6 +1,7 @@
 SETTINGS_FILE := settings/chrome-dev.json
 
 BROWSERIFY := node_modules/.bin/browserify
+ESLINT := node_modules/.bin/eslint
 EXORCIST := node_modules/.bin/exorcist
 MUSTACHE := node_modules/.bin/mustache
 
@@ -64,5 +65,9 @@ build/%: src/chrome/%
 
 dist/%.zip dist/%.xpi: extension
 	cd build && find . -not -path '*/\.*' -type f | zip -q -@ $(abspath $@)
+
+.PHONY: lint
+lint:
+	$(ESLINT) .
 
 -include build/.*.deps

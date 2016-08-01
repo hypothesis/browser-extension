@@ -14,7 +14,7 @@ describe('UriInfo.query', function () {
       Promise.resolve(
         new window.Response('{"total": 1}', {
           status: 200,
-          headers: {}
+          headers: {},
         })
       )
     );
@@ -39,11 +39,11 @@ describe('UriInfo.query', function () {
   it('urlencodes the URL appropriately', function () {
     return toResult(uriInfo.query('http://foo.com?bar=baz qüx'))
       .then(function () {
-      assert.equal(fetch.callCount, 1);
-      assert.equal(
+        assert.equal(fetch.callCount, 1);
+        assert.equal(
         fetch.lastCall.args[0],
         badgeURL + '?uri=http%3A%2F%2Ffoo.com%3Fbar%3Dbaz+q%C3%BCx');
-    });
+      });
   });
 
   var INVALID_RESPONSE_FIXTURES = [

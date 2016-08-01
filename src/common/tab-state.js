@@ -47,7 +47,7 @@ var DEFAULT_STATE = {
  * onchange     - A function that recieves onchange(tabId, current).
  */
 function TabState(initialState, onchange) {
-  var _this = this;
+  var self = this;
   var currentState;
 
   this.onchange = onchange || null;
@@ -132,8 +132,8 @@ function TabState(initialState, onchange) {
 
     currentState[tabId] = newState;
 
-    if (_this.onchange) {
-      _this.onchange(tabId, newState);
+    if (self.onchange) {
+      self.onchange(tabId, newState);
     }
   };
 

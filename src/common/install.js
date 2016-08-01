@@ -58,7 +58,7 @@ function onInstalled(installDetails) {
   // This is intended to be a temporary fix only.
   var details = {
     primaryPattern: 'https://hypothes.is/*',
-    setting: 'allow'
+    setting: 'allow',
   };
   chrome.contentSettings.cookies.set(details);
   chrome.contentSettings.images.set(details);
