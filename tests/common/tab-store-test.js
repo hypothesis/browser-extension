@@ -80,7 +80,7 @@ describe('TabStore', function () {
 
     it('removes a property from the serialized object', function () {
       store.unset(1);
-      assert.called(fakeLocalStorage.setItem, '{}');
+      assert.calledWith(fakeLocalStorage.setItem, 'state', '{}');
     });
   });
 
