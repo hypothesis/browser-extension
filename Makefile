@@ -11,7 +11,7 @@ default: extension
 ## Run test suite
 .PHONY: test
 test: 
-        npm test
+	npm test
 
 .PHONY: clean
 clean:
