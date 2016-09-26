@@ -24,7 +24,7 @@ build/.settings.json: force
 	cmp -s - $@ || \
 	tools/settings.js $(SETTINGS_FILE) >$@
 
-EXTENSION_SRC := content help images lib
+EXTENSION_SRC := pdfjs help images lib
 
 .PHONY: extension
 extension: build/extension.bundle.js
@@ -59,6 +59,8 @@ build/public/embed.js: src/client/embed.js.mustache build/public
 	tools/template-context-embed.js | $(MUSTACHE) - $< >$@
 build/settings-data.js: src/chrome/settings-data.js.mustache build/public build/.settings.json
 	tools/template-context-settings.js build/.settings.json | $(MUSTACHE) - $< >$@
+build/pdfjs: src/vendor/pdfjs
+	cp -R $< $@
 build/%: src/chrome/%
 	@mkdir -p $@
 	cp -R $</* $@
