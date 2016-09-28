@@ -1,5 +1,5 @@
 language: node_js
-node_js: '4.3'
+node_js: '6.2'
 cache:
   directories:
     - node_modules
