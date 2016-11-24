@@ -70,7 +70,7 @@ function SidebarInjector(chromeTabs, dependencies) {
 
   var executeScriptFn = util.promisify(chromeTabs.executeScript);
 
-  var PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
+  var PDFViewerBaseURL = extensionURL('/content/web/viewer.html');
 
   if (typeof extensionURL !== 'function') {
     throw new TypeError('extensionURL must be a function');
