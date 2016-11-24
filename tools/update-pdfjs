@@ -26,6 +26,6 @@ rm $DEST_DIR/web/*.pdf
 sed -i '/^\s*validateFileURL(file)/d' $DEST_DIR/web/viewer.js
 
 # Add code to load the Hypothesis client when the viewer runs
-sed -i '/<head>/a <script async defer src="\/public\/embed.js"></script>' $DEST_DIR/web/viewer.html
+sed -i 's/<\/head>/<script async src="\/public\/embed.js"><\/script><\/head>/' $DEST_DIR/web/viewer.html
 
 
