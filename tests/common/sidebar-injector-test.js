@@ -6,7 +6,7 @@ var toResult = require('../promise-util').toResult;
 // extensionURL(path) fake
 var EXTENSION_BASE_URL = 'chrome-extension://hypothesis';
 
-var PDF_VIEWER_BASE_URL = EXTENSION_BASE_URL + '/pdfjs/web/viewer.html?file=';
+var PDF_VIEWER_BASE_URL = EXTENSION_BASE_URL + '/content/web/viewer.html?file=';
 
 /**
  * Creates an <iframe> for testing the effects of code injected
