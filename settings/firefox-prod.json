@@ -7,6 +7,7 @@
   "websocketUrl": "wss://hypothes.is/ws",
 
   "sentryPublicDSN": "https://934d4f62912b47d8bb03c28ae6670cf8@app.getsentry.com/69811",
+  "googleAnalytics": "UA-26026798-5",
 
   "browserIsFirefox": true
 }
