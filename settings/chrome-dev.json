@@ -6,5 +6,7 @@
   "serviceUrl": "http://localhost:5000/",
   "websocketUrl": "ws://localhost:5001/ws",
 
+  "googleAnalytics": "UA-26026798-6",
+
   "browserIsChrome": true
 }
