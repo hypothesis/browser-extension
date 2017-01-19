@@ -20,6 +20,9 @@ function extensionSettings(settings) {
       release: settings.version,
     };
   }
+  if (settings.googleAnalytics) {
+    result.googleAnalytics = settings.googleAnalytics;
+  }
   return result;
 }
 
