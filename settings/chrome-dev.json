@@ -8,5 +8,6 @@
 
   "googleAnalytics": "UA-26026798-6",
 
-  "browserIsChrome": true
+  "browserIsChrome": true,
+  "appType": "chrome-extension"
 }

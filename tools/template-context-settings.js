@@ -14,6 +14,7 @@ function extensionSettings(settings) {
   result.buildType = settings.buildType;
   result.apiUrl = settings.apiUrl;
   result.serviceUrl = settings.serviceUrl;
+  result.appType = settings.appType || '';
   if (settings.sentryPublicDSN) {
     result.raven = {
       dsn: settings.sentryPublicDSN,
