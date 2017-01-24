@@ -9,5 +9,6 @@
   "sentryPublicDSN": "https://cec276e804f94f83a11d5cf8522aa7e0@app.getsentry.com/69812",
   "googleAnalytics": "UA-26026798-6",
 
-  "browserIsFirefox": true
+  "browserIsFirefox": true,
+  "appType": "firefox-extension"
 }
