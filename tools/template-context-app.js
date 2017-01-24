@@ -34,6 +34,7 @@ function appSettings(settings) {
   result.apiUrl = settings.apiUrl;
   result.serviceUrl = settings.serviceUrl;
   result.release = settings.version;
+  result.appType = settings.appType || '';
   if (settings.websocketUrl) {
     result.websocketUrl = settings.websocketUrl;
   }
