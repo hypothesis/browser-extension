@@ -1,6 +1,7 @@
 'use strict';
 
 var HypothesisChromeExtension = require('./hypothesis-chrome-extension');
+var settings = require('./settings');
 
 var browserExtension = new HypothesisChromeExtension({
   chromeTabs: chrome.tabs,
@@ -20,7 +21,7 @@ if (chrome.runtime.onInstalled) {
   chrome.runtime.onInstalled.addListener(onInstalled);
 }
 
-// Respond to messages sent by the JavaScript from https://hpt.is.
+// Respond to messages sent by the JavaScript from https://hyp.is.
 // This is how it knows whether the user has this Chrome extension installed.
 if (chrome.runtime.onMessageExternal) {
   chrome.runtime.onMessageExternal.addListener(
@@ -57,7 +58,7 @@ function onInstalled(installDetails) {
   // See https://github.com/hypothesis/h/issues/634 for more info.
   // This is intended to be a temporary fix only.
   var details = {
-    primaryPattern: 'https://hypothes.is/*',
+    primaryPattern: settings.serviceUrl + '*',
     setting: 'allow',
   };
   chrome.contentSettings.cookies.set(details);

@@ -1,12 +1,13 @@
 'use strict';
 
-var annotationIDs = require('./annotation-ids');
-var errors = require('./errors');
-var TabState = require('./tab-state');
 var BrowserAction = require('./browser-action');
 var HelpPage = require('./help-page');
 var SidebarInjector = require('./sidebar-injector');
+var TabState = require('./tab-state');
 var TabStore = require('./tab-store');
+var annotationIDs = require('./annotation-ids');
+var errors = require('./errors');
+var settings = require('./settings');
 
 var TAB_STATUS_LOADING = 'loading';
 var TAB_STATUS_COMPLETE = 'complete';
@@ -97,7 +98,7 @@ function HypothesisChromeExtension(dependencies) {
       return;
     }
 
-    chromeTabs.create({url: 'https://hypothes.is/welcome'}, function (tab) {
+    chromeTabs.create({url: settings.serviceUrl + 'welcome'}, function (tab) {
       state.activateTab(tab.id);
     });
   };
