@@ -4,10 +4,10 @@ var proxyquire = require('proxyquire');
 
 var extension;
 
-function FakeHypothesisChromeExtension(args) {
+function FakeHypothesisChromeExtension(deps) {
   extension = this; // eslint-disable-line consistent-this
 
-  this.args = args;
+  this.deps = deps;
   this.listen = sinon.stub();
   this.install = sinon.stub();
   this.firstRun = sinon.stub();
