@@ -121,6 +121,9 @@ describe('HypothesisChromeExtension', function () {
       './browser-action': createConstructor(fakeBrowserAction),
       './sidebar-injector': createConstructor(fakeSidebarInjector),
       './errors': fakeErrors,
+      './settings': {
+        serviceUrl: 'https://hypothes.is/',
+      },
     });
 
     ext = createExt();
