@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# This script creates a new release of the Hypothesis browser extension
+# using the latest version of the client available on npm.
+
+set -eu
+
+LATEST_CLIENT_VERSION=$(npm view hypothesis version)
+
+# Update checkout
+git checkout master
+git fetch
+git reset --hard origin/master
+
+# Update client to latest version on npm
+npm install --save-dev hypothesis@$LATEST_CLIENT_VERSION
+git add package.json
+git commit -m "Update Hypothesis client to $LATEST_CLIENT_VERSION"
+
+# Tag new browser extension release with the same version number as the client
+npm version $LATEST_CLIENT_VERSION
+
+echo "$LATEST_CLIENT_VERSION has been tagged."
+echo "Wait for the build to complete at https://travis-ci.org/hypothesis/browser-extension"
+echo "and upload the Chrome extensions to the Chrome Web Store"
