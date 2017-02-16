@@ -7,10 +7,15 @@ set -eu
 
 LATEST_CLIENT_VERSION=$(npm view hypothesis version)
 
+# Check that working tree is clean
+if ! git diff --quiet HEAD ; then
+  echo "There are uncommitted changes in the working tree or index."
+  exit 1
+fi
+
 # Update checkout
 git checkout master
-git fetch
-git reset --hard origin/master
+git pull
 
 # Update client to latest version on npm
 npm install --save-dev hypothesis@$LATEST_CLIENT_VERSION
