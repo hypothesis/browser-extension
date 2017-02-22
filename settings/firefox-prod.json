@@ -2,6 +2,7 @@
   "buildType": "production",
 
   "apiUrl": "https://hypothes.is/api/",
+  "authDomain": "hypothes.is",
   "bouncerUrl": "https://hyp.is/",
   "serviceUrl": "https://hypothes.is/",
   "websocketUrl": "wss://hypothes.is/ws",
