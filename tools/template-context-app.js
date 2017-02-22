@@ -32,6 +32,7 @@ const manifest = require('../node_modules/hypothesis/build/manifest.json');
 function appSettings(settings) {
   let result = {};
   result.apiUrl = settings.apiUrl;
+  result.authDomain = settings.authDomain;
   result.serviceUrl = settings.serviceUrl;
   result.release = settings.version;
   result.appType = settings.appType || '';
