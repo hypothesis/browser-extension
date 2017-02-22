@@ -2,7 +2,7 @@
   "buildType": "staging",
 
   "apiUrl": "https://qa.hypothes.is/api/",
-  "authDomain": "qa.hypothes.is",
+  "authDomain": "hypothes.is",
   "bouncerUrl": "https://qa.hyp.is/",
   "serviceUrl": "https://qa.hypothes.is/",
   "websocketUrl": "wss://qa.hypothes.is/ws",
