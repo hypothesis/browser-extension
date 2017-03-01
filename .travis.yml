@@ -14,3 +14,9 @@ addons:
     paths:
       # Upload all built extension packages
       - $(ls dist/*.zip dist/*.xpi | tr "\n" ":")
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: ./tools/deploy
+  on:
+    branch: master

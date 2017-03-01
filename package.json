@@ -11,6 +11,7 @@
     "browserify": "^13.0.0",
     "chai": "^3.5.0",
     "check-dependencies": "^0.12.0",
+    "chrome-webstore-upload-cli": "^1.1.1",
     "core-js": "^1.2.5",
     "diff": "^2.2.2",
     "eslint": "^3.2.0",
