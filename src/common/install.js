@@ -4,6 +4,7 @@ var HypothesisChromeExtension = require('./hypothesis-chrome-extension');
 var settings = require('./settings');
 
 var browserExtension = new HypothesisChromeExtension({
+  chromeExtension: chrome.extension,
   chromeTabs: chrome.tabs,
   chromeBrowserAction: chrome.browserAction,
   chromeStorage: chrome.storage,

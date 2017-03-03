@@ -41,6 +41,7 @@ var TAB_STATUS_COMPLETE = 'complete';
  */
 function HypothesisChromeExtension(dependencies) {
   var chromeTabs = dependencies.chromeTabs;
+  var chromeExtension = dependencies.chromeExtension;
   var chromeStorage = dependencies.chromeStorage;
   var chromeBrowserAction = dependencies.chromeBrowserAction;
   var help  = new HelpPage(chromeTabs, dependencies.extensionURL);
@@ -232,6 +233,8 @@ function HypothesisChromeExtension(dependencies) {
 
       var config = {
         annotations: state.getState(tab.id).directLinkedAnnotation,
+        assetRoot: chromeExtension.getURL('/client/'),
+        sidebarAppUrl: chromeExtension.getURL('/client/app.html'),
       };
 
       return sidebar.injectIntoTab(tab, config)
