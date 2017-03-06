@@ -71,28 +71,12 @@ documentation for instructions on building the client in a development
 environment.
 
 **Tip**: If you get a **permission denied** error when running `npm link`
-you probably need to tell npm to install packages into a directory in your home
-directory that you have permission to write to. On linux:
-
-```sh
-npm config set prefix /home/<YOUR_USERNAME>/npm
-```
-
-On macOS:
-
-```sh
-npm config set prefix /Users/<YOUR_USERNAME>/npm
-```
-
-`npm` will now install executable files into `$HOME/npm/bin`, so add that
-directory to your `$PATH`.
+you probably need to fix npm's permissions. See
+[Fixing npm permissions](https://docs.npmjs.com/getting-started/fixing-npm-permissions).
 
 **Tip**: To **unlink** your dev browser extension from your dev client run
-`npm unlink hypothesis` in your browser extension directory:
-
-```sh
-npm unlink hypothesis
-```
+`npm unlink hypothesis` in your browser extension directory
+(see the [npm uninstall docs](https://docs.npmjs.com/cli/uninstall)).
 
 See [Building the extension](docs/building.md) for more information.
 
