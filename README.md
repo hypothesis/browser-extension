@@ -70,6 +70,14 @@ built client from the client repository. Please consult the client's
 documentation for instructions on building the client in a development
 environment.
 
+**Tip**: If you get a **permission denied** error when running `npm link`
+you probably need to fix npm's permissions. See
+[Fixing npm permissions](https://docs.npmjs.com/getting-started/fixing-npm-permissions).
+
+**Tip**: To **unlink** your dev browser extension from your dev client run
+`npm unlink hypothesis` in your browser extension directory
+(see the [npm uninstall docs](https://docs.npmjs.com/cli/uninstall)).
+
 See [Building the extension](docs/building.md) for more information.
 
 [client]: https://github.com/hypothesis/client/
