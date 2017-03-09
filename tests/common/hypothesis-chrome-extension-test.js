@@ -36,6 +36,7 @@ describe('HypothesisChromeExtension', function () {
   var sandbox = sinon.sandbox.create();
   var HypothesisChromeExtension;
   var ext;
+  var fakeChromeExtension;
   var fakeChromeStorage;
   var fakeChromeTabs;
   var fakeChromeBrowserAction;
@@ -48,6 +49,7 @@ describe('HypothesisChromeExtension', function () {
 
   function createExt() {
     return new HypothesisChromeExtension({
+      chromeExtension: fakeChromeExtension,
       chromeStorage: fakeChromeStorage,
       chromeTabs: fakeChromeTabs,
       chromeBrowserAction: fakeChromeBrowserAction,
@@ -72,6 +74,11 @@ describe('HypothesisChromeExtension', function () {
     };
     fakeChromeBrowserAction = {
       onClicked: new FakeListener(),
+    };
+    fakeChromeExtension = {
+      getURL: function (path) {
+        return 'chrome://1234' + path;
+      },
     };
     fakeHelpPage = {
       showHelpForError: sandbox.spy(),
@@ -492,6 +499,20 @@ describe('HypothesisChromeExtension', function () {
       fakeTabState.isTabActive.returns(true);
       onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
       assert.calledWith(fakeSidebarInjector.injectIntoTab, tab);
+    });
+
+    it('configures the client to load assets from the extension', function () {
+      fakeTabState.getState = sandbox.stub().returns({
+        state: tabStates.ACTIVE,
+        ready: true,
+      });
+      fakeTabState.isTabActive.returns(true);
+      onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
+      assert.calledWith(fakeSidebarInjector.injectIntoTab, tab, {
+        annotations: undefined,
+        assetRoot: 'chrome://1234/client/',
+        sidebarAppUrl: 'chrome://1234/client/app.html',
+      });
     });
 
     it('does not inject the sidebar if already installed', function () {

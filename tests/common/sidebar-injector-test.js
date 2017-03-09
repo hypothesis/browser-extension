@@ -48,7 +48,7 @@ describe('SidebarInjector', function () {
     isAlreadyInjected = false;
     contentFrame = undefined;
     embedScriptReturnValue = {
-      installedURL: EXTENSION_BASE_URL + '/public/app.html',
+      installedURL: EXTENSION_BASE_URL + '/client/app.html',
     };
 
     var executeScriptSpy = sinon.spy(function (tabId, details, callback) {
@@ -58,7 +58,7 @@ describe('SidebarInjector', function () {
 
       if (details.code && details.code.match(/detectContentType/)) {
         callback([{type: contentType}]);
-      } else if (details.file && details.file.match(/embed/)) {
+      } else if (details.file && details.file.match(/boot/)) {
         callback([embedScriptReturnValue]);
       } else if (details.file && details.file.match(/destroy/)) {
         callback([isAlreadyInjected]);
@@ -146,7 +146,7 @@ describe('SidebarInjector', function () {
 
         return injector.injectIntoTab({id: 1, url: url}).then(function() {
           assert.calledWith(spy, 1, {
-            file: sinon.match('/public/embed.js'),
+            file: sinon.match('/client/build/boot.js'),
           });
         });
       });

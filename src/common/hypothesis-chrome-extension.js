@@ -41,6 +41,7 @@ var TAB_STATUS_COMPLETE = 'complete';
  */
 function HypothesisChromeExtension(dependencies) {
   var chromeTabs = dependencies.chromeTabs;
+  var chromeExtension = dependencies.chromeExtension;
   var chromeStorage = dependencies.chromeStorage;
   var chromeBrowserAction = dependencies.chromeBrowserAction;
   var help  = new HelpPage(chromeTabs, dependencies.extensionURL);
@@ -232,6 +233,13 @@ function HypothesisChromeExtension(dependencies) {
 
       var config = {
         annotations: state.getState(tab.id).directLinkedAnnotation,
+
+        // Configure client to load assets and sidebar app from extension.
+        // Note: Even though the sidebar app URL is correct here and the page
+        // does load, Chrome devtools may incorrectly report that it failed to
+        // load. See https://bugs.chromium.org/p/chromium/issues/detail?id=667533
+        assetRoot: chromeExtension.getURL('/client/'),
+        sidebarAppUrl: chromeExtension.getURL('/client/app.html'),
       };
 
       return sidebar.injectIntoTab(tab, config)

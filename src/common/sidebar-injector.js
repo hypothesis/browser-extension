@@ -274,7 +274,7 @@ function SidebarInjector(chromeTabs, dependencies) {
   }
 
   function injectIntoHTML(tab) {
-    return injectScript(tab.id, '/public/embed.js');
+    return injectScript(tab.id, '/client/build/boot.js');
   }
 
   function removeFromPDF(tab) {

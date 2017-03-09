@@ -6,9 +6,6 @@
         html5Mode.requireBase left at its default value (true), so this is
         required. In future we should be able to remove this. }}
     <base href="/">
-    {{#stylesheets}}
-    <link rel="stylesheet" href="{{&.}}">
-    {{/stylesheets}}
   </head>
   <body>
     <hypothesis-app></hypothesis-app>
@@ -20,8 +17,6 @@
     {{&settings}}
     </script>
 
-    {{#scripts}}
-    <script src="{{&.}}"></script>
-    {{/scripts}}
+    <script src="/client/build/boot.js"></script>
   </body>
 </html>

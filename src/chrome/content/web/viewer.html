@@ -40,7 +40,15 @@ http://sourceforge.net/adobe/cmap/wiki/License/
 
     <script src="debugger.js"></script>
     <script src="viewer.js"></script>
-    <script src="../../public/embed.js"></script>
+
+    <!-- Load Hypothesis client !-->
+    <script type="application/json" class="js-hypothesis-config">
+    {
+      "assetRoot": "/client/",
+      "sidebarAppUrl": "/client/app.html"
+    }
+    </script>
+    <script src="/client/build/boot.js"></script>
 
   </head>
 
