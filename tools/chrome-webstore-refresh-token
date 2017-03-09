@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -eu
+
+# This script is a helper for generating the refresh token used to automate
+# upload and publishing of Chrome extensions to the Chrome Web Store. 
+#
+# 1. Read the guide at https://github.com/DrewML/chrome-webstore-upload/blob/master/How%20to%20generate%20Google%20API%20keys.md
+#
+#    The Client ID and Client Secret can be found/generated under the 'Client
+#    Chrome Extension' project in the 'hypothes.is' organization at
+#    https://console.developers.google.com
+#
+# 2. After the step in the above guide that gives you an auth code in the
+#    browser, run this script with the auth code to get a refresh token:
+#
+#    ./tools/chrome-webstore-refresh-token $AUTH_CODE
+#
+# 3. Copy the 'refresh_token' value and add it to the Travis config as the
+#    CHROME_WEBSTORE_REFRESH_TOKEN env var
+
+AUTH_CODE=$1
+
+if [ -z "$AUTH_CODE" ]; then
+  echo "Auth code not specified."
+fi
+
+curl "https://accounts.google.com/o/oauth2/token" -d "client_id=$CHROME_WEBSTORE_CLIENT_ID&client_secret=$CHROME_WEBSTORE_CLIENT_SECRET&code=$AUTH_CODE&grant_type=authorization_code&redirect_uri=urn:ietf:wg:oauth:2.0:oob"
+
