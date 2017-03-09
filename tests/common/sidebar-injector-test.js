@@ -146,7 +146,7 @@ describe('SidebarInjector', function () {
 
         return injector.injectIntoTab({id: 1, url: url}).then(function() {
           assert.calledWith(spy, 1, {
-            file: sinon.match('/client/boot.js'),
+            file: sinon.match('/client/build/boot.js'),
           });
         });
       });

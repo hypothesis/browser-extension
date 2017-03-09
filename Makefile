@@ -29,7 +29,7 @@ EXTENSION_SRC := content help images lib
 .PHONY: extension
 extension: build/extension.bundle.js
 extension: build/manifest.json
-extension: build/client
+extension: build/client/build
 extension: build/client/app.html
 extension: build/settings-data.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
@@ -46,7 +46,7 @@ build/extension.bundle.js: src/common/extension.js
 		>build/.extension.bundle.deps
 build/manifest.json: src/chrome/manifest.json.mustache build/.settings.json
 	$(MUSTACHE) build/.settings.json $< > $@
-build/client: node_modules/hypothesis/build/manifest.json
+build/client/build: node_modules/hypothesis/build/manifest.json
 	@mkdir -p $@
 	cp -R node_modules/hypothesis/build/* $@
 	@# We can't leave the client manifest in the build or the Chrome Web Store
