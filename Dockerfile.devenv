@@ -1,0 +1,11 @@
+FROM node:6
+MAINTAINER Hypothes.is Project and contributors
+
+WORKDIR /browser-extension
+VOLUME /browser-extension
+
+ENV LANG C.UTF-8
+ENV PATH /usr/local/bin:$PATH
+
+CMD npm install && make
+

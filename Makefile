@@ -8,6 +8,11 @@ MUSTACHE := node_modules/.bin/mustache
 .PHONY: default
 default: extension
 
+## Run test suite
+.PHONY: test
+test: 
+	npm test
+
 .PHONY: clean
 clean:
 	rm -rf build/* build/.settings.json build/.*.deps
