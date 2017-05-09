@@ -26,5 +26,5 @@ git commit -m "Update Hypothesis client to $LATEST_CLIENT_VERSION"
 npm version $LATEST_CLIENT_VERSION
 
 echo "$LATEST_CLIENT_VERSION has been tagged."
-echo "Wait for the build to complete at https://travis-ci.org/hypothesis/browser-extension"
-echo "and upload the Chrome extensions to the Chrome Web Store"
+echo "After a successful Travis build, test the stage extension and then go to"
+echo "the Chrome Web Store developer dashboard to publish the prod extension."
