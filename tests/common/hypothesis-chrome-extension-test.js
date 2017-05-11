@@ -510,6 +510,7 @@ describe('HypothesisChromeExtension', function () {
       onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
       assert.calledWith(fakeSidebarInjector.injectIntoTab, tab, {
         annotations: undefined,
+        query: undefined,
         assetRoot: 'chrome://1234/client/',
         sidebarAppUrl: 'chrome://1234/client/app.html',
       });

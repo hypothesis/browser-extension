@@ -5,7 +5,7 @@ var HelpPage = require('./help-page');
 var SidebarInjector = require('./sidebar-injector');
 var TabState = require('./tab-state');
 var TabStore = require('./tab-store');
-var annotationIDs = require('./annotation-ids');
+var annotationQuery = require('./extract-annotation-query');
 var errors = require('./errors');
 var settings = require('./settings');
 
@@ -177,14 +177,15 @@ function HypothesisChromeExtension(dependencies) {
   function onTabUpdated(tabId, changeInfo, tab) {
     if (changeInfo.status === TAB_STATUS_LOADING) {
       resetTabState(tabId, tab.url);
-      var directLinkedID = annotationIDs.extractIDFromURL(tab.url);
+      var directLinkedID = annotationQuery.extractAnnotationQuery(tab.url);
       if (directLinkedID) {
-        state.setState(tab.id, {directLinkedAnnotation: directLinkedID});
+        state.setState(tab.id, {directLinkedAnnotation: directLinkedID.annotations,
+                       directLinkedQuery: directLinkedID.query});
       }
     } else if (changeInfo.status === TAB_STATUS_COMPLETE) {
       var tabState = state.getState(tabId);
       var newActiveState = tabState.state;
-      if (tabState.directLinkedAnnotation) {
+      if (tabState.directLinkedAnnotation || tabState.directLinkedQuery) {
         newActiveState = TabState.states.ACTIVE;
       }
       state.setState(tabId, {
@@ -233,6 +234,7 @@ function HypothesisChromeExtension(dependencies) {
 
       var config = {
         annotations: state.getState(tab.id).directLinkedAnnotation,
+        query: state.getState(tab.id).directLinkedQuery,
 
         // Configure client to load assets and sidebar app from extension.
         // Note: Even though the sidebar app URL is correct here and the page
@@ -245,7 +247,7 @@ function HypothesisChromeExtension(dependencies) {
       return sidebar.injectIntoTab(tab, config)
         .then(function () {
           // Clear the direct link once H has been successfully injected
-          state.setState(tab.id, {directLinkedAnnotation: undefined});
+          state.setState(tab.id, {directLinkedAnnotation: undefined, query: undefined});
         })
         .catch(function (err) {
           if (err instanceof errors.AlreadyInjectedError) {
