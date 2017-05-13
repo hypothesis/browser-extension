@@ -20,8 +20,8 @@ process.stdout.on('error', err => {
  * rules:
  *
  * - If buildType is 'production' and the git state is not clean, throw an error
- * - Set the version number to X.Y.Z.W, where X.Y.Z is the last tagged release
- *   and W is the number of commits since that release.
+ * - Set the version number to X.Y.Z.W, where the version is taken from the last
+ *   tagged release.
  * - If the buildType is 'production', set the version name to "Official Build",
  *   otherwise set it to a string of the form "gXXXXXXX[.dirty]" to reflect the
  *   exact commit and state of the repository.
@@ -33,7 +33,10 @@ function getVersion(buildType) {
     throw new Error('cannot create production build with dirty git state!');
   }
 
-  const version = `${gitInfo.semver}.${gitInfo.distance}`;
+  // We extract the version rather than using `gitInfo.semver` here because the
+  // tag may include a 4th version component which is not allowed in semver,
+  // but is allowed in Chrome/Firefox/Edge extension versions.
+  const [, version] = gitInfo.tag.match(/v([0-9.]+)/);
   let versionName = 'Official Build';
 
   if (buildType !== 'production') {
