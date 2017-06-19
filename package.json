@@ -42,7 +42,7 @@
     "whatwg-fetch": "^0.10.1"
   },
   "scripts": {
-    "postversion": "git push --follow-tags",
+    "postversion": "git push https://github.com/hypothesis/browser-extension.git master:master --follow-tags",
     "preversion": "npm run test",
     "test": "karma start tests/karma.config.js --single-run"
   }
