@@ -13,9 +13,17 @@ if ! git diff --quiet HEAD ; then
   exit 1
 fi
 
-# Update checkout
-git checkout master
-git pull
+# Fetch commits from main repo and write commit ref to `.git/FETCH_HEAD`
+git fetch --quiet https://github.com/hypothesis/browser-extension.git master
+
+# Check that HEAD is the latest commit on the
+# github.com/hypothesis/browser-extension repo.
+remote_head=$(cat .git/FETCH_HEAD | cut -f1)
+local_head=$(git rev-parse HEAD)
+if [ $remote_head != $local_head ]; then
+  echo "Current commit does not match head of hypothesis/browser-extension.git:master"
+  exit 1
+fi
 
 # Update client to latest version on npm
 npm install --save-dev hypothesis@$LATEST_CLIENT_VERSION
