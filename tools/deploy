@@ -5,12 +5,13 @@ set -eu
 CHROME_STAGE_EXT_ID=iahhmhdkmkifclacffbofcnmgkpalpoj
 CHROME_PROD_EXT_ID=bjfhmglciegochdpefhhlphglcehbmek
 
-# Upload and publish stage extension
-CHROME_STAGE_EXT_ARCHIVE=dist/*-chrome-stage.zip
-if [ ! -f $CHROME_STAGE_EXT_ARCHIVE ]; then
-  echo "Chrome stage extension has not been built."
-  exit 1
-fi
+upload_and_publish_chrome_stage_ext() {
+  # Upload and publish stage extension
+  CHROME_STAGE_EXT_ARCHIVE=dist/*-chrome-stage.zip
+  if [ ! -f $CHROME_STAGE_EXT_ARCHIVE ]; then
+    echo "Chrome stage extension has not been built."
+    exit 1
+  fi
 
 ./node_modules/.bin/webstore upload \
   --source $CHROME_STAGE_EXT_ARCHIVE \
@@ -19,18 +20,48 @@ fi
   --client-secret $CHROME_WEBSTORE_CLIENT_SECRET \
   --refresh-token $CHROME_WEBSTORE_REFRESH_TOKEN \
   --auto-publish
+}
 
-# Upload (but do not publish) prod extension
-CHROME_PROD_EXT_ARCHIVE=dist/*-chrome-prod.zip
-if [ ! -f $CHROME_PROD_EXT_ARCHIVE ]; then
-  echo "Chrome prod extension has not been built."
-  exit 1
-fi
+upload_chrome_prod_ext() {
+  # Upload (but do not publish) prod extension
+  CHROME_PROD_EXT_ARCHIVE=dist/*-chrome-prod.zip
+  if [ ! -f $CHROME_PROD_EXT_ARCHIVE ]; then
+    echo "Chrome prod extension has not been built."
+    exit 1
+  fi
 
-./node_modules/.bin/webstore upload \
-  --source $CHROME_PROD_EXT_ARCHIVE \
-  --extension-id $CHROME_PROD_EXT_ID \
-  --client-id $CHROME_WEBSTORE_CLIENT_ID \
-  --client-secret $CHROME_WEBSTORE_CLIENT_SECRET \
-  --refresh-token $CHROME_WEBSTORE_REFRESH_TOKEN \
+  ./node_modules/.bin/webstore upload \
+    --source $CHROME_PROD_EXT_ARCHIVE \
+    --extension-id $CHROME_PROD_EXT_ID \
+    --client-id $CHROME_WEBSTORE_CLIENT_ID \
+    --client-secret $CHROME_WEBSTORE_CLIENT_SECRET \
+    --refresh-token $CHROME_WEBSTORE_REFRESH_TOKEN
+}
 
+sign_firefox_ext() {
+  FIREFOX_STAGE_EXT_ID="{bf28675c-bf35-47fc-a594-1ba1935a26cb}"
+  rm -rf dist/firefox-stage
+  unzip dist/*-firefox-stage.xpi -d dist/firefox-stage
+
+  ./node_modules/.bin/web-ext sign \
+   --api-key $FIREFOX_AMO_KEY \
+   --api-secret $FIREFOX_AMO_SECRET \
+   --id "$FIREFOX_STAGE_EXT_ID" \
+   --source-dir dist/firefox-stage \
+   --artifacts-dir dist/firefox-stage
+
+  FIREFOX_PROD_EXT_ID="{5d05d280-7c67-4c09-b8dc-64c04d65ad26}"
+  rm -rf dist/firefox-prod
+  unzip dist/*-firefox-prod.xpi -d dist/firefox-prod
+
+  ./node_modules/.bin/web-ext sign \
+    --api-key $FIREFOX_AMO_KEY \
+    --api-secret $FIREFOX_AMO_SECRET \
+    --id "$FIREFOX_PROD_EXT_ID" \
+    --source-dir dist/firefox-prod \
+    --artifacts-dir dist/firefox-prod
+}
+
+upload_and_publish_chrome_stage_ext
+upload_chrome_prod_ext
+sign_firefox_ext

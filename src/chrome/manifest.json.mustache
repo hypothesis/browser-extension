@@ -12,10 +12,9 @@
   {{#browserIsFirefox}}
   "applications": {
     "gecko": {
-      "id": "firefox@hypothes.is",
       {{! Firefox v48 is required for
           https://bugzilla.mozilla.org/show_bug.cgi?id=1210583 }}
-      "strict_min_version": "48.0.0"
+      "strict_min_version": "48.0"
     }
   },
   {{/browserIsFirefox}}
@@ -28,7 +27,13 @@
   },
 
   "homepage_url": "https://hypothes.is/",
+
+  {{! Firefox does not support the "split" mode.
+      See https://developer.mozilla.org/en-US/Add-ons/WebExtensions/manifest.json/incognito
+  }}
+  {{#browserIsChrome}}
   "incognito": "split",
+  {{/browserIsChrome}}
 
   "options_ui": {
     "page": "lib/options.html",

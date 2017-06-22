@@ -41,6 +41,7 @@
     "request": "^2.71.0",
     "sinon": "^1.17.3",
     "watchify": "^3.7.0",
+    "web-ext": "^1.10.0",
     "whatwg-fetch": "^0.10.1"
   },
   "scripts": {
