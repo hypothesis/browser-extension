@@ -1,5 +1,6 @@
 'use strict';
 
+var browserName = require('./browser-name');
 var errors = require('./errors');
 
 /* A controller for displaying help pages. These are bound to extension
@@ -10,7 +11,9 @@ var errors = require('./errors');
  *   to the file inside the chrome extension. See:
  *   https://developer.chrome.com/extensions/extension#method-getURL
  */
-function HelpPage(chromeTabs, extensionURL) {
+function HelpPage(chromeTabs, extensionURL, browserName_) {
+  browserName_ = browserName_ || browserName;
+
   /* Accepts an instance of errors.ExtensionError and displays an appropriate
    * help page if one exists.
    *
@@ -55,11 +58,17 @@ function HelpPage(chromeTabs, extensionURL) {
       params = '?message=' + encodeURIComponent(error.message);
     }
 
-    chromeTabs.create({
+    var tabOpts = {
       index: tab.index + 1,
       url:  extensionURL('/help/index.html' + params + '#' + helpSection),
-      openerTabId: tab.id,
-    });
+    };
+
+    if (browserName_() !== 'firefox') {
+      // We are in Firefox, which does not support the `openerTabId` parameter.
+      tabOpts.openerTabId = tab.id;
+    }
+
+    chromeTabs.create(tabOpts);
   }
 }
 
