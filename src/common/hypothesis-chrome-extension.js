@@ -274,6 +274,12 @@ function HypothesisChromeExtension(dependencies) {
   }
 
   function updateAnnotationCountIfEnabled(tabId, url) {
+    if (!chromeStorage.sync) {
+      // Firefox < 53 does not support `chrome.storage.sync`.
+      state.updateAnnotationCount(tabId, url);
+      return;
+    }
+
     chromeStorage.sync.get({
       badge: true,
     }, function (items) {

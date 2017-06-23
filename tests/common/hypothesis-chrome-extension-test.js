@@ -291,6 +291,33 @@ describe('HypothesisChromeExtension', function () {
         fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
         assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
       });
+
+      it('updates the badge count', function () {
+        var tab = createTab();
+        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
+        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
+        assert.calledWith(fakeTabState.updateAnnotationCount, tab.id, 'http://example.com/foo.html');
+      });
+
+      it('updates the badge count if "chrome.storage.sync" is not supported', function () {
+        var tab = createTab();
+        delete fakeChromeStorage.sync;
+
+        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
+        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
+
+        assert.calledWith(fakeTabState.updateAnnotationCount, tab.id, 'http://example.com/foo.html');
+      });
+
+      it('does not update the badge count if the option is disabled', function () {
+        var tab = createTab();
+        fakeChromeStorage.sync.get.callsArgWith(1, {badge: false});
+
+        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
+        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
+
+        assert.notCalled(fakeTabState.updateAnnotationCount);
+      });
     });
 
     describe('when a tab is replaced', function () {
