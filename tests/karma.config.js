@@ -42,6 +42,7 @@ module.exports = function(config) {
     browserify: {
       debug: true,
       configure: function(bundle) {
+        bundle.transform('babelify');
         bundle.plugin('proxyquire-universal');
       },
     },
