@@ -3,14 +3,18 @@
 describe('HelpPage', function () {
   var errors = require('../../src/common/errors');
   var HelpPage = require('../../src/common/help-page');
+  var fakeBrowserName;
   var fakeChromeTabs;
+  var fakeExtensionURL;
   var help;
 
   beforeEach(function () {
+    fakeBrowserName = sinon.stub().returns('chrome');
     fakeChromeTabs = {create: sinon.stub()};
-    help = new HelpPage(fakeChromeTabs, function fakeExtensionURL(path) {
+    fakeExtensionURL = function (path) {
       return 'CRX_PATH' + path;
-    });
+    };
+    help = new HelpPage(fakeChromeTabs, fakeExtensionURL, fakeBrowserName);
   });
 
   describe('.showHelpForError', function () {
@@ -97,6 +101,19 @@ describe('HelpPage', function () {
         index: 2,
         openerTabId: 1,
         url: 'CRX_PATH/help/index.html#restricted-protocol',
+      });
+    });
+  });
+
+  context('in Firefox', function () {
+    it('does not set the "openerTabId" argument when creating a new tab', function () {
+      fakeBrowserName.returns('firefox');
+      var help = new HelpPage(fakeChromeTabs, fakeExtensionURL, fakeBrowserName);
+      help.showHelpForError({id: 1, index: 1}, new errors.LocalFileError('msg'));
+      assert.called(fakeChromeTabs.create);
+      assert.calledWith(fakeChromeTabs.create, {
+        index: 2,
+        url: 'CRX_PATH/help/index.html#local-file',
       });
     });
   });
