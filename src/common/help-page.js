@@ -63,8 +63,9 @@ function HelpPage(chromeTabs, extensionURL, browserName_) {
       url:  extensionURL('/help/index.html' + params + '#' + helpSection),
     };
 
+    // Add `openerTabId` property to associate the help page tab with the
+    // current tab. This property is not supported in Firefox.
     if (browserName_() !== 'firefox') {
-      // We are in Firefox, which does not support the `openerTabId` parameter.
       tabOpts.openerTabId = tab.id;
     }
 
