@@ -39,7 +39,7 @@ upload_chrome_prod_ext() {
 }
 
 sign_firefox_ext() {
-  FIREFOX_STAGE_EXT_ID="{bf28675c-bf35-47fc-a594-1ba1935a26cb}"
+  FIREFOX_STAGE_EXT_ID="{b441de5f-18e6-40ad-a8c2-f1bd2d42cb01}"
   rm -rf dist/firefox-stage
   unzip dist/*-firefox-stage.xpi -d dist/firefox-stage
 
@@ -50,7 +50,7 @@ sign_firefox_ext() {
    --source-dir dist/firefox-stage \
    --artifacts-dir dist/firefox-stage
 
-  FIREFOX_PROD_EXT_ID="{5d05d280-7c67-4c09-b8dc-64c04d65ad26}"
+  FIREFOX_PROD_EXT_ID="{32492fee-2d9f-49fe-b268-fe213f7019f0}"
   rm -rf dist/firefox-prod
   unzip dist/*-firefox-prod.xpi -d dist/firefox-prod
 
