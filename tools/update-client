@@ -27,7 +27,7 @@ fi
 
 # Update client to latest version on npm
 npm install --save-dev hypothesis@$LATEST_CLIENT_VERSION
-git add package.json
+git add package.json package-lock.json
 git commit -m "Update Hypothesis client to $LATEST_CLIENT_VERSION"
 
 # Tag new browser extension release with the same version number as the client
