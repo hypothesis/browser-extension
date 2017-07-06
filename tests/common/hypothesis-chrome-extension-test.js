@@ -270,12 +270,17 @@ describe('HypothesisChromeExtension', function () {
         assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
       });
 
-      it('injects the sidebar if a direct link is present', function () {
-        var tab = createTab();
-        tab.url += '#annotations:456';
-        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
-        fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
-        assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
+      [
+        '#annotations:456',
+        '#annotations:query:blah',
+      ].forEach((fragment) => {
+        it('injects the sidebar if a direct link is present', function () {
+          var tab = createTab();
+          tab.url += fragment;
+          fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
+          fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
+          assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
+        });
       });
 
       it('injects the sidebar if the page rewrites the URL fragment', function () {
@@ -536,7 +541,6 @@ describe('HypothesisChromeExtension', function () {
       fakeTabState.isTabActive.returns(true);
       onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
       assert.calledWith(fakeSidebarInjector.injectIntoTab, tab, {
-        annotations: undefined,
         assetRoot: 'chrome://1234/client/',
         sidebarAppUrl: 'chrome://1234/client/app.html',
       });
