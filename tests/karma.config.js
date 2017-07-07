@@ -42,7 +42,12 @@ module.exports = function(config) {
     browserify: {
       debug: true,
       configure: function(bundle) {
-        bundle.transform('babelify');
+        bundle.transform('babelify', {
+          // Use the "env" preset without any browsers listed, overriding the
+          // defaults in .babelrc to enable ES2015 => ES5 transformation for all
+          // language features.
+          presets: ['env'],
+        });
         bundle.plugin('proxyquire-universal');
       },
     },

@@ -5,7 +5,7 @@ var HelpPage = require('./help-page');
 var SidebarInjector = require('./sidebar-injector');
 var TabState = require('./tab-state');
 var TabStore = require('./tab-store');
-var annotationIDs = require('./annotation-ids');
+var directLinkQuery = require('./direct-link-query');
 var errors = require('./errors');
 var settings = require('./settings');
 
@@ -177,14 +177,14 @@ function HypothesisChromeExtension(dependencies) {
   function onTabUpdated(tabId, changeInfo, tab) {
     if (changeInfo.status === TAB_STATUS_LOADING) {
       resetTabState(tabId, tab.url);
-      var directLinkedID = annotationIDs.extractIDFromURL(tab.url);
-      if (directLinkedID) {
-        state.setState(tab.id, {directLinkedAnnotation: directLinkedID});
+      var query = directLinkQuery(tab.url);
+      if (query) {
+        state.setState(tab.id, { directLinkQuery: query });
       }
     } else if (changeInfo.status === TAB_STATUS_COMPLETE) {
       var tabState = state.getState(tabId);
       var newActiveState = tabState.state;
-      if (tabState.directLinkedAnnotation) {
+      if (tabState.directLinkQuery) {
         newActiveState = TabState.states.ACTIVE;
       }
       state.setState(tabId, {
@@ -231,9 +231,9 @@ function HypothesisChromeExtension(dependencies) {
         extensionSidebarInstalled: true,
       });
 
-      var config = {
-        annotations: state.getState(tab.id).directLinkedAnnotation,
+      var { directLinkQuery } = state.getState(tab.id);
 
+      var config = {
         // Configure client to load assets and sidebar app from extension.
         // Note: Even though the sidebar app URL is correct here and the page
         // does load, Chrome devtools may incorrectly report that it failed to
@@ -242,10 +242,19 @@ function HypothesisChromeExtension(dependencies) {
         sidebarAppUrl: chromeExtension.getURL('/client/app.html'),
       };
 
+      if (directLinkQuery) {
+        if (directLinkQuery.id) {
+          config.annotations = directLinkQuery.id;
+        }
+        if (directLinkQuery.query) {
+          config.query = directLinkQuery.query;
+        }
+      }
+
       return sidebar.injectIntoTab(tab, config)
         .then(function () {
           // Clear the direct link once H has been successfully injected
-          state.setState(tab.id, {directLinkedAnnotation: undefined});
+          state.setState(tab.id, { directLinkQuery: undefined });
         })
         .catch(function (err) {
           if (err instanceof errors.AlreadyInjectedError) {
