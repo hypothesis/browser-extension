@@ -1,6 +1,6 @@
 {
   "name": "hypothesis-browser-extension",
-  "version": "1.28.0",
+  "version": "1.30.0",
   "private": true,
   "description": "Annotate with anyone, anywhere.",
   "license": "BSD-2-Clause",
