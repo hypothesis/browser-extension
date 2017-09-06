@@ -29,6 +29,10 @@ function appSettings(settings) {
   if (settings.googleAnalytics) {
     result.googleAnalytics = settings.googleAnalytics;
   }
+  if (settings.oauthClientId) {
+    result.oauthClientId = settings.oauthClientId;
+    result.oauthEnabled = settings.oauthEnabled;
+  }
   return result;
 }
 
