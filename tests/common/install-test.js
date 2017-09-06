@@ -32,11 +32,6 @@ describe('install', function () {
         getURL: sinon.stub(),
         isAllowedFileSchemeAccess: sinon.stub(),
       },
-      contentSettings: {
-        cookies: { set: sinon.stub() },
-        images: { set: sinon.stub() },
-        javascript: { set: sinon.stub() },
-      },
       runtime: {
         requestUpdateCheck: sinon.stub(),
         onInstalled: eventListenerStub(),
@@ -74,14 +69,6 @@ describe('install', function () {
     it("calls the extension's first run hook", function () {
       triggerInstallEvent();
       assert.calledWith(extension.firstRun, {id: '1234', installType: 'normal'});
-    });
-
-    it('enables extension to set cookies for service domain', function () {
-      triggerInstallEvent();
-      assert.calledWith(fakeChrome.contentSettings.cookies.set, {
-        primaryPattern: 'https://hypothes.is/*',
-        setting: 'allow',
-      });
     });
   });
 });

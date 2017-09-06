@@ -1,7 +1,6 @@
 'use strict';
 
 var HypothesisChromeExtension = require('./hypothesis-chrome-extension');
-var settings = require('./settings');
 
 var browserExtension = new HypothesisChromeExtension({
   chromeExtension: chrome.extension,
@@ -54,17 +53,6 @@ function onInstalled(installDetails) {
   if (installDetails.reason === 'install') {
     chrome.management.getSelf(browserExtension.firstRun);
   }
-
-  // We need this so that 3rd party cookie blocking does not kill us.
-  // See https://github.com/hypothesis/h/issues/634 for more info.
-  // This is intended to be a temporary fix only.
-  var details = {
-    primaryPattern: settings.serviceUrl + '*',
-    setting: 'allow',
-  };
-  chrome.contentSettings.cookies.set(details);
-  chrome.contentSettings.images.set(details);
-  chrome.contentSettings.javascript.set(details);
 
   browserExtension.install();
 }
