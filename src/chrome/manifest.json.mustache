@@ -9,6 +9,10 @@
   "minimum_chrome_version": "38",
   {{/browserIsChrome}}
 
+  {{#key}}
+  "key": "{{{ key }}}",
+  {{/key}}
+
   {{#browserIsFirefox}}
   "applications": {
     "gecko": {
