@@ -1,5 +1,7 @@
 {
   "buildType": "production",
+  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCq7XsXE/uakq4aKMG5Smz2nc8VSaandriziGorxX08py3mTkab79GpWYu7j/hA3Yf7fkCLQnX8QoZGj7WdaMX6+b+eHxF7vYpOhEW/Bam7TOlb+5AVmL1KReG9PPTLz4dp+xA4WfK2dqFM+XN40FTbm2G/SNk3GRP3gQOxgy3ZKwIDAQAB",
+
 
   "apiUrl": "https://hypothes.is/api/",
   "authDomain": "hypothes.is",
