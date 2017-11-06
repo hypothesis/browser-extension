@@ -7,14 +7,14 @@ browser.
 Installing the dependencies
 ---------------------------
 
-You should have [Node v4.x][node4] installed.
+You should have [Node v6.x (or later)][node] installed.
 
 Before continuing, install the development dependencies by running the following
 at the root of the repository:
 
     $ npm install
 
-[node4]: https://nodejs.org/en/download/
+[node]: https://nodejs.org/en/download/
 
 Building the extension
 ----------------------
