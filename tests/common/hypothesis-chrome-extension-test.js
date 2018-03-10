@@ -61,7 +61,7 @@ describe('HypothesisChromeExtension', function () {
   beforeEach(function () {
     fakeChromeStorage = {
       sync: {
-        get: sandbox.stub().callsArgWith(1, {badge: true}),
+        get: sandbox.stub().callsArgWith(1, {badge: true, badgeEnable: false}),
       },
     };
     fakeChromeTabs = {
@@ -299,24 +299,25 @@ describe('HypothesisChromeExtension', function () {
 
       it('updates the badge count', function () {
         var tab = createTab();
+        fakeChromeStorage.sync.get.callsArgWith(1, {badgeEnable: true});
+
         fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
         fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
         assert.calledWith(fakeTabState.updateAnnotationCount, tab.id, 'http://example.com/foo.html');
       });
 
-      it('updates the badge count if "chrome.storage.sync" is not supported', function () {
+      it('does not update the badge count if "chrome.storage.sync" is not supported', function () {
         var tab = createTab();
         delete fakeChromeStorage.sync;
 
         fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
         fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
 
-        assert.calledWith(fakeTabState.updateAnnotationCount, tab.id, 'http://example.com/foo.html');
+        assert.notCalled(fakeTabState.updateAnnotationCount);
       });
 
       it('does not update the badge count if the option is disabled', function () {
         var tab = createTab();
-        fakeChromeStorage.sync.get.callsArgWith(1, {badge: false});
 
         fakeChromeTabs.onUpdated.listener(tab.id, {status: 'loading'}, tab);
         fakeChromeTabs.onUpdated.listener(tab.id, {status: 'complete'}, tab);
