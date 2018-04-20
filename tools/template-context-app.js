@@ -31,7 +31,6 @@ function appSettings(settings) {
   }
   if (settings.oauthClientId) {
     result.oauthClientId = settings.oauthClientId;
-    result.oauthEnabled = settings.oauthEnabled;
   }
   return result;
 }
