@@ -2,7 +2,10 @@ language: node_js
 node_js: 'lts/*'
 cache:
   directories:
-    - node_modules
+    - $HOME/.npm
+install:
+  - npm install -g npm
+  - npm ci
 script:
   - npm test
   - make SETTINGS_FILE=settings/chrome-prod.json dist/$(date +'%Y%m%d')-chrome-prod.zip
