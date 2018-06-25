@@ -2,7 +2,9 @@
   "name": "Hypothesis - Web & PDF Annotation",
   "short_name": "Hypothesis",
   "version": "{{ version }}",
+  {{#browserIsChrome}}
   "version_name": "{{ version }} ({{ versionName }})",
+  {{/browserIsChrome}}
   "manifest_version": 2,
 
   {{#browserIsChrome}}
@@ -44,7 +46,10 @@
     "chrome_style": true
   },
 
+  {{#browserIsChrome}}
   "offline_enabled": false,
+  {{/browserIsChrome}}
+
   "permissions": [
     "<all_urls>",
 
@@ -69,14 +74,18 @@
       "38": "images/browser-icon-inactive@2x.png"
     }
   },
+
+  {{#browserIsChrome}}
+  "externally_connectable": {
+    {{#bouncerUrl}}"matches": ["{{&bouncerUrl}}*"]{{/bouncerUrl}}
+  },
+  {{/browserIsChrome}}
+
   "web_accessible_resources": [
     "client/*",
     "content/*",
     "lib/*",
     "help/*",
     "content/web/viewer.html"
-  ],
-  "externally_connectable": {
-    {{#bouncerUrl}}"matches": ["{{&bouncerUrl}}*"]{{/bouncerUrl}}
-  }
+  ]
 }
