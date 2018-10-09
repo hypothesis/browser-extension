@@ -20,7 +20,7 @@
     "eslint-config-hypothesis": "^1.0.0",
     "exorcist": "^0.4.0",
     "git-describe": "^3.0.1",
-    "hypothesis": "^1.92.0",
+    "hypothesis": "^1.93.0",
     "is-equal-shallow": "^0.1.3",
     "js-polyfills": "^0.1.16",
     "jscs": "^3.0.2",
