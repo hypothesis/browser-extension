@@ -4,6 +4,7 @@ BROWSERIFY := node_modules/.bin/browserify
 ESLINT := node_modules/.bin/eslint
 EXORCIST := node_modules/.bin/exorcist
 MUSTACHE := node_modules/.bin/mustache
+PRETTIER := node_modules/.bin/prettier
 
 .PHONY: default
 default: extension
@@ -66,5 +67,13 @@ dist/%.zip dist/%.xpi: extension
 .PHONY: lint
 lint:
 	$(ESLINT) .
+
+.PHONY: checkformatting
+checkformatting:
+	$(PRETTIER) --check 'src/**/*.js' 'tests/**/*.js'
+
+.PHONY: format
+format:
+	$(PRETTIER) --list-different --write 'src/**/*.js' 'tests/**/*.js'
 
 -include build/.*.deps
