@@ -80,7 +80,7 @@ function BrowserAction(chromeBrowserAction) {
         countLabel = _("There's 1 annotation on this page");
       } else {
         countLabel = _(
-          'There are ' + totalString + ' annotations on ' + 'this page'
+          'There are ' + totalString + ' annotations on this page'
         );
       }
       title = countLabel;
