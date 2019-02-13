@@ -107,7 +107,7 @@ function SidebarInjector(chromeTabs, dependencies) {
    * Returns a promise that will be resolved if the removal succeeded
    * otherwise it will be rejected with an error.
    */
-  this.removeFromTab = function (tab) {
+  this.removeFromTab = function(tab) {
     if (isPDFViewerURL(tab.url)) {
       return removeFromPDF(tab);
     } else {
@@ -159,20 +159,20 @@ function SidebarInjector(chromeTabs, dependencies) {
       return Promise.resolve(CONTENT_TYPE_PDF);
     }
 
-    return canInjectScript(tab.url).then(function (canInject) {
+    return canInjectScript(tab.url).then(function(canInject) {
       if (canInject) {
         return executeScriptFn(tab.id, {
           code: toIIFEString(detectContentType),
-        }).then(function (frameResults) {
+        }).then(function(frameResults) {
           var result = extractContentScriptResult(frameResults);
           if (result) {
             return result.type;
           } else {
-              // If the content script threw an exception,
-              // frameResults may be null or undefined.
-              //
-              // In that case, fall back to guessing based on the
-              // tab URL
+            // If the content script threw an exception,
+            // frameResults may be null or undefined.
+            //
+            // In that case, fall back to guessing based on the
+            // tab URL
             return guessContentTypeFromURL(tab.url);
           }
         });
@@ -201,17 +201,19 @@ function SidebarInjector(chromeTabs, dependencies) {
     // see https://developer.chrome.com/extensions/match_patterns
     var parsedURL = new URL(url);
     var SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
-    return SUPPORTED_PROTOCOLS.some(function (protocol) {
+    return SUPPORTED_PROTOCOLS.some(function(protocol) {
       return parsedURL.protocol === protocol;
     });
   }
 
   function injectIntoLocalDocument(tab) {
-    return detectTabContentType(tab).then(function (type) {
+    return detectTabContentType(tab).then(function(type) {
       if (type === CONTENT_TYPE_PDF) {
         return injectIntoLocalPDF(tab);
       } else {
-        return Promise.reject(new errors.LocalFileError('Local non-PDF files are not supported'));
+        return Promise.reject(
+          new errors.LocalFileError('Local non-PDF files are not supported')
+        );
       }
     });
   }
@@ -230,25 +232,33 @@ function SidebarInjector(chromeTabs, dependencies) {
       // (or some other format). In some cases we could extract the original
       // URL and open that in the Hypothesis viewer instead.
       var protocol = tab.url.split(':')[0];
-      return Promise.reject(new errors.RestrictedProtocolError('Cannot load Hypothesis into ' + protocol + ' pages'));
+      return Promise.reject(
+        new errors.RestrictedProtocolError(
+          'Cannot load Hypothesis into ' + protocol + ' pages'
+        )
+      );
     }
 
-    return detectTabContentType(tab).then(function (type) {
+    return detectTabContentType(tab).then(function(type) {
       if (type === CONTENT_TYPE_PDF) {
         return injectIntoPDF(tab);
       } else {
-        return injectConfig(tab.id, config).then(function () {
-          return injectIntoHTML(tab);
-        }).then(function (results) {
-          var result = extractContentScriptResult(results);
-          if (result &&
+        return injectConfig(tab.id, config)
+          .then(function() {
+            return injectIntoHTML(tab);
+          })
+          .then(function(results) {
+            var result = extractContentScriptResult(results);
+            if (
+              result &&
               typeof result.installedURL === 'string' &&
-              result.installedURL.indexOf(extensionURL('/')) === -1) {
-            throw new errors.AlreadyInjectedError(
-              'Hypothesis is already injected into this page'
-            );
-          }
-        });
+              result.installedURL.indexOf(extensionURL('/')) === -1
+            ) {
+              throw new errors.AlreadyInjectedError(
+                'Hypothesis is already injected into this page'
+              );
+            }
+          });
       }
     });
   }
@@ -258,16 +268,18 @@ function SidebarInjector(chromeTabs, dependencies) {
       return Promise.resolve();
     }
     var updateFn = util.promisify(chromeTabs.update);
-    return updateFn(tab.id, {url: getPDFViewerURL(tab.url)});
+    return updateFn(tab.id, { url: getPDFViewerURL(tab.url) });
   }
 
   function injectIntoLocalPDF(tab) {
-    return new Promise(function (resolve, reject) {
-      isAllowedFileSchemeAccess(function (isAllowed) {
+    return new Promise(function(resolve, reject) {
+      isAllowedFileSchemeAccess(function(isAllowed) {
         if (isAllowed) {
           resolve(injectIntoPDF(tab));
         } else {
-          reject(new errors.NoFileAccessError('Local file scheme access denied'));
+          reject(
+            new errors.NoFileAccessError('Local file scheme access denied')
+          );
         }
       });
     });
@@ -278,7 +290,7 @@ function SidebarInjector(chromeTabs, dependencies) {
   }
 
   function removeFromPDF(tab) {
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve) {
       var parsedURL = new URL(tab.url);
       var originalURL = queryString.parse(parsedURL.search).file;
       if (!originalURL) {
@@ -293,9 +305,13 @@ function SidebarInjector(chromeTabs, dependencies) {
         hash = '';
       }
 
-      chromeTabs.update(tab.id, {
-        url: decodeURIComponent(originalURL) + hash,
-      }, resolve);
+      chromeTabs.update(
+        tab.id,
+        {
+          url: decodeURIComponent(originalURL) + hash,
+        },
+        resolve
+      );
     });
   }
 
@@ -311,7 +327,7 @@ function SidebarInjector(chromeTabs, dependencies) {
    * page currently loaded in the tab at the given ID.
    */
   function injectScript(tabId, path) {
-    return executeScriptFn(tabId, {file: path});
+    return executeScriptFn(tabId, { file: path });
   }
 
   /**
@@ -324,10 +340,14 @@ function SidebarInjector(chromeTabs, dependencies) {
   function injectConfig(tabId, config) {
     var configStr = JSON.stringify(config).replace(/"/g, '\\"');
     var configCode =
-      'var hypothesisConfig = "' + configStr + '";\n' +
-      '(' + addJSONScriptTagFn.toString() + ')' +
+      'var hypothesisConfig = "' +
+      configStr +
+      '";\n' +
+      '(' +
+      addJSONScriptTagFn.toString() +
+      ')' +
       '("js-hypothesis-config", hypothesisConfig);\n';
-    return executeScriptFn(tabId, {code: configCode});
+    return executeScriptFn(tabId, { code: configCode });
   }
 }
 

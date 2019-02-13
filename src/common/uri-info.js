@@ -12,11 +12,13 @@ function encodeUriQuery(val) {
  * statistics about the annotations for a given URL.
  */
 function query(uri) {
-  return fetch(settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri),
-               {credentials: 'include'})
-    .then(function (res) {
+  return fetch(settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri), {
+    credentials: 'include',
+  })
+    .then(function(res) {
       return res.json();
-    }).then(function (data) {
+    })
+    .then(function(data) {
       if (typeof data.total !== 'number') {
         throw new Error('Annotation count is not a number');
       }

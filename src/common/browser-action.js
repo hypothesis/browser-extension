@@ -23,11 +23,11 @@ var buildType = settings.buildType;
 // themes to apply to the toolbar icon badge depending on the type of
 // build. Production builds use the default color and no text
 var badgeThemes = {
-  'dev': {
+  dev: {
     defaultText: 'DEV',
     color: '#5BCF59', // Emerald green
   },
-  'staging': {
+  staging: {
     defaultText: 'STG',
     color: '#EDA061', // Porche orange-pink
   },
@@ -79,8 +79,9 @@ function BrowserAction(chromeBrowserAction) {
       if (state.annotationCount === 1) {
         countLabel = _("There's 1 annotation on this page");
       } else {
-        countLabel = _('There are ' + totalString + ' annotations on ' +
-                  'this page');
+        countLabel = _(
+          'There are ' + totalString + ' annotations on ' + 'this page'
+        );
       }
       title = countLabel;
       badgeText = totalString;
@@ -98,9 +99,9 @@ function BrowserAction(chromeBrowserAction) {
       }
     }
 
-    chromeBrowserAction.setBadgeText({tabId: tabId, text: badgeText});
-    chromeBrowserAction.setIcon({tabId: tabId, path: activeIcon});
-    chromeBrowserAction.setTitle({tabId: tabId, title: title});
+    chromeBrowserAction.setBadgeText({ tabId: tabId, text: badgeText });
+    chromeBrowserAction.setIcon({ tabId: tabId, path: activeIcon });
+    chromeBrowserAction.setTitle({ tabId: tabId, title: title });
   };
 }
 

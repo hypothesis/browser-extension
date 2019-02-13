@@ -61,9 +61,11 @@ var IGNORED_ERRORS = [
  * @param {{message: string}} err - The Error-like object
  */
 function shouldIgnoreInjectionError(err) {
-  if (IGNORED_ERRORS.some(function (pattern) {
-    return err.message.match(pattern);
-  })) {
+  if (
+    IGNORED_ERRORS.some(function(pattern) {
+      return err.message.match(pattern);
+    })
+  ) {
     return true;
   }
   if (isKnownError(err)) {

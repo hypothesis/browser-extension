@@ -44,7 +44,7 @@ function HypothesisChromeExtension(dependencies) {
   var chromeExtension = dependencies.chromeExtension;
   var chromeStorage = dependencies.chromeStorage;
   var chromeBrowserAction = dependencies.chromeBrowserAction;
-  var help  = new HelpPage(chromeTabs, dependencies.extensionURL);
+  var help = new HelpPage(chromeTabs, dependencies.extensionURL);
   var store = new TabStore(localStorage);
   var state = new TabState(store.all(), onTabStateChange);
   var browserAction = new BrowserAction(chromeBrowserAction);
@@ -58,7 +58,7 @@ function HypothesisChromeExtension(dependencies) {
   /* Sets up the extension and binds event listeners. Requires a window
    * object to be passed so that it can listen for localStorage events.
    */
-  this.listen = function () {
+  this.listen = function() {
     chromeBrowserAction.onClicked.addListener(onBrowserActionClicked);
     chromeTabs.onCreated.addListener(onTabCreated);
 
@@ -78,12 +78,12 @@ function HypothesisChromeExtension(dependencies) {
   /* A method that can be used to setup the extension on existing tabs
    * when the extension is re-installed.
    */
-  this.install = function () {
+  this.install = function() {
     restoreSavedTabState();
   };
 
   /* Opens the onboarding page */
-  this.firstRun = function (extensionInfo) {
+  this.firstRun = function(extensionInfo) {
     // If we've been installed because of an administrative policy, then don't
     // open the welcome page in a new tab.
     //
@@ -99,7 +99,7 @@ function HypothesisChromeExtension(dependencies) {
       return;
     }
 
-    chromeTabs.create({url: settings.serviceUrl + 'welcome'}, function (tab) {
+    chromeTabs.create({ url: settings.serviceUrl + 'welcome' }, function(tab) {
       state.activateTab(tab.id);
     });
   };
@@ -107,8 +107,8 @@ function HypothesisChromeExtension(dependencies) {
   function restoreSavedTabState() {
     store.reload();
     state.load(store.all());
-    chromeTabs.query({}, function (tabs) {
-      tabs.forEach(function (tab) {
+    chromeTabs.query({}, function(tabs) {
+      tabs.forEach(function(tab) {
         onTabStateChange(tab.id, state.getState(tab.id));
       });
     });
@@ -134,11 +134,9 @@ function HypothesisChromeExtension(dependencies) {
     var tabError = state.getState(tab.id).error;
     if (tabError) {
       help.showHelpForError(tab, tabError);
-    }
-    else if (state.isTabActive(tab.id)) {
+    } else if (state.isTabActive(tab.id)) {
       state.deactivateTab(tab.id);
-    }
-    else {
+    } else {
       state.activateTab(tab.id);
     }
   }
@@ -201,7 +199,7 @@ function HypothesisChromeExtension(dependencies) {
     });
     state.clearTab(removedTabId);
 
-    chromeTabs.get(addedTabId, function (tab) {
+    chromeTabs.get(addedTabId, function(tab) {
       updateAnnotationCountIfEnabled(addedTabId, tab.url);
     });
   }
@@ -251,12 +249,13 @@ function HypothesisChromeExtension(dependencies) {
         }
       }
 
-      return sidebar.injectIntoTab(tab, config)
-        .then(function () {
+      return sidebar
+        .injectIntoTab(tab, config)
+        .then(function() {
           // Clear the direct link once H has been successfully injected
           state.setState(tab.id, { directLinkQuery: undefined });
         })
-        .catch(function (err) {
+        .catch(function(err) {
           if (err instanceof errors.AlreadyInjectedError) {
             state.setState(tab.id, {
               state: TabState.states.INACTIVE,
@@ -272,7 +271,7 @@ function HypothesisChromeExtension(dependencies) {
           state.errorTab(tab.id, err);
         });
     } else if (state.isTabInactive(tab.id) && isInstalled) {
-      return sidebar.removeFromTab(tab).then(function () {
+      return sidebar.removeFromTab(tab).then(function() {
         state.setState(tab.id, {
           extensionSidebarInstalled: false,
         });
@@ -289,13 +288,16 @@ function HypothesisChromeExtension(dependencies) {
       return;
     }
 
-    chromeStorage.sync.get({
-      badge: true,
-    }, function (items) {
-      if (items.badge) {
-        state.updateAnnotationCount(tabId, url);
+    chromeStorage.sync.get(
+      {
+        badge: true,
+      },
+      function(items) {
+        if (items.badge) {
+          state.updateAnnotationCount(tabId, url);
+        }
       }
-    });
+    );
   }
 }
 

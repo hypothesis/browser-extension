@@ -7,11 +7,14 @@ function saveOptions() {
 }
 
 function loadOptions() {
-  chrome.storage.sync.get({
-    badge: true,
-  }, function(items) {
-    document.getElementById('badge').checked = items.badge;
-  });
+  chrome.storage.sync.get(
+    {
+      badge: true,
+    },
+    function(items) {
+      document.getElementById('badge').checked = items.badge;
+    }
+  );
 }
 
 document.addEventListener('DOMContentLoaded', loadOptions);

@@ -7,10 +7,10 @@ var browserExtension = new HypothesisChromeExtension({
   chromeTabs: chrome.tabs,
   chromeBrowserAction: chrome.browserAction,
   chromeStorage: chrome.storage,
-  extensionURL: function (path) {
+  extensionURL: function(path) {
     return chrome.extension.getURL(path);
   },
-  isAllowedFileSchemeAccess: function (fn) {
+  isAllowedFileSchemeAccess: function(fn) {
     return chrome.extension.isAllowedFileSchemeAccess(fn);
   },
 });
@@ -24,17 +24,19 @@ if (chrome.runtime.onInstalled) {
 // Respond to messages sent by the JavaScript from https://hyp.is.
 // This is how it knows whether the user has this Chrome extension installed.
 if (chrome.runtime.onMessageExternal) {
-  chrome.runtime.onMessageExternal.addListener(
-    function (request, sender, sendResponse) {
-      if (request.type === 'ping') {
-        sendResponse({type: 'pong'});
-      }
+  chrome.runtime.onMessageExternal.addListener(function(
+    request,
+    sender,
+    sendResponse
+  ) {
+    if (request.type === 'ping') {
+      sendResponse({ type: 'pong' });
     }
-  );
+  });
 }
 
 if (chrome.runtime.requestUpdateCheck) {
-  chrome.runtime.requestUpdateCheck(function () {
+  chrome.runtime.requestUpdateCheck(function() {
     chrome.runtime.onUpdateAvailable.addListener(onUpdateAvailable);
   });
 }

@@ -1,6 +1,6 @@
 'use strict';
 
-describe('HelpPage', function () {
+describe('HelpPage', function() {
   var errors = require('../../src/common/errors');
   var HelpPage = require('../../src/common/help-page');
   var fakeBrowserName;
@@ -8,18 +8,21 @@ describe('HelpPage', function () {
   var fakeExtensionURL;
   var help;
 
-  beforeEach(function () {
+  beforeEach(function() {
     fakeBrowserName = sinon.stub().returns('chrome');
-    fakeChromeTabs = {create: sinon.stub()};
-    fakeExtensionURL = function (path) {
+    fakeChromeTabs = { create: sinon.stub() };
+    fakeExtensionURL = function(path) {
       return 'CRX_PATH' + path;
     };
     help = new HelpPage(fakeChromeTabs, fakeExtensionURL, fakeBrowserName);
   });
 
-  describe('.showHelpForError', function () {
-    it('renders the "local-file" page when passed a LocalFileError', function () {
-      help.showHelpForError({id: 1, index: 1}, new errors.LocalFileError('msg'));
+  describe('.showHelpForError', function() {
+    it('renders the "local-file" page when passed a LocalFileError', function() {
+      help.showHelpForError(
+        { id: 1, index: 1 },
+        new errors.LocalFileError('msg')
+      );
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -28,8 +31,11 @@ describe('HelpPage', function () {
       });
     });
 
-    it('renders the "no-file-access" page when passed a NoFileAccessError', function () {
-      help.showHelpForError({id: 1, index: 1}, new errors.NoFileAccessError('msg'));
+    it('renders the "no-file-access" page when passed a NoFileAccessError', function() {
+      help.showHelpForError(
+        { id: 1, index: 1 },
+        new errors.NoFileAccessError('msg')
+      );
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -38,8 +44,11 @@ describe('HelpPage', function () {
       });
     });
 
-    it('renders the "no-file-access" page when passed a RestrictedProtocolError', function () {
-      help.showHelpForError({id: 1, index: 1}, new errors.RestrictedProtocolError('msg'));
+    it('renders the "no-file-access" page when passed a RestrictedProtocolError', function() {
+      help.showHelpForError(
+        { id: 1, index: 1 },
+        new errors.RestrictedProtocolError('msg')
+      );
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -48,8 +57,11 @@ describe('HelpPage', function () {
       });
     });
 
-    it('renders the "blocked-site" page when passed a BlockedSiteError', function () {
-      help.showHelpForError({id: 1, index: 1}, new errors.BlockedSiteError('msg'));
+    it('renders the "blocked-site" page when passed a BlockedSiteError', function() {
+      help.showHelpForError(
+        { id: 1, index: 1 },
+        new errors.BlockedSiteError('msg')
+      );
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -58,8 +70,8 @@ describe('HelpPage', function () {
       });
     });
 
-    it('renders the "other-error" page for unknown errors', function () {
-      help.showHelpForError({id: 1, index: 1}, new Error('Unexpected Error'));
+    it('renders the "other-error" page for unknown errors', function() {
+      help.showHelpForError({ id: 1, index: 1 }, new Error('Unexpected Error'));
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -69,9 +81,9 @@ describe('HelpPage', function () {
     });
   });
 
-  describe('.showLocalFileHelpPage', function () {
-    it('should load the help page with the "local-file" fragment', function () {
-      help.showLocalFileHelpPage({id: 1, index: 1});
+  describe('.showLocalFileHelpPage', function() {
+    it('should load the help page with the "local-file" fragment', function() {
+      help.showLocalFileHelpPage({ id: 1, index: 1 });
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -81,9 +93,9 @@ describe('HelpPage', function () {
     });
   });
 
-  describe('.showNoFileAccessHelpPage', function () {
-    it('should load the help page with the "no-file-access" fragment', function () {
-      help.showNoFileAccessHelpPage({id: 1, index: 1});
+  describe('.showNoFileAccessHelpPage', function() {
+    it('should load the help page with the "no-file-access" fragment', function() {
+      help.showNoFileAccessHelpPage({ id: 1, index: 1 });
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -93,9 +105,9 @@ describe('HelpPage', function () {
     });
   });
 
-  describe('.showRestrictedProtocolPage', function () {
-    it('should load the help page with the "restricted-protocol" fragment', function () {
-      help.showRestrictedProtocolPage({id: 1, index: 1});
+  describe('.showRestrictedProtocolPage', function() {
+    it('should load the help page with the "restricted-protocol" fragment', function() {
+      help.showRestrictedProtocolPage({ id: 1, index: 1 });
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,
@@ -105,11 +117,18 @@ describe('HelpPage', function () {
     });
   });
 
-  context('in Firefox', function () {
-    it('does not set the "openerTabId" argument when creating a new tab', function () {
+  context('in Firefox', function() {
+    it('does not set the "openerTabId" argument when creating a new tab', function() {
       fakeBrowserName.returns('firefox');
-      var help = new HelpPage(fakeChromeTabs, fakeExtensionURL, fakeBrowserName);
-      help.showHelpForError({id: 1, index: 1}, new errors.LocalFileError('msg'));
+      var help = new HelpPage(
+        fakeChromeTabs,
+        fakeExtensionURL,
+        fakeBrowserName
+      );
+      help.showHelpForError(
+        { id: 1, index: 1 },
+        new errors.LocalFileError('msg')
+      );
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
         index: 2,

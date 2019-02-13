@@ -3,8 +3,9 @@
 
 'use strict';
 
-var annotatorLink =
-  document.querySelector('link[type="application/annotator+html"]');
+var annotatorLink = document.querySelector(
+  'link[type="application/annotator+html"]'
+);
 
 if (annotatorLink) {
   // Dispatch a 'destroy' event which is handled by the code in
