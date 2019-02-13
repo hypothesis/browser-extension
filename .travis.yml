@@ -7,6 +7,8 @@ install:
   - npm install -g npm
   - npm ci
 script:
+  - make checkformatting
+  - make lint
   - npm test
   - make SETTINGS_FILE=settings/chrome-prod.json dist/$(date +'%Y%m%d')-chrome-prod.zip
   - make SETTINGS_FILE=settings/chrome-stage.json dist/$(date +'%Y%m%d')-chrome-stage.zip
