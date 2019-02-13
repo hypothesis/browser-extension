@@ -10,7 +10,7 @@
   "devDependencies": {
     "babel-preset-env": "^1.7.0",
     "babelify": "^7.3.0",
-    "browserify": "^13.0.0",
+    "browserify": "^16.2.3",
     "chai": "^3.5.0",
     "check-dependencies": "^1.1.0",
     "chrome-webstore-upload-cli": "^1.1.1",
