@@ -28,7 +28,10 @@ function convertLocalURLsToFilenames(url) {
 
   // Strip the query string (which is used as a cache buster)
   // and extract the filename from the URL
-  return url.replace(/\?.*/,'').split('/').slice(-1)[0];
+  return url
+    .replace(/\?.*/, '')
+    .split('/')
+    .slice(-1)[0];
 }
 
 /**
@@ -50,7 +53,7 @@ function convertLocalURLsToFilenames(url) {
 function translateSourceURLs(data) {
   try {
     var frames = data.exception.values[0].stacktrace.frames;
-    frames.forEach(function (frame) {
+    frames.forEach(function(frame) {
       frame.filename = convertLocalURLsToFilenames(frame.filename);
     });
     data.culprit = frames[0].filename;
@@ -111,7 +114,7 @@ function report(error, when, context) {
  * automatically, in which case this code can simply be removed.
  */
 function installUnhandledPromiseErrorHandler() {
-  window.addEventListener('unhandledrejection', function (event) {
+  window.addEventListener('unhandledrejection', function(event) {
     if (event.reason) {
       report(event.reason, 'Unhandled Promise rejection');
     }

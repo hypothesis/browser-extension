@@ -6,10 +6,10 @@ var unroll = require('../util').unroll;
 var uriInfo = require('../../src/common/uri-info');
 var settings = require('../settings.json');
 
-describe('UriInfo.query', function () {
+describe('UriInfo.query', function() {
   var badgeURL = settings.apiUrl + '/badge';
 
-  beforeEach(function () {
+  beforeEach(function() {
     sinon.stub(window, 'fetch').returns(
       Promise.resolve(
         new window.Response('{"total": 1}', {
@@ -22,47 +22,54 @@ describe('UriInfo.query', function () {
     sinon.stub(console, 'error');
   });
 
-  afterEach(function () {
+  afterEach(function() {
     window.fetch.restore();
     console.error.restore();
   });
 
-  it('sends the correct XMLHttpRequest', function () {
-    return uriInfo.query('tabUrl').then(function () {
+  it('sends the correct XMLHttpRequest', function() {
+    return uriInfo.query('tabUrl').then(function() {
       assert.equal(fetch.callCount, 1);
-      assert.deepEqual(
-        fetch.lastCall.args,
-        [badgeURL + '?uri=tabUrl', {credentials: 'include'}]);
+      assert.deepEqual(fetch.lastCall.args, [
+        badgeURL + '?uri=tabUrl',
+        { credentials: 'include' },
+      ]);
     });
   });
 
-  it('urlencodes the URL appropriately', function () {
-    return toResult(uriInfo.query('http://foo.com?bar=baz qüx'))
-      .then(function () {
+  it('urlencodes the URL appropriately', function() {
+    return toResult(uriInfo.query('http://foo.com?bar=baz qüx')).then(
+      function() {
         assert.equal(fetch.callCount, 1);
         assert.equal(
-        fetch.lastCall.args[0],
-        badgeURL + '?uri=http%3A%2F%2Ffoo.com%3Fbar%3Dbaz+q%C3%BCx');
-      });
+          fetch.lastCall.args[0],
+          badgeURL + '?uri=http%3A%2F%2Ffoo.com%3Fbar%3Dbaz+q%C3%BCx'
+        );
+      }
+    );
   });
 
   var INVALID_RESPONSE_FIXTURES = [
-    {status: 200, headers: {}, body: 'this is not valid json'},
-    {status: 200, headers: {}, body: '{"total": "not a valid number"}'},
-    {status: 200, headers: {}, body: '{"rows": []}'},
+    { status: 200, headers: {}, body: 'this is not valid json' },
+    { status: 200, headers: {}, body: '{"total": "not a valid number"}' },
+    { status: 200, headers: {}, body: '{"rows": []}' },
   ];
 
-  unroll('returns an error if the server\'s JSON is invalid', function (response) {
-    fetch.returns(
-      Promise.resolve(
-        new window.Response(
-          response.body,
-          {status: response.status, headers: response.headers}
+  unroll(
+    "returns an error if the server's JSON is invalid",
+    function(response) {
+      fetch.returns(
+        Promise.resolve(
+          new window.Response(response.body, {
+            status: response.status,
+            headers: response.headers,
+          })
         )
-      )
-    );
-    return toResult(uriInfo.query('tabUrl')).then(function (result) {
-      assert.ok(result.error);
-    });
-  }, INVALID_RESPONSE_FIXTURES);
+      );
+      return toResult(uriInfo.query('tabUrl')).then(function(result) {
+        assert.ok(result.error);
+      });
+    },
+    INVALID_RESPONSE_FIXTURES
+  );
 });

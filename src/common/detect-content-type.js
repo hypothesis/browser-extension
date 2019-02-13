@@ -25,8 +25,10 @@ function detectContentType(document_) {
     // see this document, open the inspector on a PDF viewer tab with
     // Ctrl+Shift+I rather than right-clicking on the viewport and selecting the
     // 'Inspect' option which will instead show the _inner_ document.
-    if (document_.querySelector('embed[type="application/pdf"][name="plugin"]')) {
-      return {type: 'PDF'};
+    if (
+      document_.querySelector('embed[type="application/pdf"][name="plugin"]')
+    ) {
+      return { type: 'PDF' };
     }
     return null;
   }
@@ -42,7 +44,7 @@ function detectContentType(document_) {
     // `window.PDFViewerApplication` object. This however requires running JS
     // code in the same JS context as the page's own code.
     if (document_.baseURI.indexOf('resource://pdf.js') === 0) {
-      return {type: 'PDF'};
+      return { type: 'PDF' };
     }
     return null;
   }
@@ -55,7 +57,7 @@ function detectContentType(document_) {
     }
   }
 
-  return {type: 'HTML'};
+  return { type: 'HTML' };
 }
 
 module.exports = detectContentType;

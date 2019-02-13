@@ -21,27 +21,26 @@ function HelpPage(chromeTabs, extensionURL, browserName_) {
    * @param {Error} error - The error to display, usually an instance of
    *                        errors.ExtensionError
    */
-  this.showHelpForError = function (tab, error) {
+  this.showHelpForError = function(tab, error) {
     if (error instanceof errors.LocalFileError) {
       return this.showLocalFileHelpPage(tab);
-    }
-    else if (error instanceof errors.NoFileAccessError) {
+    } else if (error instanceof errors.NoFileAccessError) {
       return this.showNoFileAccessHelpPage(tab);
-    }
-    else if (error instanceof errors.RestrictedProtocolError) {
+    } else if (error instanceof errors.RestrictedProtocolError) {
       return this.showRestrictedProtocolPage(tab);
-    }
-    else if (error instanceof errors.BlockedSiteError) {
+    } else if (error instanceof errors.BlockedSiteError) {
       return this.showBlockedSitePage(tab);
-    }
-    else {
+    } else {
       return this.showOtherErrorPage(tab, error);
     }
   };
 
   this.showLocalFileHelpPage = showHelpPage.bind(null, 'local-file');
   this.showNoFileAccessHelpPage = showHelpPage.bind(null, 'no-file-access');
-  this.showRestrictedProtocolPage = showHelpPage.bind(null, 'restricted-protocol');
+  this.showRestrictedProtocolPage = showHelpPage.bind(
+    null,
+    'restricted-protocol'
+  );
   this.showBlockedSitePage = showHelpPage.bind(null, 'blocked-site');
   this.showOtherErrorPage = showHelpPage.bind(null, 'other-error');
 
@@ -60,7 +59,7 @@ function HelpPage(chromeTabs, extensionURL, browserName_) {
 
     var tabOpts = {
       index: tab.index + 1,
-      url:  extensionURL('/help/index.html' + params + '#' + helpSection),
+      url: extensionURL('/help/index.html' + params + '#' + helpSection),
     };
 
     // Add `openerTabId` property to associate the help page tab with the

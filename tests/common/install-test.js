@@ -19,11 +19,11 @@ function eventListenerStub() {
   };
 }
 
-describe('install', function () {
+describe('install', function() {
   var origChrome;
   var fakeChrome;
 
-  beforeEach(function () {
+  beforeEach(function() {
     fakeChrome = {
       tabs: {},
       browserAction: {},
@@ -39,8 +39,8 @@ describe('install', function () {
         onUpdateAvailable: eventListenerStub(),
       },
       management: {
-        getSelf: function (cb) {
-          cb({installType: 'normal', id: '1234'});
+        getSelf: function(cb) {
+          cb({ installType: 'normal', id: '1234' });
         },
       },
     };
@@ -56,19 +56,22 @@ describe('install', function () {
     });
   });
 
-  afterEach(function () {
+  afterEach(function() {
     window.chrome = origChrome;
   });
 
-  context('when the extension is installed', function () {
+  context('when the extension is installed', function() {
     function triggerInstallEvent() {
       var cb = fakeChrome.runtime.onInstalled.addListener.args[0][0];
-      cb({reason: 'install'});
+      cb({ reason: 'install' });
     }
 
-    it("calls the extension's first run hook", function () {
+    it("calls the extension's first run hook", function() {
       triggerInstallEvent();
-      assert.calledWith(extension.firstRun, {id: '1234', installType: 'normal'});
+      assert.calledWith(extension.firstRun, {
+        id: '1234',
+        installType: 'normal',
+      });
     });
   });
 });
