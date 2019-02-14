@@ -23,7 +23,7 @@
     "hypothesis": "^1.130.0",
     "is-equal-shallow": "^0.1.3",
     "js-polyfills": "^0.1.16",
-    "karma": "^3.0.0",
+    "karma": "^4.0.0",
     "karma-browserify": "^6.0.0",
     "karma-chai": "^0.1.0",
     "karma-mocha": "^1.1.1",
