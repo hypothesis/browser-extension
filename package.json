@@ -34,7 +34,7 @@
     "mustache": "^2.2.1",
     "prettier": "1.16.4",
     "proxyquire": "^1.7.4",
-    "proxyquire-universal": "^1.0.8",
+    "proxyquire-universal": "^2.1.0",
     "proxyquireify": "^3.1.1",
     "query-string": "^3.0.1",
     "raven-js": "^2.0.2",
