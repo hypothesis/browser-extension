@@ -18,7 +18,7 @@
     "diff": "^4.0.1",
     "eslint": "^5.13.0",
     "eslint-config-hypothesis": "^1.0.0",
-    "exorcist": "^0.4.0",
+    "exorcist": "^1.0.1",
     "git-describe": "^3.0.1",
     "hypothesis": "^1.130.0",
     "is-equal-shallow": "^0.1.3",
