@@ -31,7 +31,7 @@
     "karma-phantomjs-launcher": "^1.0.1",
     "karma-sinon": "^1.0.5",
     "mocha": "^5.2.0",
-    "mustache": "^2.2.1",
+    "mustache": "^3.0.1",
     "prettier": "1.16.4",
     "proxyquire": "^2.1.0",
     "proxyquire-universal": "^2.1.0",
