@@ -1,6 +1,5 @@
 'use strict';
 
-var assign = require('core-js/modules/$.object-assign');
 var proxyquire = require('proxyquire');
 
 describe('BrowserAction', function() {
@@ -53,7 +52,7 @@ describe('BrowserAction', function() {
       };
       action.update(1, state);
       var prevTitle = fakeChromeBrowserAction.title;
-      action.update(1, assign(state, { state: TabState.states.ACTIVE }));
+      action.update(1, Object.assign(state, { state: TabState.states.ACTIVE }));
       assert.equal(fakeChromeBrowserAction.title, prevTitle);
     });
   });
