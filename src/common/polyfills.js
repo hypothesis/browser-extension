@@ -7,6 +7,5 @@
 require('core-js/fn/object/assign'); // Available: Chrome >= 45
 require('core-js/fn/object/values'); // Available: Chrome issue #4663
 
-// Polyfill for the fetch() API for Chrome < 42,
-// also used by our PhantomJS tests
+// Polyfill for the fetch() API for Chrome < 42.
 require('whatwg-fetch');
