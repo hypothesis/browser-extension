@@ -76,4 +76,8 @@ checkformatting:
 format:
 	$(PRETTIER) --list-different --write 'src/**/*.js' 'tests/**/*.js'
 
+.PHONY: test
+test:
+	npm test
+
 -include build/.*.deps
