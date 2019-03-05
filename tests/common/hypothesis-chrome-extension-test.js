@@ -32,7 +32,7 @@ function isValidState(state) {
 }
 
 describe('HypothesisChromeExtension', function() {
-  var sandbox = sinon.sandbox.create();
+  var sandbox = sinon.createSandbox();
   var HypothesisChromeExtension;
   var ext;
   var fakeChromeExtension;

@@ -1,5 +1,14 @@
 'use strict';
 
+/* global process */
+
+let chromeFlags = [];
+process.env.CHROME_BIN = require('puppeteer').executablePath();
+if (process.env.TRAVIS) {
+  // See https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-travis-ci
+  chromeFlags = ['--no-sandbox'];
+}
+
 module.exports = function(config) {
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
@@ -15,7 +24,6 @@ module.exports = function(config) {
         pattern: './settings.json',
         included: false,
       },
-      './karma-phantomjs-polyfill.js',
       './bootstrap.js',
       './common/*.js',
     ],
@@ -70,7 +78,14 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome_Puppeteer'],
+
+    customLaunchers: {
+      Chrome_Puppeteer: {
+        base: 'ChromeHeadless',
+        flags: chromeFlags,
+      },
+    },
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
