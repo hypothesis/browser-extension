@@ -39,7 +39,7 @@
     "query-string": "^3.0.1",
     "raven-js": "^3.27.0",
     "request": "^2.88.0",
-    "sinon": "^7.2.5",
+    "sinon": "^7.2.6",
     "watchify": "^3.11.1",
     "web-ext": "^3.0.0",
     "whatwg-fetch": "^3.0.0"
