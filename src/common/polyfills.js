@@ -4,8 +4,8 @@
 // versions of Chrome
 
 // ES2015+ polyfills
-require('core-js/fn/object/assign'); // Available: Chrome >= 45
-require('core-js/fn/object/values'); // Available: Chrome issue #4663
+require('core-js/features/object/assign'); // Available: Chrome >= 45
+require('core-js/features/object/values'); // Available: Chrome issue #4663
 
 // Polyfill for the fetch() API for Chrome < 42.
 require('whatwg-fetch');
