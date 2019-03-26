@@ -36,7 +36,8 @@ extension: build/settings-data.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
 
 build/extension.bundle.js: src/common/extension.js
-	$(BROWSERIFY) -t babelify -d $< | $(EXORCIST) $(addsuffix .map,$@) >$@
+	$(BROWSERIFY) -t babelify -d $< > $@.tmp
+	cat $@.tmp | $(EXORCIST) $(addsuffix .map,$@) >$@
 	@# When building the extension bundle, we also write out a list of
 	@# depended-upon files to .extension.bundle.deps, which we then include to
 	@# ensure that the bundle is rebuilt if any of these change. We ignore
