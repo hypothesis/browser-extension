@@ -19,10 +19,10 @@ The Hypothesis browser extensions allow you to annotate web documents using your
 Choose your browser below
 -------------------------
 
-|     **Chrome**    |    **Firefox**     |     **Opera**     |     **Safari**    |     **IE**    |
-| ----------------- | ------------------ | ----------------- | ----------------- | ------------- |
-| [![Chrome][0]][1] | [![Firefox][2]][3] | [![Opera][4]][5]  | [![Safari][6]][7] | [![IE][8]][9] |
-| **Now available** | **In development** | `not yet`         | `not yet`         | `not yet`     |
+|     **Chrome**    |    **Firefox**     |     **Opera**     |     **Safari**    |
+| ----------------- | ------------------ | ----------------- | ----------------- |
+| [![Chrome][0]][1] | [![Firefox][2]][3] | [![Opera][4]][5]  | [![Safari][6]][7] |
+| **Now available** | **In development** | `not yet`         | `not yet`         |
 
 
 
@@ -34,8 +34,6 @@ Choose your browser below
 [5]: #not-yet
 [6]: /images/apple-safari.png?raw=true "Help wanted"
 [7]: #not-yet
-[8]: /images/microsoft-ie.ico?raw=true "Help wanted"
-[9]: #not-yet
 
 Development
 -----------
