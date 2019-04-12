@@ -240,14 +240,12 @@ function HypothesisChromeExtension(dependencies) {
         sidebarAppUrl: chromeExtension.getURL('/client/app.html'),
       };
 
-      if (directLinkQuery) {
-        if (directLinkQuery.id) {
-          config.annotations = directLinkQuery.id;
-        }
-        if (directLinkQuery.query) {
-          config.query = directLinkQuery.query;
-        }
-      }
+      // Pass the direct-link query as configuration into the client.
+      //
+      // The reason we don't rely on just putting this into the URL and letting
+      // the client pick it up is to make direct-linking work in sites/apps
+      // that modify the URL fragment as they load. See commit 3143ca27e05d.
+      Object.assign(config, directLinkQuery);
 
       return sidebar
         .injectIntoTab(tab, config)
