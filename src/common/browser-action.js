@@ -18,8 +18,6 @@ icons[states.INACTIVE] = {
   38: 'images/browser-icon-inactive@2x.png',
 };
 
-var buildType = settings.buildType;
-
 // themes to apply to the toolbar icon badge depending on the type of
 // build. Production builds use the default color and no text
 var badgeThemes = {
@@ -46,6 +44,8 @@ function _(str) {
  * the badge state.
  */
 function BrowserAction(chromeBrowserAction) {
+  var buildType = settings.buildType;
+
   /**
    * Updates the state of the browser action to reflect the logical
    * H state of a tab.

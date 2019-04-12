@@ -1,7 +1,5 @@
 'use strict';
 
-var proxyquire = require('proxyquire');
-
 describe('BrowserAction', function() {
   var BrowserAction = require('../../src/common/browser-action');
   var TabState = require('../../src/common/tab-state');
@@ -162,13 +160,15 @@ describe('BrowserAction', function() {
     beforeEach(function() {
       var fakeSettings = {
         buildType: 'staging',
-        '@noCallThru': true,
       };
-      var BrowserAction = proxyquire('../../src/common/browser-action', {
+      BrowserAction.$imports.$mock({
         './settings': fakeSettings,
       });
       action = new BrowserAction(fakeChromeBrowserAction);
-      return fakeSettings;
+    });
+
+    afterEach(() => {
+      BrowserAction.$imports.$restore();
     });
 
     it('sets the text to STG when there are no annotations', function() {

@@ -1,24 +1,23 @@
 'use strict';
 
-var proxyquire = require('proxyquire');
+const errors = require('../../src/common/errors');
 
 describe('errors', function() {
   var fakeRaven;
-  var errors;
 
   beforeEach(function() {
     fakeRaven = {
       report: sinon.stub(),
     };
-    errors = proxyquire('../../src/common/errors', {
+    errors.$imports.$mock({
       './raven': fakeRaven,
-      '@noCallThru': true,
     });
     sinon.stub(console, 'error');
   });
 
   afterEach(function() {
     console.error.restore();
+    errors.$imports.$restore();
   });
 
   describe('#shouldIgnoreInjectionError', function() {
