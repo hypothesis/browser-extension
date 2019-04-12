@@ -1,7 +1,5 @@
 'use strict';
 
-var proxyquire = require('proxyquire');
-
 var extension;
 
 function FakeHypothesisChromeExtension(deps) {
@@ -22,9 +20,12 @@ function eventListenerStub() {
 describe('install', function() {
   var origChrome;
   var fakeChrome;
+  var install;
 
   beforeEach(function() {
     fakeChrome = {
+      isFakeChrome: true,
+
       tabs: {},
       browserAction: {},
       storage: {},
@@ -48,16 +49,19 @@ describe('install', function() {
     origChrome = window.chrome;
     window.chrome = fakeChrome;
 
-    proxyquire('../../src/common/install', {
+    // Defer requiring `common/install` until `window.chrome` is initialized
+    // for the first time because top-level statements in the module depend on
+    // it.
+    install = require('../../src/common/install');
+    install.$imports.$mock({
       './hypothesis-chrome-extension': FakeHypothesisChromeExtension,
-      './settings': {
-        serviceUrl: 'https://hypothes.is/',
-      },
     });
+    install.init();
   });
 
   afterEach(function() {
     window.chrome = origChrome;
+    install.$imports.$restore();
   });
 
   context('when the extension is installed', function() {

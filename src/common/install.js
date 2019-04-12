@@ -2,20 +2,28 @@
 
 var HypothesisChromeExtension = require('./hypothesis-chrome-extension');
 
-var browserExtension = new HypothesisChromeExtension({
-  chromeExtension: chrome.extension,
-  chromeTabs: chrome.tabs,
-  chromeBrowserAction: chrome.browserAction,
-  chromeStorage: chrome.storage,
-  extensionURL: function(path) {
-    return chrome.extension.getURL(path);
-  },
-  isAllowedFileSchemeAccess: function(fn) {
-    return chrome.extension.isAllowedFileSchemeAccess(fn);
-  },
-});
+var browserExtension;
 
-browserExtension.listen(window);
+function init() {
+  browserExtension = new HypothesisChromeExtension({
+    chromeExtension: chrome.extension,
+    chromeTabs: chrome.tabs,
+    chromeBrowserAction: chrome.browserAction,
+    chromeStorage: chrome.storage,
+    extensionURL: function(path) {
+      return chrome.extension.getURL(path);
+    },
+    isAllowedFileSchemeAccess: function(fn) {
+      return chrome.extension.isAllowedFileSchemeAccess(fn);
+    },
+  });
+
+  browserExtension.listen(window);
+}
+
+if (!chrome.isFakeChrome) {
+  init();
+}
 
 if (chrome.runtime.onInstalled) {
   chrome.runtime.onInstalled.addListener(onInstalled);
@@ -62,3 +70,5 @@ function onInstalled(installDetails) {
 function onUpdateAvailable() {
   chrome.runtime.reload();
 }
+
+module.exports = { init };
