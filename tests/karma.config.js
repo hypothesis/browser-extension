@@ -48,7 +48,6 @@ module.exports = function(config) {
           presets: ['env'],
           plugins: ['mockable-imports'],
         });
-        bundle.plugin('proxyquire-universal');
       },
     },
 
