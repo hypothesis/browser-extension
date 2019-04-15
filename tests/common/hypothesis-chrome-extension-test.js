@@ -284,7 +284,11 @@ describe('HypothesisChromeExtension', function() {
         assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
       });
 
-      ['#annotations:456', '#annotations:query:blah'].forEach(fragment => {
+      [
+        '#annotations:456',
+        '#annotations:query:blah',
+        '#annotations:group:123',
+      ].forEach(fragment => {
         it('injects the sidebar if a direct link is present', function() {
           var tab = createTab();
           tab.url += fragment;
