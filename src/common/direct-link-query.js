@@ -38,7 +38,9 @@ function directLinkQuery(url) {
     return { query };
   }
 
-  var groupMatch = url.match(/#annotations:group:(.*)$/);
+  // Group IDs (and other "pubids" in h) are a subset of ASCII letters and
+  // digits.
+  var groupMatch = url.match(/#annotations:group:([A-Za-z0-9]+)$/);
   if (groupMatch) {
     return { group: groupMatch[1] };
   }
