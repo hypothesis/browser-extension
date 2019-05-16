@@ -8,7 +8,6 @@
   "websocketUrl": "wss://qa.hypothes.is/ws",
 
   "oauthClientId": "92b42e3c-7793-11e7-8e17-cb2151436a1f",
-  "oauthEnabled": true,
 
   "sentryPublicDSN": "https://934d4f62912b47d8bb03c28ae6670cf8@app.getsentry.com/69811",
   "googleAnalytics": "UA-26026798-6",
