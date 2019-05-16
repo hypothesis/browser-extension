@@ -46,8 +46,8 @@ module.exports = function(config) {
           // defaults in .babelrc to enable ES2015 => ES5 transformation for all
           // language features.
           presets: ['env'],
+          plugins: ['mockable-imports'],
         });
-        bundle.plugin('proxyquire-universal');
       },
     },
 

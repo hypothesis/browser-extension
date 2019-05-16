@@ -1,7 +1,6 @@
 'use strict';
 
-var proxyquire = require('proxyquire');
-
+var HypothesisChromeExtension = require('../../src/common/hypothesis-chrome-extension');
 var toResult = require('../promise-util').toResult;
 
 var errors = require('../../src/common/errors');
@@ -33,7 +32,6 @@ function isValidState(state) {
 
 describe('HypothesisChromeExtension', function() {
   var sandbox = sinon.createSandbox();
-  var HypothesisChromeExtension;
   var ext;
   var fakeChromeExtension;
   var fakeChromeStorage;
@@ -111,6 +109,7 @@ describe('HypothesisChromeExtension', function() {
       removeFromTab: sandbox.stub().returns(Promise.resolve()),
     };
     fakeErrors = {
+      AlreadyInjectedError: function AlreadyInjectedError() {},
       shouldIgnoreInjectionError: function() {
         return false;
       },
@@ -121,27 +120,26 @@ describe('HypothesisChromeExtension', function() {
       fakeTabState.onChangeHandler = onchange;
     }
     FakeTabState.prototype = fakeTabState;
+    FakeTabState.states = TabState.states;
 
-    HypothesisChromeExtension = proxyquire(
-      '../../src/common/hypothesis-chrome-extension',
-      {
-        './tab-state': FakeTabState,
-        './tab-store': createConstructor(fakeTabStore),
-        './help-page': createConstructor(fakeHelpPage),
-        './browser-action': createConstructor(fakeBrowserAction),
-        './sidebar-injector': createConstructor(fakeSidebarInjector),
-        './errors': fakeErrors,
-        './settings': {
-          serviceUrl: 'https://hypothes.is/',
-        },
-      }
-    );
+    HypothesisChromeExtension.$imports.$mock({
+      './tab-state': FakeTabState,
+      './tab-store': createConstructor(fakeTabStore),
+      './help-page': createConstructor(fakeHelpPage),
+      './browser-action': createConstructor(fakeBrowserAction),
+      './sidebar-injector': createConstructor(fakeSidebarInjector),
+      './errors': fakeErrors,
+      './settings': {
+        serviceUrl: 'https://hypothes.is/',
+      },
+    });
 
     ext = createExt();
   });
 
   afterEach(function() {
     sandbox.restore();
+    HypothesisChromeExtension.$imports.$restore();
   });
 
   describe('.install', function() {

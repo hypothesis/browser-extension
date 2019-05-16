@@ -1,7 +1,5 @@
 'use strict';
 
-var proxyquire = require('proxyquire');
-
 var TabState = require('../../src/common/tab-state');
 
 describe('TabState', function() {
@@ -141,11 +139,12 @@ describe('TabState', function() {
 
     afterEach(function() {
       console.error.restore();
+      TabState.$imports.$restore();
     });
 
     it('queries the service and sets the annotation count', function() {
       var queryStub = sinon.stub().returns(Promise.resolve({ total: 42 }));
-      var TabState = proxyquire('../../src/common/tab-state', {
+      TabState.$imports.$mock({
         './uri-info': {
           query: queryStub,
         },
@@ -159,7 +158,7 @@ describe('TabState', function() {
 
     it('resets the count if an error occurred', function() {
       var queryStub = sinon.stub().returns(Promise.reject(new Error('err')));
-      var TabState = proxyquire('../../src/common/tab-state', {
+      TabState.$imports.$mock({
         './uri-info': {
           query: queryStub,
         },
