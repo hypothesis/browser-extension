@@ -35,7 +35,7 @@
     "prettier": "1.17.1",
     "puppeteer": "^1.17.0",
     "query-string": "^3.0.1",
-    "raven-js": "^3.27.0",
+    "raven-js": "^3.27.1",
     "request": "^2.88.0",
     "sinon": "^7.3.2",
     "watchify": "^3.11.1",
