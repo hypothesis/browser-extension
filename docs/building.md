@@ -34,6 +34,24 @@ To build the extension from an alternate settings file, simply specify the
 This, for example, will build a production extension: one that talks to the main
 <https://hypothes.is> web service.
 
+Building for a local `h` server
+-------------------------------
+
+The default settings file used is `chrome-dev.json` but it does not contain a 
+value for the `oauthClientId`. If you are running your own version of `h`, then 
+simply look up your oauth client id in the admin UI and add it to the config 
+file. `http://localhost:5000/admin/oauthclients`.
+
+> Note:
+> It may be convenient to create a new config file called `custom.json` based 
+> on `chrome-dev.json` with your  `oauthClientId` value.
+>
+>       $ make SETTINGS_FILE=settings/custom.json
+
+For instructions how to set up a client with your `h` server, see 
+https://h-client.readthedocs.io/en/latest/developers/developing/#running-the-client-from-h*
+
+
 Loading an extension into Chrome
 --------------------------------
 
