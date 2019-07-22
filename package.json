@@ -30,7 +30,7 @@
     "karma-mocha": "^1.1.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-sinon": "^1.0.5",
-    "mocha": "^6.1.4",
+    "mocha": "^6.2.0",
     "mustache": "^3.0.1",
     "prettier": "1.18.2",
     "puppeteer": "^1.18.1",
