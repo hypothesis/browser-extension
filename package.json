@@ -33,7 +33,7 @@
     "mocha": "^6.2.0",
     "mustache": "^3.0.1",
     "prettier": "1.18.2",
-    "puppeteer": "^1.18.1",
+    "puppeteer": "^1.19.0",
     "query-string": "^3.0.1",
     "raven-js": "^3.27.2",
     "request": "^2.88.0",
