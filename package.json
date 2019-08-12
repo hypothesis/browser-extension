@@ -10,7 +10,7 @@
   "devDependencies": {
     "babel-plugin-mockable-imports": "^1.5.1",
     "babel-preset-env": "^1.7.0",
-    "babelify": "^7.3.0",
+    "babelify": "^10.0.0",
     "browserify": "^16.3.0",
     "chai": "^4.2.0",
     "check-dependencies": "^1.1.0",
