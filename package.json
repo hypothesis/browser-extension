@@ -15,7 +15,7 @@
     "chai": "^4.2.0",
     "check-dependencies": "^1.1.0",
     "chrome-webstore-upload-cli": "^1.2.0",
-    "core-js": "^3.1.4",
+    "core-js": "^3.2.1",
     "diff": "^4.0.1",
     "eslint": "^6.1.0",
     "eslint-config-hypothesis": "^1.0.0",
