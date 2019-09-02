@@ -22,12 +22,10 @@ function detectContentType(document_) {
     // instantiates the native PDF renderer.
     //
     // The selector below matches the <embed> tag in the top-level document. To
-    // see this document, open the inspector on a PDF viewer tab with
-    // Ctrl+Shift+I rather than right-clicking on the viewport and selecting the
-    // 'Inspect' option which will instead show the _inner_ document.
-    if (
-      document_.querySelector('embed[type="application/pdf"][name="plugin"]')
-    ) {
+    // see this document, open the developer tools from Chrome's menu rather
+    // than right-clicking on the viewport and selecting the 'Inspect' option
+    // which will instead show the _inner_ document.
+    if (document_.querySelector('embed[type="application/pdf"]')) {
       return { type: 'PDF' };
     }
     return null;
