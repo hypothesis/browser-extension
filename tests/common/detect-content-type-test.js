@@ -19,7 +19,7 @@ describe('detectContentType()', function() {
   });
 
   it('returns "PDF" if Google Chrome PDF viewer is present', function() {
-    el.innerHTML = '<embed name="plugin" type="application/pdf"></embed>';
+    el.innerHTML = '<embed type="application/pdf"></embed>';
     assert.deepEqual(detectContentType(), { type: 'PDF' });
   });
 
