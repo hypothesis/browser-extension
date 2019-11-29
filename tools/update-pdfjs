@@ -44,3 +44,5 @@ if [ $download_pdfjs ]; then
   # viewer.
   sed -i '' -e 's/HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)/true \/* Hypothesis *\//' $DEST_DIR/web/viewer.js
 fi
+
+sed -i '' -e 's/<\/head>/<script src="\/pdfjs-init.js"><\/script><\/head>/' $DEST_DIR/web/viewer.html
