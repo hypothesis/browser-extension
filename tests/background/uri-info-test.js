@@ -3,7 +3,7 @@
 var toResult = require('../promise-util').toResult;
 var unroll = require('../util').unroll;
 
-var uriInfo = require('../../src/common/uri-info');
+var uriInfo = require('../../src/background/uri-info');
 var settings = require('../settings.json');
 
 describe('UriInfo.query', function() {

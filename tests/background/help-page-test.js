@@ -1,8 +1,8 @@
 'use strict';
 
 describe('HelpPage', function() {
-  var errors = require('../../src/common/errors');
-  var HelpPage = require('../../src/common/help-page');
+  var errors = require('../../src/background/errors');
+  var HelpPage = require('../../src/background/help-page');
   var fakeBrowserName;
   var fakeChromeTabs;
   var fakeExtensionURL;

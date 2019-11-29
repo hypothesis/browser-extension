@@ -23,8 +23,8 @@ function createTestFrame() {
 }
 
 describe('SidebarInjector', function() {
-  var errors = require('../../src/common/errors');
-  var SidebarInjector = require('../../src/common/sidebar-injector');
+  var errors = require('../../src/background/errors');
+  var SidebarInjector = require('../../src/background/sidebar-injector');
   var injector;
   var fakeChromeTabs;
   var fakeFileAccess;
@@ -290,7 +290,7 @@ describe('SidebarInjector', function() {
           .removeFromTab({ id: 1, url: 'http://example.com/foo.html' })
           .then(function() {
             assert.calledWith(fakeChromeTabs.executeScript, 1, {
-              file: sinon.match('/lib/destroy.js'),
+              file: sinon.match('/unload-client.js'),
             });
           });
       });

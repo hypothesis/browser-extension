@@ -25,7 +25,7 @@ build/.settings.json: force
 	cmp -s - $@ || \
 	tools/settings.js $(SETTINGS_FILE) >$@
 
-EXTENSION_SRC := pdfjs help images lib
+EXTENSION_SRC := pdfjs help images options
 
 .PHONY: extension
 extension: build/extension.bundle.js
@@ -33,9 +33,10 @@ extension: build/manifest.json
 extension: build/client/build
 extension: build/client/app.html
 extension: build/settings-data.js
+extension: build/unload-client.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
 
-build/extension.bundle.js: src/common/extension.js
+build/extension.bundle.js: src/background/index.js
 	$(BROWSERIFY) -t babelify -d $< > $@.tmp
 	cat $@.tmp | $(EXORCIST) $(addsuffix .map,$@) >$@
 	@# When building the extension bundle, we also write out a list of
@@ -46,7 +47,7 @@ build/extension.bundle.js: src/common/extension.js
 		grep -v node_modules | \
 		sed 's#^#$@: #' \
 		>build/.extension.bundle.deps
-build/manifest.json: src/chrome/manifest.json.mustache build/.settings.json
+build/manifest.json: src/manifest.json.mustache build/.settings.json
 	$(MUSTACHE) build/.settings.json $< > $@
 build/client/build: node_modules/hypothesis/build/manifest.json
 	@mkdir -p $@
@@ -54,13 +55,15 @@ build/client/build: node_modules/hypothesis/build/manifest.json
 	@# We can't leave the client manifest in the build or the Chrome Web Store
 	@# will complain.
 	rm $@/manifest.json
-build/client/app.html: src/client/app.html.mustache build/client build/.settings.json
+build/client/app.html: src/sidebar-app.html.mustache build/client build/.settings.json
 	tools/template-context-app.js build/.settings.json | $(MUSTACHE) - $< >$@
-build/settings-data.js: src/chrome/settings-data.js.mustache build/client build/.settings.json
+build/settings-data.js: src/settings-data.js.mustache build/client build/.settings.json
 	tools/template-context-settings.js build/.settings.json | $(MUSTACHE) - $< >$@
+build/unload-client.js: src/unload-client.js
+	cp $< $@
 build/pdfjs: src/vendor/pdfjs
 	cp -R $< $@
-build/%: src/chrome/%
+build/%: src/%
 	@mkdir -p $@
 	cp -R $</* $@
 

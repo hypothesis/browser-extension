@@ -25,7 +25,7 @@ module.exports = function(config) {
         included: false,
       },
       './bootstrap.js',
-      './common/*.js',
+      './background/*.js',
     ],
 
     // list of files to exclude
@@ -34,7 +34,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-      '../src/common/*.js': ['browserify'],
+      '../src/background/*.js': ['browserify'],
       './**/*.js': ['browserify'],
     },
 

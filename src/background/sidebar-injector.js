@@ -319,7 +319,7 @@ function SidebarInjector(chromeTabs, dependencies) {
     if (!isSupportedURL(tab.url)) {
       return Promise.resolve();
     }
-    return injectScript(tab.id, '/lib/destroy.js');
+    return injectScript(tab.id, '/unload-client.js');
   }
 
   /**
