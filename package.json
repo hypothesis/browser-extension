@@ -15,7 +15,6 @@
     "chai": "^4.2.0",
     "check-dependencies": "^1.1.0",
     "chrome-webstore-upload-cli": "^1.2.0",
-    "core-js": "^3.4.5",
     "diff": "^4.0.1",
     "eslint": "^6.7.2",
     "eslint-config-hypothesis": "^1.0.0",
@@ -39,8 +38,7 @@
     "request": "^2.88.0",
     "sinon": "^7.5.0",
     "watchify": "^3.11.1",
-    "web-ext": "^3.2.1",
-    "whatwg-fetch": "^3.0.0"
+    "web-ext": "^3.2.1"
   },
   "scripts": {
     "postversion": "git push https://github.com/hypothesis/browser-extension.git master:master --follow-tags",
