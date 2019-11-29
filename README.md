@@ -2,7 +2,6 @@ Hypothesis browser extension(s)
 ===============================
 
 [![Build status](https://img.shields.io/travis/hypothesis/browser-extension/master.svg)][travis]
-[![#hypothes.is IRC channel](https://img.shields.io/badge/IRC-%23hypothes.is-blue.svg)][irc]
 [![BSD licensed](https://img.shields.io/badge/license-BSD-blue.svg)][license]
 
 [travis]: https://travis-ci.org/hypothesis/browser-extension
@@ -19,10 +18,10 @@ The Hypothesis browser extensions allow you to annotate web documents using your
 Choose your browser below
 -------------------------
 
-|     **Chrome**    |    **Firefox**     |     **Opera**     |     **Safari**    |
-| ----------------- | ------------------ | ----------------- | ----------------- |
-| [![Chrome][0]][1] | [![Firefox][2]][3] | [![Opera][4]][5]  | [![Safari][6]][7] |
-| **Now available** | **In development** | `not yet`         | `not yet`         |
+|     **Chrome**    |    **Firefox**     |
+| ----------------- | ------------------ |
+| [![Chrome][0]][1] | [![Firefox][2]][3] |
+| **Now available** | **In development** |
 
 
 
@@ -30,10 +29,6 @@ Choose your browser below
 [1]: https://chrome.google.com/webstore/detail/hypothesis-web-pdf-annota/bjfhmglciegochdpefhhlphglcehbmek
 [2]: /images/mozilla-firefox.ico?raw=true "Nearly there..."
 [3]: #not-yet
-[4]: /images/opera.png?raw=true "Help wanted"
-[5]: #not-yet
-[6]: /images/apple-safari.png?raw=true "Help wanted"
-[7]: #not-yet
 
 Development
 -----------
@@ -83,8 +78,10 @@ See [Building the extension](docs/building.md) for more information.
 Community
 ---------
 
-Join us in [#hypothes.is][irc] on [freenode](https://freenode.net/) for
-discussion.
+Join us on Slack for discussion. Please see [our contact
+page](https://web.hypothes.is/contact/) for details of how to register.
+
+For help using the extension, please see our [Help pages](https://web.hypothes.is/help/).
 
 If you'd like to contribute to the project, you should consider subscribing to
 the [development mailing list][ml], where we can help you plan your
