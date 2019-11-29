@@ -28,6 +28,9 @@ curl -L https://github.com/mozilla/pdf.js/archive/gh-pages.tar.gz \
 # Remove example content from viewer
 rm $DEST_DIR/web/*.pdf
 
+# Remove sourcemaps. These increase the size of the extension significantly.
+find $DEST_DIR/ -name '*.map' -delete
+
 # Remove the check that the PDF being loaded is from the same origin as the
 # viewer.
 sed -i '' -e 's/HOSTED_VIEWER_ORIGINS.includes(viewerOrigin)/true \/* Hypothesis *\//' $DEST_DIR/web/viewer.js
