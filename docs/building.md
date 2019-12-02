@@ -38,9 +38,26 @@ Building for a local `h` server
 -------------------------------
 
 The default settings file used is `chrome-dev.json` but it does not contain a 
-value for the `oauthClientId`. If you are running your own version of `h`, then 
-simply look up your oauth client id in the admin UI and add it to the config 
-file. `http://localhost:5000/admin/oauthclients`.
+value for the `oauthClientId`. If you are running your own version of `h` 
+simply create an oauth client ID in the admin UI for the browser extension.
+
+http://localhost:5000/admin/oauthclients
+
+**Client OAuth Values**
+
+    Name: Browser Extension
+    Authority: localhost
+    Grant type: authorization_code
+    Redirect URL: chrome-extension://<extension id>
+
+Where `<extension id>` is the ID of the browser extension. You may need to load the extension 
+into chrome the first to view the ID. Skip ahead to _Loading an extension into Chrome_
+below. Next, add the generated ID value to the config file you are using. e.g inside of 
+`chrome-dev.json` add
+
+```
+"oauthClientId": "<32 digit value>"
+```
 
 > Note:
 > It may be convenient to create a new config file called `custom.json` based 
