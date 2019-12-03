@@ -1,10 +1,10 @@
 'use strict';
 
-var HypothesisChromeExtension = require('../../src/common/hypothesis-chrome-extension');
+var HypothesisChromeExtension = require('../../src/background/hypothesis-chrome-extension');
 var toResult = require('../promise-util').toResult;
 
-var errors = require('../../src/common/errors');
-var TabState = require('../../src/common/tab-state');
+var errors = require('../../src/background/errors');
+var TabState = require('../../src/background/tab-state');
 
 // Creates a constructor function which takes no arguments
 // and has a given prototype.

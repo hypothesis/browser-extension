@@ -70,7 +70,7 @@ function SidebarInjector(chromeTabs, dependencies) {
 
   var executeScriptFn = util.promisify(chromeTabs.executeScript);
 
-  var PDFViewerBaseURL = extensionURL('/content/web/viewer.html');
+  var PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
 
   if (typeof extensionURL !== 'function') {
     throw new TypeError('extensionURL must be a function');
@@ -319,7 +319,7 @@ function SidebarInjector(chromeTabs, dependencies) {
     if (!isSupportedURL(tab.url)) {
       return Promise.resolve();
     }
-    return injectScript(tab.id, '/lib/destroy.js');
+    return injectScript(tab.id, '/unload-client.js');
   }
 
   /**

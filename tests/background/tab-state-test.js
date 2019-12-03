@@ -1,6 +1,6 @@
 'use strict';
 
-var TabState = require('../../src/common/tab-state');
+var TabState = require('../../src/background/tab-state');
 
 describe('TabState', function() {
   var states = TabState.states;

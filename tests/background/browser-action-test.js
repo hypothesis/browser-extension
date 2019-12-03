@@ -1,8 +1,8 @@
 'use strict';
 
 describe('BrowserAction', function() {
-  var BrowserAction = require('../../src/common/browser-action');
-  var TabState = require('../../src/common/tab-state');
+  var BrowserAction = require('../../src/background/browser-action');
+  var TabState = require('../../src/background/tab-state');
   var action;
   var fakeChromeBrowserAction;
 

@@ -1,6 +1,6 @@
 'use strict';
 
-var directLinkQuery = require('../../src/common/direct-link-query');
+var directLinkQuery = require('../../src/background/direct-link-query');
 
 describe('common.direct-link-query', () => {
   it('returns `null` if the URL contains no #annotations fragment', () => {

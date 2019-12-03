@@ -6,7 +6,7 @@ var toResult = require('../promise-util').toResult;
 // extensionURL(path) fake
 var EXTENSION_BASE_URL = 'chrome-extension://hypothesis';
 
-var PDF_VIEWER_BASE_URL = EXTENSION_BASE_URL + '/content/web/viewer.html?file=';
+var PDF_VIEWER_BASE_URL = EXTENSION_BASE_URL + '/pdfjs/web/viewer.html?file=';
 
 /**
  * Creates an <iframe> for testing the effects of code injected
@@ -23,8 +23,8 @@ function createTestFrame() {
 }
 
 describe('SidebarInjector', function() {
-  var errors = require('../../src/common/errors');
-  var SidebarInjector = require('../../src/common/sidebar-injector');
+  var errors = require('../../src/background/errors');
+  var SidebarInjector = require('../../src/background/sidebar-injector');
   var injector;
   var fakeChromeTabs;
   var fakeFileAccess;
@@ -290,7 +290,7 @@ describe('SidebarInjector', function() {
           .removeFromTab({ id: 1, url: 'http://example.com/foo.html' })
           .then(function() {
             assert.calledWith(fakeChromeTabs.executeScript, 1, {
-              file: sinon.match('/lib/destroy.js'),
+              file: sinon.match('/unload-client.js'),
             });
           });
       });

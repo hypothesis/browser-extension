@@ -52,7 +52,7 @@ describe('install', function() {
     // Defer requiring `common/install` until `window.chrome` is initialized
     // for the first time because top-level statements in the module depend on
     // it.
-    install = require('../../src/common/install');
+    install = require('../../src/background/install');
     install.$imports.$mock({
       './hypothesis-chrome-extension': FakeHypothesisChromeExtension,
     });

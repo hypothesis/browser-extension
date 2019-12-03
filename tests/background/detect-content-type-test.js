@@ -1,6 +1,6 @@
 'use strict';
 
-var detectContentType = require('../../src/common/detect-content-type');
+var detectContentType = require('../../src/background/detect-content-type');
 
 describe('detectContentType()', function() {
   var el;
