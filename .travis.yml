@@ -22,6 +22,6 @@ addons:
 deploy:
   skip_cleanup: true
   provider: script
-  script: ./tools/deploy
+  script: sh -x ./tools/deploy
   on:
     branch: master
