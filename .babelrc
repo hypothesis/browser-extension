@@ -2,8 +2,8 @@
   "presets": [
     ["env", {
       "targets": {
-        "firefox": "48",
-        "chrome": "43"
+        "firefox": "68",
+        "chrome": "64"
       }
     }]
   ]
