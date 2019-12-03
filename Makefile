@@ -34,6 +34,7 @@ extension: build/client/build
 extension: build/client/app.html
 extension: build/settings-data.js
 extension: build/unload-client.js
+extension: build/pdfjs-init.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
 
 build/extension.bundle.js: src/background/index.js
@@ -60,6 +61,8 @@ build/client/app.html: src/sidebar-app.html.mustache build/client build/.setting
 build/settings-data.js: src/settings-data.js.mustache build/client build/.settings.json
 	tools/template-context-settings.js build/.settings.json | $(MUSTACHE) - $< >$@
 build/unload-client.js: src/unload-client.js
+	cp $< $@
+build/pdfjs-init.js: src/pdfjs-init.js
 	cp $< $@
 build/pdfjs: src/vendor/pdfjs
 	cp -R $< $@
