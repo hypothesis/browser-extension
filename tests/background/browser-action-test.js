@@ -162,7 +162,9 @@ describe('BrowserAction', function() {
         buildType: 'staging',
       };
       $imports.$mock({
-        './settings': fakeSettings,
+        './settings': {
+          default: fakeSettings,
+        },
       });
       action = new BrowserAction(fakeChromeBrowserAction);
     });

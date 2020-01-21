@@ -128,7 +128,9 @@ describe('HypothesisChromeExtension', function() {
       './sidebar-injector': createConstructor(fakeSidebarInjector),
       './errors': fakeErrors,
       './settings': {
-        serviceUrl: 'https://hypothes.is/',
+        default: {
+          serviceUrl: 'https://hypothes.is/',
+        },
       },
     });
 
