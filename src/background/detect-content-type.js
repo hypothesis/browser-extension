@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Returns the type of content in the current document,
  * currently either 'PDF' or 'HTML'.
@@ -12,7 +10,7 @@
  * of content in embedded viewers where that differs from the tab's
  * main URL.
  */
-function detectContentType(document_) {
+export default function detectContentType(document_) {
   document_ = document_ || document;
 
   function detectChromePDFViewer() {
@@ -57,5 +55,3 @@ function detectContentType(document_) {
 
   return { type: 'HTML' };
 }
-
-module.exports = detectContentType;

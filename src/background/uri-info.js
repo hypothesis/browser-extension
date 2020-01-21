@@ -1,6 +1,4 @@
-'use strict';
-
-var settings = require('./settings');
+import settings from './settings';
 
 /** encodeUriQuery encodes a string for use in a query parameter */
 function encodeUriQuery(val) {
@@ -11,7 +9,7 @@ function encodeUriQuery(val) {
  * Queries the Hypothesis service that provides
  * statistics about the annotations for a given URL.
  */
-function query(uri) {
+export function query(uri) {
   return fetch(settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri), {
     credentials: 'include',
   })
@@ -25,7 +23,3 @@ function query(uri) {
       return data;
     });
 }
-
-module.exports = {
-  query: query,
-};

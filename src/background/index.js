@@ -1,10 +1,8 @@
-'use strict';
-
-var raven = require('./raven');
+import * as raven from './raven';
 
 if (window.EXTENSION_CONFIG.raven) {
   raven.init(window.EXTENSION_CONFIG.raven);
 }
 
-require('./hypothesis-chrome-extension');
-require('./install');
+import './hypothesis-chrome-extension';
+import './install';

@@ -1,13 +1,11 @@
-'use strict';
-
-var BrowserAction = require('./browser-action');
-var HelpPage = require('./help-page');
-var SidebarInjector = require('./sidebar-injector');
-var TabState = require('./tab-state');
-var TabStore = require('./tab-store');
-var directLinkQuery = require('./direct-link-query');
-var errors = require('./errors');
-var settings = require('./settings');
+import BrowserAction from './browser-action';
+import directLinkQuery from './direct-link-query';
+import * as errors from './errors';
+import HelpPage from './help-page';
+import settings from './settings';
+import SidebarInjector from './sidebar-injector';
+import TabState from './tab-state';
+import TabStore from './tab-store';
 
 var TAB_STATUS_LOADING = 'loading';
 var TAB_STATUS_COMPLETE = 'complete';
@@ -39,7 +37,7 @@ var TAB_STATUS_COMPLETE = 'complete';
  *   extensionURL: chrome.extension.getURL.
  *   isAllowedFileSchemeAccess: chrome.extension.isAllowedFileSchemeAccess.
  */
-function HypothesisChromeExtension(dependencies) {
+export default function HypothesisChromeExtension(dependencies) {
   var chromeTabs = dependencies.chromeTabs;
   var chromeExtension = dependencies.chromeExtension;
   var chromeStorage = dependencies.chromeStorage;
@@ -298,5 +296,3 @@ function HypothesisChromeExtension(dependencies) {
     );
   }
 }
-
-module.exports = HypothesisChromeExtension;

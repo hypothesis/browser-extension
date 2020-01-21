@@ -1,7 +1,5 @@
-'use strict';
-
-var settings = require('./settings');
-var TabState = require('./tab-state');
+import settings from './settings';
+import TabState from './tab-state';
 
 // Cache the tab state constants.
 var states = TabState.states;
@@ -43,7 +41,7 @@ function _(str) {
  * a tab (whether the extension is active, annotation count) to
  * the badge state.
  */
-function BrowserAction(chromeBrowserAction) {
+export default function BrowserAction(chromeBrowserAction) {
   var buildType = settings.buildType;
 
   /**
@@ -106,5 +104,3 @@ function BrowserAction(chromeBrowserAction) {
 }
 
 BrowserAction.icons = icons;
-
-module.exports = BrowserAction;

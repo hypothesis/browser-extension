@@ -1,7 +1,5 @@
-'use strict';
-
-var browserName = require('./browser-name');
-var errors = require('./errors');
+import browserName from './browser-name';
+import * as errors from './errors';
 
 /* A controller for displaying help pages. These are bound to extension
  * specific errors (found in errors.js) but can also be triggered manually.
@@ -11,7 +9,7 @@ var errors = require('./errors');
  *   to the file inside the chrome extension. See:
  *   https://developer.chrome.com/extensions/extension#method-getURL
  */
-function HelpPage(chromeTabs, extensionURL, browserName_) {
+export default function HelpPage(chromeTabs, extensionURL, browserName_) {
   browserName_ = browserName_ || browserName;
 
   /* Accepts an instance of errors.ExtensionError and displays an appropriate
@@ -71,5 +69,3 @@ function HelpPage(chromeTabs, extensionURL, browserName_) {
     chromeTabs.create(tabOpts);
   }
 }
-
-module.exports = HelpPage;

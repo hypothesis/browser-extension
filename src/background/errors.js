@@ -1,41 +1,45 @@
-'use strict';
+import * as raven from './raven';
 
-var raven = require('./raven');
-
-function ExtensionError(message) {
+export function ExtensionError(message) {
   Error.apply(this, arguments);
   this.message = message;
 }
+
 ExtensionError.prototype = Object.create(Error.prototype);
 
-function LocalFileError(message) {
+export function LocalFileError(message) {
   Error.apply(this, arguments);
   this.message = message;
 }
+
 LocalFileError.prototype = Object.create(ExtensionError.prototype);
 
-function NoFileAccessError(message) {
+export function NoFileAccessError(message) {
   Error.apply(this, arguments);
   this.message = message;
 }
+
 NoFileAccessError.prototype = Object.create(ExtensionError.prototype);
 
-function RestrictedProtocolError(message) {
+export function RestrictedProtocolError(message) {
   Error.apply(this, arguments);
   this.message = message;
 }
+
 RestrictedProtocolError.prototype = Object.create(ExtensionError.prototype);
 
-function BlockedSiteError(message) {
+export function BlockedSiteError(message) {
   Error.apply(this, arguments);
   this.message = message;
 }
+
 BlockedSiteError.prototype = Object.create(ExtensionError.prototype);
 
-function AlreadyInjectedError(message) {
+export function AlreadyInjectedError(message) {
   Error.apply(this, arguments);
   this.message = message;
 }
+
 AlreadyInjectedError.prototype = Object.create(ExtensionError.prototype);
 
 /**
@@ -60,7 +64,7 @@ var IGNORED_ERRORS = [
  *
  * @param {{message: string}} err - The Error-like object
  */
-function shouldIgnoreInjectionError(err) {
+export function shouldIgnoreInjectionError(err) {
   if (
     IGNORED_ERRORS.some(function(pattern) {
       return err.message.match(pattern);
@@ -85,20 +89,9 @@ function shouldIgnoreInjectionError(err) {
  * @param {string} when - Describes the context in which the error occurred.
  * @param {Object} context - Additional context for the error.
  */
-function report(error, when, context) {
+export function report(error, when, context) {
   console.error(when, error);
   if (!isKnownError(error)) {
     raven.report(error, when, context);
   }
 }
-
-module.exports = {
-  ExtensionError: ExtensionError,
-  AlreadyInjectedError: AlreadyInjectedError,
-  LocalFileError: LocalFileError,
-  NoFileAccessError: NoFileAccessError,
-  RestrictedProtocolError: RestrictedProtocolError,
-  BlockedSiteError: BlockedSiteError,
-  report: report,
-  shouldIgnoreInjectionError: shouldIgnoreInjectionError,
-};

@@ -1,10 +1,8 @@
-'use strict';
+import * as queryString from 'query-string';
 
-var queryString = require('query-string');
-
-var detectContentType = require('./detect-content-type');
-var errors = require('./errors');
-var util = require('./util');
+import detectContentType from './detect-content-type';
+import * as errors from './errors';
+import * as util from './util';
 
 var CONTENT_TYPE_HTML = 'HTML';
 var CONTENT_TYPE_PDF = 'PDF';
@@ -62,7 +60,7 @@ function extractContentScriptResult(result) {
  *   extensionURL: A function that receives a path and returns an absolute
  *   url. See: https://developer.chrome.com/extensions/extension#method-getURL
  */
-function SidebarInjector(chromeTabs, dependencies) {
+export default function SidebarInjector(chromeTabs, dependencies) {
   dependencies = dependencies || {};
 
   var isAllowedFileSchemeAccess = dependencies.isAllowedFileSchemeAccess;
@@ -350,5 +348,3 @@ function SidebarInjector(chromeTabs, dependencies) {
     return executeScriptFn(tabId, { code: configCode });
   }
 }
-
-module.exports = SidebarInjector;
