@@ -1,5 +1,4 @@
-import BrowserAction from '../../src/background/browser-action';
-import { $imports } from '../../src/background/browser-action';
+import BrowserAction, { $imports } from '../../src/background/browser-action';
 import TabState from '../../src/background/tab-state';
 
 describe('BrowserAction', function() {

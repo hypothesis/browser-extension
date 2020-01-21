@@ -1,5 +1,4 @@
 import * as errors from '../../src/background/errors';
-import { $imports } from '../../src/background/errors';
 
 describe('errors', function() {
   var fakeRaven;
@@ -8,7 +7,7 @@ describe('errors', function() {
     fakeRaven = {
       report: sinon.stub(),
     };
-    $imports.$mock({
+    errors.$imports.$mock({
       './raven': fakeRaven,
     });
     sinon.stub(console, 'error');
@@ -16,7 +15,7 @@ describe('errors', function() {
 
   afterEach(function() {
     console.error.restore();
-    $imports.$restore();
+    errors.$imports.$restore();
   });
 
   describe('#shouldIgnoreInjectionError', function() {

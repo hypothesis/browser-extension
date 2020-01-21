@@ -1,6 +1,7 @@
 import * as errors from '../../src/background/errors';
-import HypothesisChromeExtension from '../../src/background/hypothesis-chrome-extension';
-import { $imports } from '../../src/background/hypothesis-chrome-extension';
+import HypothesisChromeExtension, {
+  $imports,
+} from '../../src/background/hypothesis-chrome-extension';
 import TabState from '../../src/background/tab-state';
 import { toResult } from '../promise-util';
 

@@ -1,5 +1,4 @@
-import TabState from '../../src/background/tab-state';
-import { $imports } from '../../src/background/tab-state';
+import TabState, { $imports } from '../../src/background/tab-state';
 
 describe('TabState', function() {
   var states = TabState.states;
