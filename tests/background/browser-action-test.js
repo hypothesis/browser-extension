@@ -1,8 +1,6 @@
-'use strict';
-
-var BrowserAction = require('../../src/background/browser-action');
-var { $imports } = require('../../src/background/browser-action');
-var TabState = require('../../src/background/tab-state');
+import BrowserAction from '../../src/background/browser-action';
+import { $imports } from '../../src/background/browser-action';
+import TabState from '../../src/background/tab-state';
 
 describe('BrowserAction', function() {
   var action;

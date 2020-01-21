@@ -1,11 +1,8 @@
-'use strict';
-
-var HypothesisChromeExtension = require('../../src/background/hypothesis-chrome-extension');
-var { $imports } = require('../../src/background/hypothesis-chrome-extension');
-var { toResult } = require('../promise-util');
-
-var errors = require('../../src/background/errors');
-var TabState = require('../../src/background/tab-state');
+import * as errors from '../../src/background/errors';
+import HypothesisChromeExtension from '../../src/background/hypothesis-chrome-extension';
+import { $imports } from '../../src/background/hypothesis-chrome-extension';
+import TabState from '../../src/background/tab-state';
+import { toResult } from '../promise-util';
 
 // Creates a constructor function which takes no arguments
 // and has a given prototype.

@@ -1,8 +1,6 @@
-'use strict';
-
-var { toResult } = require('../promise-util');
-var errors = require('../../src/background/errors');
-var SidebarInjector = require('../../src/background/sidebar-injector');
+import * as errors from '../../src/background/errors';
+import SidebarInjector from '../../src/background/sidebar-injector';
+import { toResult } from '../promise-util';
 
 // The root URL for the extension returned by the
 // extensionURL(path) fake

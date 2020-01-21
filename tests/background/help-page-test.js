@@ -1,7 +1,5 @@
-'use strict';
-
-var errors = require('../../src/background/errors');
-var HelpPage = require('../../src/background/help-page');
+import * as errors from '../../src/background/errors';
+import HelpPage from '../../src/background/help-page';
 
 describe('HelpPage', function() {
   var fakeBrowserName;
