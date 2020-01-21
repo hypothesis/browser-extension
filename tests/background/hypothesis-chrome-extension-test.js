@@ -1,6 +1,7 @@
 'use strict';
 
 var HypothesisChromeExtension = require('../../src/background/hypothesis-chrome-extension');
+var { $imports } = require('../../src/background/hypothesis-chrome-extension');
 var { toResult } = require('../promise-util');
 
 var errors = require('../../src/background/errors');
@@ -122,7 +123,7 @@ describe('HypothesisChromeExtension', function() {
     FakeTabState.prototype = fakeTabState;
     FakeTabState.states = TabState.states;
 
-    HypothesisChromeExtension.$imports.$mock({
+    $imports.$mock({
       './tab-state': FakeTabState,
       './tab-store': createConstructor(fakeTabStore),
       './help-page': createConstructor(fakeHelpPage),
@@ -139,7 +140,7 @@ describe('HypothesisChromeExtension', function() {
 
   afterEach(function() {
     sandbox.restore();
-    HypothesisChromeExtension.$imports.$restore();
+    $imports.$restore();
   });
 
   describe('.install', function() {

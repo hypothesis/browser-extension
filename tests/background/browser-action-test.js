@@ -1,5 +1,7 @@
 'use strict';
+
 var BrowserAction = require('../../src/background/browser-action');
+var { $imports } = require('../../src/background/browser-action');
 var TabState = require('../../src/background/tab-state');
 
 describe('BrowserAction', function() {
@@ -161,14 +163,14 @@ describe('BrowserAction', function() {
       var fakeSettings = {
         buildType: 'staging',
       };
-      BrowserAction.$imports.$mock({
+      $imports.$mock({
         './settings': fakeSettings,
       });
       action = new BrowserAction(fakeChromeBrowserAction);
     });
 
     afterEach(() => {
-      BrowserAction.$imports.$restore();
+      $imports.$restore();
     });
 
     it('sets the text to STG when there are no annotations', function() {

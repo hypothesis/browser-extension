@@ -1,6 +1,7 @@
 'use strict';
 
 const errors = require('../../src/background/errors');
+const { $imports } = require('../../src/background/errors');
 
 describe('errors', function() {
   var fakeRaven;
@@ -9,7 +10,7 @@ describe('errors', function() {
     fakeRaven = {
       report: sinon.stub(),
     };
-    errors.$imports.$mock({
+    $imports.$mock({
       './raven': fakeRaven,
     });
     sinon.stub(console, 'error');
@@ -17,7 +18,7 @@ describe('errors', function() {
 
   afterEach(function() {
     console.error.restore();
-    errors.$imports.$restore();
+    $imports.$restore();
   });
 
   describe('#shouldIgnoreInjectionError', function() {
