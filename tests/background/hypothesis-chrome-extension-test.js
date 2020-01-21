@@ -1,7 +1,7 @@
 'use strict';
 
 var HypothesisChromeExtension = require('../../src/background/hypothesis-chrome-extension');
-var toResult = require('../promise-util').toResult;
+var { toResult } = require('../promise-util');
 
 var errors = require('../../src/background/errors');
 var TabState = require('../../src/background/tab-state');

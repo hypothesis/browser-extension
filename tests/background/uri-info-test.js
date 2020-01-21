@@ -1,7 +1,7 @@
 'use strict';
 
-var toResult = require('../promise-util').toResult;
-var unroll = require('../util').unroll;
+var { toResult } = require('../promise-util');
+var { unroll } = require('../util');
 
 var uriInfo = require('../../src/background/uri-info');
 var settings = require('../settings.json');
