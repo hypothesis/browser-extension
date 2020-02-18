@@ -38,7 +38,7 @@
     "request": "^2.88.2",
     "sinon": "^8.1.1",
     "watchify": "^3.11.1",
-    "web-ext": "^4.0.0"
+    "web-ext": "^4.1.0"
   },
   "scripts": {
     "postversion": "git push https://github.com/hypothesis/browser-extension.git master:master --follow-tags",
