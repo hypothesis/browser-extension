@@ -13,7 +13,6 @@
     "babelify": "^7.3.0",
     "browserify": "^16.5.0",
     "chai": "^4.2.0",
-    "check-dependencies": "^1.1.0",
     "chrome-webstore-upload-cli": "^1.2.0",
     "diff": "^4.0.2",
     "eslint": "^6.8.0",
@@ -35,7 +34,6 @@
     "puppeteer": "^2.1.1",
     "query-string": "^3.0.1",
     "raven-js": "^3.27.2",
-    "request": "^2.88.2",
     "sinon": "^8.1.1",
     "watchify": "^3.11.1",
     "web-ext": "^4.1.0"
