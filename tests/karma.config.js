@@ -4,9 +4,24 @@
 
 let chromeFlags = [];
 process.env.CHROME_BIN = require('puppeteer').executablePath();
-if (process.env.TRAVIS) {
-  // See https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-on-travis-ci
+
+// On Travis and in Docker, the tests run as root, so the sandbox must be
+// disabled.
+if (process.env.TRAVIS || process.env.RUNNING_IN_DOCKER) {
   chromeFlags = ['--no-sandbox'];
+}
+
+if (process.env.RUNNING_IN_DOCKER) {
+  // Disable `/dev/shm` usage as this can cause Chrome to fail to load large
+  // HTML pages, such as the one Karma creates with all the tests loaded.
+  //
+  // See https://github.com/GoogleChrome/puppeteer/issues/1834 and
+  // https://github.com/karma-runner/karma-chrome-launcher/issues/198.
+  chromeFlags.push('--disable-dev-shm-usage');
+
+  // Use Chromium from Alpine packages. The one that Puppeteer downloads won't
+  // load in Alpine.
+  process.env.CHROME_BIN = 'chromium-browser';
 }
 
 module.exports = function(config) {
@@ -78,10 +93,10 @@ module.exports = function(config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['Chrome_Puppeteer'],
+    browsers: ['ChromeHeadless_Custom'],
 
     customLaunchers: {
-      Chrome_Puppeteer: {
+      ChromeHeadless_Custom: {
         base: 'ChromeHeadless',
         flags: chromeFlags,
       },
