@@ -1,4 +1,5 @@
 build/**
+dist/*
 **/vendor/**/*.js
 
 # Ignore PDF.js build
