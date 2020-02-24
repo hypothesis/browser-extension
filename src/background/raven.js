@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * This module configures Raven for reporting crashes
  * to Sentry.
@@ -8,7 +6,7 @@
  * version to be provided via the app's settings object.
  */
 
-var Raven = require('raven-js');
+import Raven from 'raven-js';
 
 /**
  * Returns the input URL if it is an HTTP URL or the filename part of the URL
@@ -63,7 +61,7 @@ function translateSourceURLs(data) {
   return data;
 }
 
-function init(config) {
+export function init(config) {
   Raven.config(config.dsn, {
     release: config.release,
     dataCallback: translateSourceURLs,
@@ -81,7 +79,7 @@ function init(config) {
  *                             information which may be useful when
  *                             investigating the error.
  */
-function report(error, when, context) {
+export function report(error, when, context) {
   if (!(error instanceof Error)) {
     // If the passed object is not an Error, raven-js
     // will serialize it using toString() which produces unhelpful results
@@ -120,8 +118,3 @@ function installUnhandledPromiseErrorHandler() {
     }
   });
 }
-
-module.exports = {
-  init: init,
-  report: report,
-};

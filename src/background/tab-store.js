@@ -1,5 +1,3 @@
-'use strict';
-
 /** TabStore is used to persist the state of H browser tabs when
  * the extension is re-installed or updated.
  *
@@ -7,7 +5,7 @@
  * for that to work however the storage key would need to be changed.
  * The tab ID is currently used but this is valid only for a browser session.
  */
-function TabStore(storage) {
+export default function TabStore(storage) {
   var key = 'state';
   var local;
 
@@ -60,5 +58,3 @@ function TabStore(storage) {
 
   this.reload();
 }
-
-module.exports = TabStore;

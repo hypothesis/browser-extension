@@ -1,10 +1,7 @@
-'use strict';
-
-var toResult = require('../promise-util').toResult;
-var unroll = require('../util').unroll;
-
-var uriInfo = require('../../src/background/uri-info');
-var settings = require('../settings.json');
+import * as uriInfo from '../../src/background/uri-info';
+import { toResult } from '../promise-util';
+import settings from '../settings.json';
+import { unroll } from '../util';
 
 describe('UriInfo.query', function() {
   var badgeURL = settings.apiUrl + '/badge';

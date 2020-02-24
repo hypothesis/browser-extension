@@ -1,8 +1,7 @@
-'use strict';
+import * as errors from '../../src/background/errors';
+import HelpPage from '../../src/background/help-page';
 
 describe('HelpPage', function() {
-  var errors = require('../../src/background/errors');
-  var HelpPage = require('../../src/background/help-page');
   var fakeBrowserName;
   var fakeChromeTabs;
   var fakeExtensionURL;

@@ -1,10 +1,9 @@
-'use strict';
-
-var HypothesisChromeExtension = require('../../src/background/hypothesis-chrome-extension');
-var toResult = require('../promise-util').toResult;
-
-var errors = require('../../src/background/errors');
-var TabState = require('../../src/background/tab-state');
+import * as errors from '../../src/background/errors';
+import HypothesisChromeExtension, {
+  $imports,
+} from '../../src/background/hypothesis-chrome-extension';
+import TabState from '../../src/background/tab-state';
+import { toResult } from '../promise-util';
 
 // Creates a constructor function which takes no arguments
 // and has a given prototype.
@@ -122,7 +121,7 @@ describe('HypothesisChromeExtension', function() {
     FakeTabState.prototype = fakeTabState;
     FakeTabState.states = TabState.states;
 
-    HypothesisChromeExtension.$imports.$mock({
+    $imports.$mock({
       './tab-state': FakeTabState,
       './tab-store': createConstructor(fakeTabStore),
       './help-page': createConstructor(fakeHelpPage),
@@ -130,7 +129,9 @@ describe('HypothesisChromeExtension', function() {
       './sidebar-injector': createConstructor(fakeSidebarInjector),
       './errors': fakeErrors,
       './settings': {
-        serviceUrl: 'https://hypothes.is/',
+        default: {
+          serviceUrl: 'https://hypothes.is/',
+        },
       },
     });
 
@@ -139,7 +140,7 @@ describe('HypothesisChromeExtension', function() {
 
   afterEach(function() {
     sandbox.restore();
-    HypothesisChromeExtension.$imports.$restore();
+    $imports.$restore();
   });
 
   describe('.install', function() {

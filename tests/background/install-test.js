@@ -1,5 +1,3 @@
-'use strict';
-
 var extension;
 
 function FakeHypothesisChromeExtension(deps) {

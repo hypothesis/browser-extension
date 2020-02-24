@@ -1,6 +1,4 @@
-'use strict';
-
-var TabState = require('../../src/background/tab-state');
+import TabState, { $imports } from '../../src/background/tab-state';
 
 describe('TabState', function() {
   var states = TabState.states;
@@ -139,12 +137,12 @@ describe('TabState', function() {
 
     afterEach(function() {
       console.error.restore();
-      TabState.$imports.$restore();
+      $imports.$restore();
     });
 
     it('queries the service and sets the annotation count', function() {
       var queryStub = sinon.stub().returns(Promise.resolve({ total: 42 }));
-      TabState.$imports.$mock({
+      $imports.$mock({
         './uri-info': {
           query: queryStub,
         },
@@ -158,7 +156,7 @@ describe('TabState', function() {
 
     it('resets the count if an error occurred', function() {
       var queryStub = sinon.stub().returns(Promise.reject(new Error('err')));
-      TabState.$imports.$mock({
+      $imports.$mock({
         './uri-info': {
           query: queryStub,
         },

@@ -1,10 +1,8 @@
-'use strict';
-
-var HypothesisChromeExtension = require('./hypothesis-chrome-extension');
+import HypothesisChromeExtension from './hypothesis-chrome-extension';
 
 var browserExtension;
 
-function init() {
+export function init() {
   browserExtension = new HypothesisChromeExtension({
     chromeExtension: chrome.extension,
     chromeTabs: chrome.tabs,
@@ -70,5 +68,3 @@ function onInstalled(installDetails) {
 function onUpdateAvailable() {
   chrome.runtime.reload();
 }
-
-module.exports = { init };

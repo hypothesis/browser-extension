@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Validate and normalize the given settings data.
  *
@@ -16,4 +14,4 @@ function normalizeSettings(settings) {
 /**
  * Returns the configuration object for the Chrome extension
  */
-module.exports = normalizeSettings(window.EXTENSION_CONFIG);
+export default normalizeSettings(window.EXTENSION_CONFIG);

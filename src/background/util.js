@@ -1,5 +1,3 @@
-'use strict';
-
 function getLastError() {
   if (typeof chrome !== 'undefined' && chrome.extension) {
     return chrome.extension.lastError;
@@ -24,7 +22,7 @@ function getLastError() {
  *           is invoked, the promise is rejected if chrome.extension.lastError
  *           is set or resolved with the first argument to the callback otherwise.
  */
-function promisify(fn) {
+export function promisify(fn) {
   return function() {
     var args = [].slice.call(arguments);
     var result = new Promise(function(resolve, reject) {
@@ -43,7 +41,3 @@ function promisify(fn) {
     return result;
   };
 }
-
-module.exports = {
-  promisify: promisify,
-};

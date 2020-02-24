@@ -1,8 +1,6 @@
-'use strict';
+import isShallowEqual from 'is-equal-shallow';
 
-var isShallowEqual = require('is-equal-shallow');
-
-var uriInfo = require('./uri-info');
+import * as uriInfo from './uri-info';
 
 var states = {
   ACTIVE: 'active',
@@ -46,7 +44,7 @@ var DEFAULT_STATE = {
  *   the default state for a tab.
  * onchange     - A function that recieves onchange(tabId, current).
  */
-function TabState(initialState, onchange) {
+export default function TabState(initialState, onchange) {
   var self = this;
   var currentState;
 
@@ -170,5 +168,3 @@ function TabState(initialState, onchange) {
 }
 
 TabState.states = states;
-
-module.exports = TabState;

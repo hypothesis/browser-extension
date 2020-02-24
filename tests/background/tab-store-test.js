@@ -1,7 +1,6 @@
-'use strict';
+import TabStore from '../../src/background/tab-store';
 
 describe('TabStore', function() {
-  var TabStore = require('../../src/background/tab-store');
   var store;
   var fakeLocalStorage;
 

@@ -1,6 +1,4 @@
-'use strict';
-
-const errors = require('../../src/background/errors');
+import * as errors from '../../src/background/errors';
 
 describe('errors', function() {
   var fakeRaven;

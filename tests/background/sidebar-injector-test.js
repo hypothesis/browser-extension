@@ -1,6 +1,6 @@
-'use strict';
-
-var toResult = require('../promise-util').toResult;
+import * as errors from '../../src/background/errors';
+import SidebarInjector from '../../src/background/sidebar-injector';
+import { toResult } from '../promise-util';
 
 // The root URL for the extension returned by the
 // extensionURL(path) fake
@@ -23,8 +23,6 @@ function createTestFrame() {
 }
 
 describe('SidebarInjector', function() {
-  var errors = require('../../src/background/errors');
-  var SidebarInjector = require('../../src/background/sidebar-injector');
   var injector;
   var fakeChromeTabs;
   var fakeFileAccess;
