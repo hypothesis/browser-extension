@@ -1,6 +1,7 @@
 #!groovy
 
 node {
+    deleteDir()
     checkout scm
 
     workspace = pwd()
@@ -37,10 +38,6 @@ node {
 
     stage('Build Packages') {
         nodeEnv.inside("-e HOME=${workspace}") {
-          // FIXME - We should ensure that each build runs in a fresh workspace
-          // so old files don't need to be cleared out manually.
-          sh "rm -rf dist/*"
-
           sh "make SETTINGS_FILE=settings/chrome-stage.json dist/${gitVersion}-chrome-stage.zip"
           sh "make SETTINGS_FILE=settings/chrome-prod.json dist/${gitVersion}-chrome-prod.zip"
           sh "make SETTINGS_FILE=settings/firefox-stage.json dist/${gitVersion}-firefox-stage.xpi"
