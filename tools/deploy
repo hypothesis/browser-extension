@@ -41,7 +41,7 @@ upload_chrome_prod_ext() {
 sign_firefox_ext() {
   FIREFOX_STAGE_EXT_ID="{b441de5f-18e6-40ad-a8c2-f1bd2d42cb01}"
   rm -rf dist/firefox-stage
-  unzip dist/*-firefox-stage.xpi -d dist/firefox-stage
+  unzip -q dist/*-firefox-stage.xpi -d dist/firefox-stage
 
   ./node_modules/.bin/web-ext sign \
    --api-key $FIREFOX_AMO_KEY \
@@ -52,7 +52,7 @@ sign_firefox_ext() {
 
   FIREFOX_PROD_EXT_ID="{32492fee-2d9f-49fe-b268-fe213f7019f0}"
   rm -rf dist/firefox-prod
-  unzip dist/*-firefox-prod.xpi -d dist/firefox-prod
+  unzip -q dist/*-firefox-prod.xpi -d dist/firefox-prod
 
   ./node_modules/.bin/web-ext sign \
     --api-key $FIREFOX_AMO_KEY \
@@ -62,6 +62,11 @@ sign_firefox_ext() {
     --artifacts-dir dist/firefox-prod
 }
 
+echo "Uploading and publishing Chrome (QA) extension..."
 upload_and_publish_chrome_stage_ext
+
+echo "Uploading Chrome (prod) extension..."
 upload_chrome_prod_ext
+
+echo "Signing Firefox extension..."
 sign_firefox_ext
