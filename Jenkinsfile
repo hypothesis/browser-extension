@@ -1,5 +1,19 @@
 #!groovy
 
+properties([
+    parameters([
+        choice(
+          name: 'BUILD_TYPE',
+
+          // Build types. The first value in this list is the default, per
+          // https://stackoverflow.com/questions/47873401/.
+          choices: ['build', 'update-hypothesis-client'],
+
+          description: 'Build task to execute'
+        )
+    ])
+])
+
 node {
     deleteDir()
     checkout scm
@@ -30,6 +44,52 @@ node {
       }
     }
 
+    if (params.BUILD_TYPE == 'update-hypothesis-client') {
+        stage('Update Hypothesis Client') {
+            nodeEnv.inside("-e HOME=${workspace}") {
+                // Update Hypothesis client and set the version of the extension
+                // to match the client release.
+                sh "npm install --save-dev hypothesis@latest"
+                newClientVersion = sh(
+                    script: """node -p 'require("./package.json").devDependencies.hypothesis.match(/[0-9.]+/)[0]'""",
+                    returnStdout: true
+                ).trim()
+
+                // nb. Any additional steps to test the new client release with
+                // the extension can go here.
+
+                sh "npm --no-git-tag-version version ${newClientVersion}"
+            }
+
+            withCredentials([
+              usernamePassword(
+                  credentialsId: 'github-jenkins-user',
+                  usernameVariable: 'GIT_USERNAME',
+                  passwordVariable: 'GIT_PASSWORD'
+              )
+            ]) {
+                tagAuthor = "${GIT_USERNAME} <${GIT_USERNAME}@hypothes.is>"
+                repoUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@github.com/hypothesis/browser-extension"
+                sh "git config user.email ${GIT_USERNAME}@hypothes.is"
+                sh "git config user.name ${GIT_USERNAME}"
+                sh "git commit -a -m 'Update Hypothesis client to ${newClientVersion}'"
+                tagName = "v${newClientVersion}"
+                sh "git tag ${tagName}"
+
+                // Push the new commit to the source branch as well as the tag.
+                // Make the push atomic so that both will fail if the source
+                // branch has been updated since the build started.
+                sh "git push --atomic ${repoUrl} HEAD:${env.BRANCH_NAME} ${tagName}"
+            }
+        }
+
+        // Skip remaining pre-deploy steps.
+        //
+        // The `git push` to the source branch above will trigger a regular build which will in
+        // turn deploy an extension release with the new client version.
+        return
+    }
+
     stage('Test') {
         nodeEnv.inside("-e HOME=${workspace}") {
           sh "make checkformatting lint test"
@@ -44,6 +104,11 @@ node {
           sh "make SETTINGS_FILE=settings/firefox-prod.json dist/${gitVersion}-firefox-prod.xpi"
         }
     }
+}
+
+if (params.BUILD_TYPE != "build") {
+    echo "Skipping deployment because this is not a regular build"
+    return
 }
 
 if (env.BRANCH_NAME != releaseFromBranch) {
