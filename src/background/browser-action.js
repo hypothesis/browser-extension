@@ -23,8 +23,8 @@ var badgeThemes = {
     defaultText: 'DEV',
     color: '#5BCF59', // Emerald green
   },
-  staging: {
-    defaultText: 'STG',
+  qa: {
+    defaultText: 'QA',
     color: '#EDA061', // Porche orange-pink
   },
 };

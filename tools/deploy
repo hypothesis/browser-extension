@@ -2,20 +2,20 @@
 
 set -eu
 
-CHROME_STAGE_EXT_ID=iahhmhdkmkifclacffbofcnmgkpalpoj
+CHROME_QA_EXT_ID=iahhmhdkmkifclacffbofcnmgkpalpoj
 CHROME_PROD_EXT_ID=bjfhmglciegochdpefhhlphglcehbmek
 
-upload_and_publish_chrome_stage_ext() {
-  # Upload and publish stage extension
-  CHROME_STAGE_EXT_ARCHIVE=dist/*-chrome-stage.zip
-  if [ ! -f $CHROME_STAGE_EXT_ARCHIVE ]; then
-    echo "Chrome stage extension has not been built."
+upload_and_publish_chrome_qa_ext() {
+  # Upload and publish qa extension
+  CHROME_QA_EXT_ARCHIVE=dist/*-chrome-qa.zip
+  if [ ! -f $CHROME_QA_EXT_ARCHIVE ]; then
+    echo "Chrome qa extension has not been built."
     exit 1
   fi
 
 ./node_modules/.bin/webstore upload \
-  --source $CHROME_STAGE_EXT_ARCHIVE \
-  --extension-id $CHROME_STAGE_EXT_ID \
+  --source $CHROME_QA_EXT_ARCHIVE \
+  --extension-id $CHROME_QA_EXT_ID \
   --client-id $CHROME_WEBSTORE_CLIENT_ID \
   --client-secret $CHROME_WEBSTORE_CLIENT_SECRET \
   --refresh-token $CHROME_WEBSTORE_REFRESH_TOKEN \
@@ -39,16 +39,16 @@ upload_chrome_prod_ext() {
 }
 
 sign_firefox_ext() {
-  FIREFOX_STAGE_EXT_ID="{b441de5f-18e6-40ad-a8c2-f1bd2d42cb01}"
-  rm -rf dist/firefox-stage
-  unzip -q dist/*-firefox-stage.xpi -d dist/firefox-stage
+  FIREFOX_QA_EXT_ID="{b441de5f-18e6-40ad-a8c2-f1bd2d42cb01}"
+  rm -rf dist/firefox-qa
+  unzip -q dist/*-firefox-qa.xpi -d dist/firefox-qa
 
   ./node_modules/.bin/web-ext sign \
    --api-key $FIREFOX_AMO_KEY \
    --api-secret $FIREFOX_AMO_SECRET \
-   --id "$FIREFOX_STAGE_EXT_ID" \
-   --source-dir dist/firefox-stage \
-   --artifacts-dir dist/firefox-stage
+   --id "$FIREFOX_QA_EXT_ID" \
+   --source-dir dist/firefox-qa \
+   --artifacts-dir dist/firefox-qa
 
   FIREFOX_PROD_EXT_ID="{32492fee-2d9f-49fe-b268-fe213f7019f0}"
   rm -rf dist/firefox-prod
@@ -63,7 +63,7 @@ sign_firefox_ext() {
 }
 
 echo "Uploading and publishing Chrome (QA) extension..."
-upload_and_publish_chrome_stage_ext
+upload_and_publish_chrome_qa_ext
 
 echo "Uploading Chrome (prod) extension..."
 upload_chrome_prod_ext

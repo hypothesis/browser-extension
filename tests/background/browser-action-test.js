@@ -158,7 +158,7 @@ describe('BrowserAction', function() {
   describe('build type', function() {
     beforeEach(function() {
       var fakeSettings = {
-        buildType: 'staging',
+        buildType: 'qa',
       };
       $imports.$mock({
         './settings': {
@@ -172,12 +172,12 @@ describe('BrowserAction', function() {
       $imports.$restore();
     });
 
-    it('sets the text to STG when there are no annotations', function() {
+    it('sets the text to QA when there are no annotations', function() {
       action.update(1, {
         state: TabState.states.INACTIVE,
         annotationCount: 0,
       });
-      assert.equal(fakeChromeBrowserAction.badgeText, 'STG');
+      assert.equal(fakeChromeBrowserAction.badgeText, 'QA');
     });
 
     it('shows the annotation count when there are annotations', function() {
