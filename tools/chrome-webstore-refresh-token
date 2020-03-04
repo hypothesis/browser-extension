@@ -3,7 +3,7 @@
 set -eu
 
 # This script is a helper for generating the refresh token used to automate
-# upload and publishing of Chrome extensions to the Chrome Web Store. 
+# upload and publishing of Chrome extensions to the Chrome Web Store.
 #
 # 1. Read the guide at https://github.com/DrewML/chrome-webstore-upload/blob/master/How%20to%20generate%20Google%20API%20keys.md
 #
@@ -16,8 +16,8 @@ set -eu
 #
 #    ./tools/chrome-webstore-refresh-token $AUTH_CODE
 #
-# 3. Copy the 'refresh_token' value and add it to the Travis config as the
-#    CHROME_WEBSTORE_REFRESH_TOKEN env var
+# 3. Copy the 'refresh_token' value and update the corresponding credentials in
+#    Jenkins (see `Jenkinsfile`) and Travis.
 
 AUTH_CODE=$1
 
