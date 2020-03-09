@@ -38,28 +38,72 @@ upload_chrome_prod_ext() {
     --refresh-token $CHROME_WEBSTORE_REFRESH_TOKEN
 }
 
-sign_firefox_ext() {
+# Upload a Firefox extension to addons.mozilla.org for automated validation and
+# signing. Write log output to `ext_source_dir/log.txt`.
+#
+# Arguments:
+#   ext_id - ID of the Firefox extension
+#   ext_source_dir - Directory containing source files for the extension.
+# Returns:
+#   0 if extension was successfully signed and downloaded to `ext_source_dir`.
+run_webext_sign() {
+  ext_id=$1
+  ext_source_dir=$2
+
+  # Make pipeline below fail if `webext` fails.
+  set -o pipefail
+
+  # Run `web-ext sign` and filter out progress message spam, as webext is not
+  # smart enough to do this itself if not connected to a TTY.
+  node_modules/.bin/web-ext sign \
+    --api-key $FIREFOX_AMO_KEY \
+    --api-secret $FIREFOX_AMO_SECRET \
+    --id "$ext_id" \
+    --source-dir $ext_source_dir \
+    --artifacts-dir $ext_source_dir \
+    | grep -E -v "(Signing|Validating) add-on \[" \
+    | grep -E -v "Downloading signed files:" \
+    > $ext_source_dir/log.txt
+}
+
+sign_firefox_exts() {
+  # Unpack the Firefox extensions ready for upload to addons.mozilla.org.
   FIREFOX_QA_EXT_ID="{b441de5f-18e6-40ad-a8c2-f1bd2d42cb01}"
   rm -rf dist/firefox-qa
   unzip -q dist/*-firefox-qa.xpi -d dist/firefox-qa
-
-  ./node_modules/.bin/web-ext sign \
-   --api-key $FIREFOX_AMO_KEY \
-   --api-secret $FIREFOX_AMO_SECRET \
-   --id "$FIREFOX_QA_EXT_ID" \
-   --source-dir dist/firefox-qa \
-   --artifacts-dir dist/firefox-qa
 
   FIREFOX_PROD_EXT_ID="{32492fee-2d9f-49fe-b268-fe213f7019f0}"
   rm -rf dist/firefox-prod
   unzip -q dist/*-firefox-prod.xpi -d dist/firefox-prod
 
-  ./node_modules/.bin/web-ext sign \
-    --api-key $FIREFOX_AMO_KEY \
-    --api-secret $FIREFOX_AMO_SECRET \
-    --id "$FIREFOX_PROD_EXT_ID" \
-    --source-dir dist/firefox-prod \
-    --artifacts-dir dist/firefox-prod
+  # Upload the Firefox extensions and wait for signing to complete.
+  # This may take several minutes for each extension, so we do this for the
+  # QA and prod extensions in parallel.
+  run_webext_sign "$FIREFOX_QA_EXT_ID" dist/firefox-qa &
+  qa_sign_pid=$!
+
+  run_webext_sign "$FIREFOX_PROD_EXT_ID" dist/firefox-prod &
+  prod_sign_pid=$!
+
+  echo "Waiting for Firefox QA signing to complete..."
+  status=0
+  wait $qa_sign_pid || status=$?
+  cat dist/firefox-qa/log.txt
+  if [[ $status -ne 0 ]]; then
+    echo "Signing Firefox QA extension failed"
+    exit 1
+  fi
+
+  echo "Waiting for Firefox prod signing to complete..."
+  status=0
+  wait $prod_sign_pid || status=$?
+  cat dist/firefox-prod/log.txt
+  if [[ $status -ne 0 ]]; then
+    echo "Signing Firefox prod extension failed"
+    exit 1
+  fi
+
+  echo "Successfully signed Firefox extensions"
 }
 
 echo "Uploading and publishing Chrome (QA) extension..."
@@ -68,5 +112,5 @@ upload_and_publish_chrome_qa_ext
 echo "Uploading Chrome (prod) extension..."
 upload_chrome_prod_ext
 
-echo "Signing Firefox extension..."
-sign_firefox_ext
+echo "Signing Firefox extensions..."
+sign_firefox_exts
