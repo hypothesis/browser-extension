@@ -115,7 +115,12 @@ export default function HypothesisChromeExtension(dependencies) {
   function onTabStateChange(tabId, current) {
     if (current) {
       browserAction.update(tabId, current);
-      chromeTabs.get(tabId, updateTabDocument);
+      // check that tab still exists before (un)installing sidebar from it
+      chromeTabs.get(tabId, function(tab) {
+        if (!chrome.runtime.lastError) {
+            updateTabDocument(tab)
+        }
+      });
 
       if (!state.isTabErrored(tabId)) {
         store.set(tabId, current);
