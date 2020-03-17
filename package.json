@@ -29,7 +29,7 @@
     "karma-mocha-reporter": "^2.2.5",
     "karma-sinon": "^1.0.5",
     "mocha": "^7.1.0",
-    "mustache": "^4.0.0",
+    "mustache": "^4.0.1",
     "prettier": "1.19.1",
     "puppeteer": "^2.1.1",
     "query-string": "^3.0.1",
