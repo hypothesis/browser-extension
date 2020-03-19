@@ -97,14 +97,10 @@ export default function BrowserAction(chromeBrowserAction) {
       }
     }
 
-    // check that tab still exists before updating its browser action
-    chrome.tabs.get(tabId, function() {
-      if (!chrome.runtime.lastError) {
-        chromeBrowserAction.setBadgeText({ tabId: tabId, text: badgeText });
-        chromeBrowserAction.setIcon({ tabId: tabId, path: activeIcon });
-        chromeBrowserAction.setTitle({ tabId: tabId, title: title });
-      }
-    });
+    chromeBrowserAction.setBadgeText({ tabId: tabId, text: badgeText }, function() { if (chrome.runtime.lastError) {} });
+    chromeBrowserAction.setIcon({ tabId: tabId, path: activeIcon }, function() { if (chrome.runtime.lastError) {} });
+    chromeBrowserAction.setTitle({ tabId: tabId, title: title }, function() { if (chrome.runtime.lastError) {} });
+
   };
 }
 
