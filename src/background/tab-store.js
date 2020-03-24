@@ -9,7 +9,7 @@ export default function TabStore(storage) {
   var key = 'state';
   var local;
 
-  this.get = function(tabId) {
+  this.get = function (tabId) {
     var value = local[tabId];
     if (!value) {
       throw new Error('TabStateStore could not find entry for tab: ' + tabId);
@@ -17,7 +17,7 @@ export default function TabStore(storage) {
     return value;
   };
 
-  this.set = function(tabId, value) {
+  this.set = function (tabId, value) {
     // copy across only the parts of the tab state that should
     // be preserved
     local[tabId] = {
@@ -27,20 +27,20 @@ export default function TabStore(storage) {
     storage.setItem(key, JSON.stringify(local));
   };
 
-  this.unset = function(tabId) {
+  this.unset = function (tabId) {
     delete local[tabId];
     storage.setItem(key, JSON.stringify(local));
   };
 
-  this.all = function() {
+  this.all = function () {
     return local;
   };
 
-  this.reload = function() {
+  this.reload = function () {
     try {
       local = {};
       var loaded = JSON.parse(storage.getItem(key));
-      Object.keys(loaded).forEach(function(key) {
+      Object.keys(loaded).forEach(function (key) {
         // ignore tab state saved by earlier versions of
         // the extension which saved the state as a {key: <state string>}
         // dict rather than {key: <state object>}

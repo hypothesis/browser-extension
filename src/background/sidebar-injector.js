@@ -89,7 +89,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
    * Returns a promise that will be resolved if the injection succeeded
    * otherwise it will be rejected with an error.
    */
-  this.injectIntoTab = function(tab, config) {
+  this.injectIntoTab = function (tab, config) {
     config = config || {};
     if (isFileURL(tab.url)) {
       return injectIntoLocalDocument(tab);
@@ -105,7 +105,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
    * Returns a promise that will be resolved if the removal succeeded
    * otherwise it will be rejected with an error.
    */
-  this.removeFromTab = function(tab) {
+  this.removeFromTab = function (tab) {
     if (isPDFViewerURL(tab.url)) {
       return removeFromPDF(tab);
     } else {
@@ -157,11 +157,11 @@ export default function SidebarInjector(chromeTabs, dependencies) {
       return Promise.resolve(CONTENT_TYPE_PDF);
     }
 
-    return canInjectScript(tab.url).then(function(canInject) {
+    return canInjectScript(tab.url).then(function (canInject) {
       if (canInject) {
         return executeScriptFn(tab.id, {
           code: toIIFEString(detectContentType),
-        }).then(function(frameResults) {
+        }).then(function (frameResults) {
           var result = extractContentScriptResult(frameResults);
           if (result) {
             return result.type;
@@ -199,13 +199,13 @@ export default function SidebarInjector(chromeTabs, dependencies) {
     // see https://developer.chrome.com/extensions/match_patterns
     var parsedURL = new URL(url);
     var SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
-    return SUPPORTED_PROTOCOLS.some(function(protocol) {
+    return SUPPORTED_PROTOCOLS.some(function (protocol) {
       return parsedURL.protocol === protocol;
     });
   }
 
   function injectIntoLocalDocument(tab) {
-    return detectTabContentType(tab).then(function(type) {
+    return detectTabContentType(tab).then(function (type) {
       if (type === CONTENT_TYPE_PDF) {
         return injectIntoLocalPDF(tab);
       } else {
@@ -237,15 +237,15 @@ export default function SidebarInjector(chromeTabs, dependencies) {
       );
     }
 
-    return detectTabContentType(tab).then(function(type) {
+    return detectTabContentType(tab).then(function (type) {
       if (type === CONTENT_TYPE_PDF) {
         return injectIntoPDF(tab);
       } else {
         return injectConfig(tab.id, config)
-          .then(function() {
+          .then(function () {
             return injectIntoHTML(tab);
           })
-          .then(function(results) {
+          .then(function (results) {
             var result = extractContentScriptResult(results);
             if (
               result &&
@@ -270,8 +270,8 @@ export default function SidebarInjector(chromeTabs, dependencies) {
   }
 
   function injectIntoLocalPDF(tab) {
-    return new Promise(function(resolve, reject) {
-      isAllowedFileSchemeAccess(function(isAllowed) {
+    return new Promise(function (resolve, reject) {
+      isAllowedFileSchemeAccess(function (isAllowed) {
         if (isAllowed) {
           resolve(injectIntoPDF(tab));
         } else {
@@ -288,7 +288,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
   }
 
   function removeFromPDF(tab) {
-    return new Promise(function(resolve) {
+    return new Promise(function (resolve) {
       var parsedURL = new URL(tab.url);
       var originalURL = queryString.parse(parsedURL.search).file;
       if (!originalURL) {

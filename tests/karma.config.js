@@ -24,7 +24,7 @@ if (process.env.RUNNING_IN_DOCKER) {
   process.env.CHROME_BIN = 'chromium-browser';
 }
 
-module.exports = function(config) {
+module.exports = function (config) {
   config.set({
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: './',
@@ -55,7 +55,7 @@ module.exports = function(config) {
 
     browserify: {
       debug: true,
-      configure: function(bundle) {
+      configure: function (bundle) {
         bundle.transform('babelify', {
           // Use the "env" preset without any browsers listed, overriding the
           // defaults in .babelrc to enable ES2015 => ES5 transformation for all

@@ -1,23 +1,23 @@
 import * as errors from '../../src/background/errors';
 import HelpPage from '../../src/background/help-page';
 
-describe('HelpPage', function() {
+describe('HelpPage', function () {
   var fakeBrowserName;
   var fakeChromeTabs;
   var fakeExtensionURL;
   var help;
 
-  beforeEach(function() {
+  beforeEach(function () {
     fakeBrowserName = sinon.stub().returns('chrome');
     fakeChromeTabs = { create: sinon.stub() };
-    fakeExtensionURL = function(path) {
+    fakeExtensionURL = function (path) {
       return 'CRX_PATH' + path;
     };
     help = new HelpPage(fakeChromeTabs, fakeExtensionURL, fakeBrowserName);
   });
 
-  describe('.showHelpForError', function() {
-    it('renders the "local-file" page when passed a LocalFileError', function() {
+  describe('.showHelpForError', function () {
+    it('renders the "local-file" page when passed a LocalFileError', function () {
       help.showHelpForError(
         { id: 1, index: 1 },
         new errors.LocalFileError('msg')
@@ -30,7 +30,7 @@ describe('HelpPage', function() {
       });
     });
 
-    it('renders the "no-file-access" page when passed a NoFileAccessError', function() {
+    it('renders the "no-file-access" page when passed a NoFileAccessError', function () {
       help.showHelpForError(
         { id: 1, index: 1 },
         new errors.NoFileAccessError('msg')
@@ -43,7 +43,7 @@ describe('HelpPage', function() {
       });
     });
 
-    it('renders the "no-file-access" page when passed a RestrictedProtocolError', function() {
+    it('renders the "no-file-access" page when passed a RestrictedProtocolError', function () {
       help.showHelpForError(
         { id: 1, index: 1 },
         new errors.RestrictedProtocolError('msg')
@@ -56,7 +56,7 @@ describe('HelpPage', function() {
       });
     });
 
-    it('renders the "blocked-site" page when passed a BlockedSiteError', function() {
+    it('renders the "blocked-site" page when passed a BlockedSiteError', function () {
       help.showHelpForError(
         { id: 1, index: 1 },
         new errors.BlockedSiteError('msg')
@@ -69,7 +69,7 @@ describe('HelpPage', function() {
       });
     });
 
-    it('renders the "other-error" page for unknown errors', function() {
+    it('renders the "other-error" page for unknown errors', function () {
       help.showHelpForError({ id: 1, index: 1 }, new Error('Unexpected Error'));
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
@@ -80,8 +80,8 @@ describe('HelpPage', function() {
     });
   });
 
-  describe('.showLocalFileHelpPage', function() {
-    it('should load the help page with the "local-file" fragment', function() {
+  describe('.showLocalFileHelpPage', function () {
+    it('should load the help page with the "local-file" fragment', function () {
       help.showLocalFileHelpPage({ id: 1, index: 1 });
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
@@ -92,8 +92,8 @@ describe('HelpPage', function() {
     });
   });
 
-  describe('.showNoFileAccessHelpPage', function() {
-    it('should load the help page with the "no-file-access" fragment', function() {
+  describe('.showNoFileAccessHelpPage', function () {
+    it('should load the help page with the "no-file-access" fragment', function () {
       help.showNoFileAccessHelpPage({ id: 1, index: 1 });
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
@@ -104,8 +104,8 @@ describe('HelpPage', function() {
     });
   });
 
-  describe('.showRestrictedProtocolPage', function() {
-    it('should load the help page with the "restricted-protocol" fragment', function() {
+  describe('.showRestrictedProtocolPage', function () {
+    it('should load the help page with the "restricted-protocol" fragment', function () {
       help.showRestrictedProtocolPage({ id: 1, index: 1 });
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
@@ -116,8 +116,8 @@ describe('HelpPage', function() {
     });
   });
 
-  context('in Firefox', function() {
-    it('does not set the "openerTabId" argument when creating a new tab', function() {
+  context('in Firefox', function () {
+    it('does not set the "openerTabId" argument when creating a new tab', function () {
       fakeBrowserName.returns('firefox');
       var help = new HelpPage(
         fakeChromeTabs,

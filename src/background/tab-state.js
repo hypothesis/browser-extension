@@ -57,9 +57,9 @@ export default function TabState(initialState, onchange) {
    *                   The provided state will be merged with the default
    *                   state for a tab.
    */
-  this.load = function(newState) {
+  this.load = function (newState) {
     var newCurrentState = {};
-    Object.keys(newState).forEach(function(tabId) {
+    Object.keys(newState).forEach(function (tabId) {
       newCurrentState[tabId] = Object.assign(
         {},
         DEFAULT_STATE,
@@ -69,45 +69,45 @@ export default function TabState(initialState, onchange) {
     currentState = newCurrentState;
   };
 
-  this.activateTab = function(tabId) {
+  this.activateTab = function (tabId) {
     this.setState(tabId, { state: states.ACTIVE });
   };
 
-  this.deactivateTab = function(tabId) {
+  this.deactivateTab = function (tabId) {
     this.setState(tabId, { state: states.INACTIVE });
   };
 
-  this.errorTab = function(tabId, error) {
+  this.errorTab = function (tabId, error) {
     this.setState(tabId, {
       state: states.ERRORED,
       error: error,
     });
   };
 
-  this.clearTab = function(tabId) {
+  this.clearTab = function (tabId) {
     this.setState(tabId, null);
   };
 
-  this.getState = function(tabId) {
+  this.getState = function (tabId) {
     if (!currentState[tabId]) {
       return DEFAULT_STATE;
     }
     return currentState[tabId];
   };
 
-  this.annotationCount = function(tabId) {
+  this.annotationCount = function (tabId) {
     return this.getState(tabId).annotationCount;
   };
 
-  this.isTabActive = function(tabId) {
+  this.isTabActive = function (tabId) {
     return this.getState(tabId).state === states.ACTIVE;
   };
 
-  this.isTabInactive = function(tabId) {
+  this.isTabInactive = function (tabId) {
     return this.getState(tabId).state === states.INACTIVE;
   };
 
-  this.isTabErrored = function(tabId) {
+  this.isTabErrored = function (tabId) {
     return this.getState(tabId).state === states.ERRORED;
   };
 
@@ -119,7 +119,7 @@ export default function TabState(initialState, onchange) {
    *                      state properties to update or null if the
    *                      state should be removed.
    */
-  this.setState = function(tabId, stateUpdate) {
+  this.setState = function (tabId, stateUpdate) {
     var newState;
     if (stateUpdate) {
       newState = Object.assign({}, this.getState(tabId), stateUpdate);
@@ -147,14 +147,14 @@ export default function TabState(initialState, onchange) {
    * @param {integer} tabId The id of the tab.
    * @param {string} tabUrl The URL of the tab.
    */
-  this.updateAnnotationCount = function(tabId, tabUrl) {
+  this.updateAnnotationCount = function (tabId, tabUrl) {
     var self = this;
     return uriInfo
       .query(tabUrl)
-      .then(function(result) {
+      .then(function (result) {
         self.setState(tabId, { annotationCount: result.total });
       })
-      .catch(function(err) {
+      .catch(function (err) {
         self.setState(tabId, { annotationCount: 0 });
         console.error(
           'Failed to fetch annotation count for %s: %s',
