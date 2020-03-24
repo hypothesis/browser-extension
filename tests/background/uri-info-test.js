@@ -3,10 +3,10 @@ import { toResult } from '../promise-util';
 import settings from '../settings.json';
 import { unroll } from '../util';
 
-describe('UriInfo.query', function() {
+describe('UriInfo.query', function () {
   var badgeURL = settings.apiUrl + '/badge';
 
-  beforeEach(function() {
+  beforeEach(function () {
     sinon.stub(window, 'fetch').returns(
       Promise.resolve(
         new window.Response('{"total": 1}', {
@@ -19,13 +19,13 @@ describe('UriInfo.query', function() {
     sinon.stub(console, 'error');
   });
 
-  afterEach(function() {
+  afterEach(function () {
     window.fetch.restore();
     console.error.restore();
   });
 
-  it('sends the correct XMLHttpRequest', function() {
-    return uriInfo.query('tabUrl').then(function() {
+  it('sends the correct XMLHttpRequest', function () {
+    return uriInfo.query('tabUrl').then(function () {
       assert.equal(fetch.callCount, 1);
       assert.deepEqual(fetch.lastCall.args, [
         badgeURL + '?uri=tabUrl',
@@ -34,9 +34,9 @@ describe('UriInfo.query', function() {
     });
   });
 
-  it('urlencodes the URL appropriately', function() {
+  it('urlencodes the URL appropriately', function () {
     return toResult(uriInfo.query('http://foo.com?bar=baz qüx')).then(
-      function() {
+      function () {
         assert.equal(fetch.callCount, 1);
         assert.equal(
           fetch.lastCall.args[0],
@@ -54,7 +54,7 @@ describe('UriInfo.query', function() {
 
   unroll(
     "returns an error if the server's JSON is invalid",
-    function(response) {
+    function (response) {
       fetch.returns(
         Promise.resolve(
           new window.Response(response.body, {
@@ -63,7 +63,7 @@ describe('UriInfo.query', function() {
           })
         )
       );
-      return toResult(uriInfo.query('tabUrl')).then(function(result) {
+      return toResult(uriInfo.query('tabUrl')).then(function (result) {
         assert.ok(result.error);
       });
     },

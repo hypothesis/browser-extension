@@ -11,7 +11,7 @@ function loadOptions() {
     {
       badge: true,
     },
-    function(items) {
+    function (items) {
       document.getElementById('badge').checked = items.badge;
     }
   );

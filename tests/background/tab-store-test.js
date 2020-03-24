@@ -1,12 +1,12 @@
 import TabStore from '../../src/background/tab-store';
 
-describe('TabStore', function() {
+describe('TabStore', function () {
   var store;
   var fakeLocalStorage;
 
-  beforeEach(function() {
+  beforeEach(function () {
     fakeLocalStorage = {
-      getItem: sinon.spy(function(key) {
+      getItem: sinon.spy(function (key) {
         return this.data[key];
       }),
       setItem: sinon.spy(),
@@ -16,26 +16,26 @@ describe('TabStore', function() {
     store = new TabStore(fakeLocalStorage);
   });
 
-  describe('.get', function() {
-    beforeEach(function() {
+  describe('.get', function () {
+    beforeEach(function () {
       fakeLocalStorage.data.state = JSON.stringify({
         1: { state: 'active' },
       });
       store.reload();
     });
 
-    it('retrieves a key from the cache', function() {
+    it('retrieves a key from the cache', function () {
       var value = store.get(1);
       assert.equal(value.state, 'active');
     });
 
-    it('raises an error if the key cannot be found', function() {
-      assert.throws(function() {
+    it('raises an error if the key cannot be found', function () {
+      assert.throws(function () {
         store.get(100);
       });
     });
 
-    it('converts state-string keys to objects', function() {
+    it('converts state-string keys to objects', function () {
       fakeLocalStorage.data.state = JSON.stringify({
         1: 'active',
       });
@@ -44,8 +44,8 @@ describe('TabStore', function() {
     });
   });
 
-  describe('.set', function() {
-    it('inserts a JSON string into the store for the tab id', function() {
+  describe('.set', function () {
+    it('inserts a JSON string into the store for the tab id', function () {
       var expected = JSON.stringify({
         1: { state: 'active' },
       });
@@ -53,7 +53,7 @@ describe('TabStore', function() {
       assert.calledWith(fakeLocalStorage.setItem, 'state', expected);
     });
 
-    it('adds new properties to the serialized object with each new call', function() {
+    it('adds new properties to the serialized object with each new call', function () {
       var expected = JSON.stringify({
         1: { state: 'active' },
         2: { state: 'inactive' },
@@ -63,7 +63,7 @@ describe('TabStore', function() {
       assert.calledWith(fakeLocalStorage.setItem, 'state', expected);
     });
 
-    it('overrides existing properties on the serialized object', function() {
+    it('overrides existing properties on the serialized object', function () {
       var expected = JSON.stringify({
         1: { state: 'inactive' },
       });
@@ -73,25 +73,25 @@ describe('TabStore', function() {
     });
   });
 
-  describe('.unset', function() {
-    beforeEach(function() {
+  describe('.unset', function () {
+    beforeEach(function () {
       fakeLocalStorage.data.state = JSON.stringify({ 1: 'active' });
       store.reload();
     });
 
-    it('removes a property from the serialized object', function() {
+    it('removes a property from the serialized object', function () {
       store.unset(1);
       assert.calledWith(fakeLocalStorage.setItem, 'state', '{}');
     });
   });
 
-  describe('.all', function() {
-    beforeEach(function() {
+  describe('.all', function () {
+    beforeEach(function () {
       fakeLocalStorage.data.state = JSON.stringify({ 1: { state: 'active' } });
       store.reload();
     });
 
-    it('returns all items as an Object', function() {
+    it('returns all items as an Object', function () {
       var all = store.all();
       assert.deepEqual(all, { 1: { state: 'active' } });
     });
