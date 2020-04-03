@@ -37,8 +37,9 @@ export default function directLinkQuery(url) {
   }
 
   // Group IDs (and other "pubids" in h) are a subset of ASCII letters and
-  // digits.
-  var groupMatch = url.match(/#annotations:group:([A-Za-z0-9]+)$/);
+  // digits. As a special exception, the "Public" group has underscores in its
+  // ID ("__world__").
+  var groupMatch = url.match(/#annotations:group:([A-Za-z0-9_]+)$/);
   if (groupMatch) {
     return { group: groupMatch[1] };
   }
