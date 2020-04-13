@@ -27,10 +27,12 @@ describe('common.direct-link-query', () => {
     });
   });
 
-  it('returns the group ID if the URL contains a #annotations:group:<ID> fragment', () => {
-    var url = 'https://example.com/#annotations:group:123';
-    assert.deepEqual(directLinkQuery(url), {
-      group: '123',
+  ['123', 'abcDEF456', '__world__'].forEach(groupId => {
+    it('returns the group ID if the URL contains a #annotations:group:<ID> fragment', () => {
+      var url = `https://example.com/#annotations:group:${groupId}`;
+      assert.deepEqual(directLinkQuery(url), {
+        group: groupId,
+      });
     });
   });
 
