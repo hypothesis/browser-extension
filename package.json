@@ -30,7 +30,7 @@
     "karma-sinon": "^1.0.5",
     "mocha": "^7.1.1",
     "mustache": "^4.0.1",
-    "prettier": "2.0.4",
+    "prettier": "2.0.5",
     "puppeteer": "^3.0.0",
     "query-string": "^3.0.1",
     "raven-js": "^3.27.2",
