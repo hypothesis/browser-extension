@@ -3,7 +3,15 @@
 /* global process */
 
 let chromeFlags = [];
-process.env.CHROME_BIN = require('puppeteer').executablePath();
+
+if (process.version.startsWith('v14.')) {
+  // See https://github.com/puppeteer/puppeteer/issues/5719
+  console.warn(
+    'Using system Chrome instead of Puppeteer due to issue with Node 14'
+  );
+} else {
+  process.env.CHROME_BIN = require('puppeteer').executablePath();
+}
 
 // On Travis and in Docker, the tests run as root, so the sandbox must be
 // disabled.
