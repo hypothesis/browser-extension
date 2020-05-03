@@ -1,9 +1,9 @@
 import * as errors from '../../src/background/errors';
 
-describe('errors', function() {
+describe('errors', function () {
   var fakeRaven;
 
-  beforeEach(function() {
+  beforeEach(function () {
     fakeRaven = {
       report: sinon.stub(),
     };
@@ -13,12 +13,12 @@ describe('errors', function() {
     sinon.stub(console, 'error');
   });
 
-  afterEach(function() {
+  afterEach(function () {
     console.error.restore();
     errors.$imports.$restore();
   });
 
-  describe('#shouldIgnoreInjectionError', function() {
+  describe('#shouldIgnoreInjectionError', function () {
     var ignoredErrors = [
       'The tab was closed',
       'No tab with id 42',
@@ -30,34 +30,34 @@ describe('errors', function() {
 
     var unexpectedErrors = ['SyntaxError: A typo'];
 
-    it('should be true for "expected" errors', function() {
-      ignoredErrors.forEach(function(message) {
+    it('should be true for "expected" errors', function () {
+      ignoredErrors.forEach(function (message) {
         var error = { message: message };
         assert.isTrue(errors.shouldIgnoreInjectionError(error));
       });
     });
 
-    it('should be false for unexpected errors', function() {
-      unexpectedErrors.forEach(function(message) {
+    it('should be false for unexpected errors', function () {
+      unexpectedErrors.forEach(function (message) {
         var error = { message: message };
         assert.isFalse(errors.shouldIgnoreInjectionError(error));
       });
     });
 
-    it("should be true for the extension's custom error classes", function() {
+    it("should be true for the extension's custom error classes", function () {
       var error = new errors.LocalFileError('some message');
       assert.isTrue(errors.shouldIgnoreInjectionError(error));
     });
   });
 
-  describe('#report', function() {
-    it('reports unknown errors via Raven', function() {
+  describe('#report', function () {
+    it('reports unknown errors via Raven', function () {
       var error = new Error('A most unexpected error');
       errors.report(error, 'injecting the sidebar');
       assert.calledWith(fakeRaven.report, error, 'injecting the sidebar');
     });
 
-    it('does not report known errors via Raven', function() {
+    it('does not report known errors via Raven', function () {
       var error = new errors.LocalFileError('some message');
       errors.report(error, 'injecting the sidebar');
       assert.notCalled(fakeRaven.report);

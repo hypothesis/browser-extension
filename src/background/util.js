@@ -23,12 +23,12 @@ function getLastError() {
  *           is set or resolved with the first argument to the callback otherwise.
  */
 export function promisify(fn) {
-  return function() {
+  return function () {
     var args = [].slice.call(arguments);
-    var result = new Promise(function(resolve, reject) {
+    var result = new Promise(function (resolve, reject) {
       fn.apply(
         this,
-        args.concat(function(result) {
+        args.concat(function (result) {
           var lastError = getLastError();
           if (lastError) {
             reject(lastError);

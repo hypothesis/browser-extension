@@ -19,7 +19,7 @@ export default function HelpPage(chromeTabs, extensionURL, browserName_) {
    * @param {Error} error - The error to display, usually an instance of
    *                        errors.ExtensionError
    */
-  this.showHelpForError = function(tab, error) {
+  this.showHelpForError = function (tab, error) {
     if (error instanceof errors.LocalFileError) {
       return this.showLocalFileHelpPage(tab);
     } else if (error instanceof errors.NoFileAccessError) {

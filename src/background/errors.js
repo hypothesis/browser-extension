@@ -66,7 +66,7 @@ var IGNORED_ERRORS = [
  */
 export function shouldIgnoreInjectionError(err) {
   if (
-    IGNORED_ERRORS.some(function(pattern) {
+    IGNORED_ERRORS.some(function (pattern) {
       return err.message.match(pattern);
     })
   ) {

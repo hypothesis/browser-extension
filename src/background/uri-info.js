@@ -13,10 +13,10 @@ export function query(uri) {
   return fetch(settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri), {
     credentials: 'include',
   })
-    .then(function(res) {
+    .then(function (res) {
       return res.json();
     })
-    .then(function(data) {
+    .then(function (data) {
       if (typeof data.total !== 'number') {
         throw new Error('Annotation count is not a number');
       }

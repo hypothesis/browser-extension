@@ -104,21 +104,19 @@ node {
           sh "make SETTINGS_FILE=settings/firefox-prod.json dist/${gitVersion}-firefox-prod.xpi"
         }
     }
-}
 
-if (params.BUILD_TYPE != "build") {
-    echo "Skipping deployment because this is not a regular build"
-    return
-}
+    if (params.BUILD_TYPE != "build") {
+        echo "Skipping deployment because this is not a regular build"
+        return
+    }
 
-if (env.BRANCH_NAME != releaseFromBranch) {
-    echo "Skipping deployment because ${env.BRANCH_NAME} is not the ${releaseFromBranch} branch"
-    return
-}
+    if (env.BRANCH_NAME != releaseFromBranch) {
+        echo "Skipping deployment because ${env.BRANCH_NAME} is not the ${releaseFromBranch} branch"
+        return
+    }
 
-milestone()
-stage('Upload Packages') {
-    node {
+    milestone()
+    stage('Upload Packages') {
         nodeEnv.inside("-e HOME=${workspace}") {
             withCredentials([
                 // Credentials for Chrome Web Store API calls.

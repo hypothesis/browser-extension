@@ -50,7 +50,7 @@ export default function BrowserAction(chromeBrowserAction) {
    *
    * @param state - The H state of a tab. See the 'tab-state' module.
    */
-  this.update = function(tabId, state) {
+  this.update = function (tabId, state) {
     var activeIcon = icons[states.INACTIVE];
     var title = '';
     var badgeText = '';
