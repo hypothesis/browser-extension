@@ -1,3 +1,5 @@
+import * as queryString from 'query-string';
+
 import HypothesisChromeExtension from './hypothesis-chrome-extension';
 
 var browserExtension;
@@ -38,6 +40,37 @@ if (chrome.runtime.onMessageExternal) {
     if (request.type === 'ping') {
       sendResponse({ type: 'pong' });
     }
+  });
+}
+
+if (chrome.runtime.onMessage) {
+  chrome.runtime.onMessage.addListener(function(
+    request,
+    sender,
+    sendResponse
+  ) {
+    let authUrl = request.authUrl;
+    authUrl +=
+      '?' +
+      queryString.stringify({
+        client_id: request.clientId,
+        origin: chrome.identity.getRedirectURL(),
+        response_type: 'code',
+        state: request.state,
+      });
+
+    chrome.identity.launchWebAuthFlow({
+      'url': authUrl,
+      'interactive': true
+    }, redirectUrl => {
+      if(chrome.runtime.lastError) {
+        sendResponse({error: chrome.runtime.lastError.message})
+      } else {
+        let data = queryString.parse(queryString.extract(redirectUrl));
+        sendResponse({data: data});
+      }
+    });
+    return true;
   });
 }
 

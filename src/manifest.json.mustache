@@ -18,6 +18,9 @@
   {{#browserIsFirefox}}
   "applications": {
     "gecko": {
+  {{#id}}
+      "id": "{{{ id }}}",
+  {{/id}}
       "strict_min_version": "68.0"
     }
   },
@@ -52,7 +55,8 @@
     "<all_urls>",
 
     "storage",
-    "tabs"
+    "tabs",
+    "identity"
   ],
   "content_security_policy": "script-src 'self' 'unsafe-eval' https://www.google-analytics.com; object-src 'self'; font-src 'self' data:;",
 
