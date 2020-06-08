@@ -173,6 +173,14 @@ export default function SidebarInjector(chromeTabs, dependencies) {
             // tab URL
             return guessContentTypeFromURL(tab.url);
           }
+        }, function(error) {
+          if (error.message === 'Missing host permission for the tab') {
+            // Assume that any file or http URLs that trigger this error
+            // (ie. not a protected scheme) are PDFs. See issue #260.
+            return CONTENT_TYPE_PDF;
+          } else {
+            return guessContentTypeFromURL(tab.url);
+          }
         });
       } else {
         // We cannot inject a content script in order to determine the
