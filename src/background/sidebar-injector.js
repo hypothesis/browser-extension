@@ -179,7 +179,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
             // (ie. not a protected scheme) are PDFs. See issue #260.
             return CONTENT_TYPE_PDF;
           } else {
-            return guessContentTypeFromURL(tab.url);
+            throw error;
           }
         });
       } else {
