@@ -23,7 +23,11 @@ export default function HelpPage(chromeTabs, extensionURL, browserName_) {
     if (error instanceof errors.LocalFileError) {
       return this.showLocalFileHelpPage(tab);
     } else if (error instanceof errors.NoFileAccessError) {
-      return this.showNoFileAccessHelpPage(tab);
+      if (browserName_() === 'firefox') {
+        return this.showNoFileAccessFirefoxHelpPage(tab);
+      } else {
+        return this.showNoFileAccessHelpPage(tab);
+      }
     } else if (error instanceof errors.RestrictedProtocolError) {
       return this.showRestrictedProtocolPage(tab);
     } else if (error instanceof errors.BlockedSiteError) {
@@ -35,6 +39,7 @@ export default function HelpPage(chromeTabs, extensionURL, browserName_) {
 
   this.showLocalFileHelpPage = showHelpPage.bind(null, 'local-file');
   this.showNoFileAccessHelpPage = showHelpPage.bind(null, 'no-file-access');
+  this.showNoFileAccessFirefoxHelpPage = showHelpPage.bind(null, 'no-file-access-firefox');
   this.showRestrictedProtocolPage = showHelpPage.bind(
     null,
     'restricted-protocol'
