@@ -175,9 +175,13 @@ export default function SidebarInjector(chromeTabs, dependencies) {
           }
         }, function(error) {
           if (error.message === 'Missing host permission for the tab') {
-            // Assume that any file or http URLs that trigger this error
-            // (ie. not a protected scheme) are PDFs. See issue #260.
-            return CONTENT_TYPE_PDF;
+            if (!isFirefoxRestrictedDomain(tab.url)) {
+              // Assume that any file or http URLs that trigger this error
+              // (ie. not a protected scheme) are PDFs. See issue #260.
+              return CONTENT_TYPE_PDF;
+            } else {
+              throw error;
+            }
           } else {
             throw error;
           }
@@ -209,6 +213,32 @@ export default function SidebarInjector(chromeTabs, dependencies) {
     var SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
     return SUPPORTED_PROTOCOLS.some(function (protocol) {
       return parsedURL.protocol === protocol;
+    });
+  }
+
+  function isFirefoxRestrictedDomain(url) {
+    // Injection of content scripts in Firefox is blocked in some domains,
+    // see https://developer.mozilla.org/en-US/docs/Mozilla/Add-ons/WebExtensions/Content_scripts
+    var parsedURL = new URL(url);
+    var RESTRICTED_DOMAINS = [
+      'accounts-static.cdn.mozilla.net',
+      'accounts.firefox.com',
+      'addons.cdn.mozilla.net',
+      'addons.mozilla.org',
+      'api.accounts.firefox.com',
+      'content.cdn.mozilla.net',
+      'content.cdn.mozilla.net',
+      'discovery.addons.mozilla.org',
+      'input.mozilla.org',
+      'install.mozilla.org',
+      'oauth.accounts.firefox.com',
+      'profile.accounts.firefox.com',
+      'support.mozilla.org',
+      'sync.services.mozilla.com',
+      'testpilot.firefox.com'
+    ]
+    return RESTRICTED_DOMAINS.some(function (hostname) {
+      return parsedURL.hostname === hostname;
     });
   }
 
