@@ -43,34 +43,42 @@ if (chrome.runtime.onMessageExternal) {
   });
 }
 
+function auth(request, sendResponse) {
+  let authUrl = request.authUrl;
+  authUrl +=
+    '?' +
+    queryString.stringify({
+      client_id: request.clientId,
+      origin: chrome.identity.getRedirectURL(),
+      response_type: 'code',
+      state: request.state,
+    });
+
+  chrome.identity.launchWebAuthFlow({
+    'url': authUrl,
+    'interactive': true
+  }, redirectUrl => {
+    if(chrome.runtime.lastError) {
+      sendResponse({error: chrome.runtime.lastError.message})
+    } else {
+      let data = queryString.parse(queryString.extract(redirectUrl));
+      sendResponse({data: data});
+    }
+  });
+}
+
 if (chrome.runtime.onMessage) {
   chrome.runtime.onMessage.addListener(function(
     request,
     sender,
     sendResponse
   ) {
-    let authUrl = request.authUrl;
-    authUrl +=
-      '?' +
-      queryString.stringify({
-        client_id: request.clientId,
-        origin: chrome.identity.getRedirectURL(),
-        response_type: 'code',
-        state: request.state,
-      });
-
-    chrome.identity.launchWebAuthFlow({
-      'url': authUrl,
-      'interactive': true
-    }, redirectUrl => {
-      if(chrome.runtime.lastError) {
-        sendResponse({error: chrome.runtime.lastError.message})
-      } else {
-        let data = queryString.parse(queryString.extract(redirectUrl));
-        sendResponse({data: data});
-      }
-    });
-    return true;
+    switch (request.type) {
+      case 'auth':
+        auth(request, sendResponse);
+        return true;
+        break;
+    }
   });
 }
 
