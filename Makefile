@@ -44,7 +44,7 @@ build/extension.bundle.js: src/background/index.js
 	@# depended-upon files to .extension.bundle.deps, which we then include to
 	@# ensure that the bundle is rebuilt if any of these change. We ignore
 	@# vendor dependencies.
-	@$(BROWSERIFY) --list $< | \
+	@$(BROWSERIFY) -t babelify --list $< | \
 		grep -v node_modules | \
 		sed 's#^#$@: #' \
 		>build/.extension.bundle.deps
