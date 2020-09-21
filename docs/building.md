@@ -20,14 +20,13 @@ Building the extension
 ----------------------
 
 The extension build is configured by a JSON settings file, some examples of
-which are supplied in the `settings/` directory. To build the extension, you
-simply run `make`. To build the extension in its default configuration (a Chrome
-development build), run:
+which are supplied in the `settings/` directory. To build the extension using
+the default settings file (`settings/chrome-dev.json`), run `make`:
 
     $ make
 
-To build the extension from an alternate settings file, simply specify the
-`SETTINGS_FILE` variable when running `make`:
+To build the extension from a different settings file, provide a
+`SETTINGS_FILE` path to `make`:
 
     $ make SETTINGS_FILE=settings/chrome-prod.json
 
@@ -37,37 +36,37 @@ This, for example, will build a production extension: one that talks to the main
 Building for a local `h` server
 -------------------------------
 
-The default settings file used is `chrome-dev.json` but it does not contain a 
-value for the `oauthClientId`. If you are running your own version of `h` 
-simply create an oauth client ID in the admin UI for the browser extension.
-
-http://localhost:5000/admin/oauthclients
-
-**Client OAuth Values**
-
-    Name: Browser Extension
-    Authority: localhost
-    Grant type: authorization_code
-    Redirect URL: chrome-extension://<extension id>
-
-Where `<extension id>` is the ID of the browser extension. You may need to load the extension 
-into chrome the first to view the ID. Skip ahead to _Loading an extension into Chrome_
-below. Next, add the generated ID value to the config file you are using. e.g inside of 
-`chrome-dev.json` add
-
-```
-"oauthClientId": "<32 digit value>"
-```
-
 > Note:
-> It may be convenient to create a new config file called `custom.json` based 
-> on `chrome-dev.json` with your  `oauthClientId` value.
+> It may be convenient to create a new, untracked config file
+> based  on `chrome-dev.json` to maintain your settings
+> (here called `custom.json`):
 >
 >       $ make SETTINGS_FILE=settings/custom.json
 
-For instructions how to set up a client with your `h` server, see 
-https://h-client.readthedocs.io/en/latest/developers/developing/#running-the-client-from-h*
+> These instructions assume you have the `h` service running locally already.
+> For instructions how to set up a client with your `h` server, see 
+> https://h-client.readthedocs.io/en/latest/developers/developing/#running-the-client-from-h*
 
+1. [Create an OAuthClient](http://localhost:5000/admin/oauthclients)
+   for the extension to use in your local instance of `h`, using the following values:
+   
+   ```
+   Name: Browser Extension
+   Authority: localhost
+   Grant type: authorization_code
+   Redirect URL: chrome-extension://<extension id>
+   ```
+   
+   You won't know the extension ID yet, and that's OK.
+1. Set an `oauthClientId` property in your settings JSON. Its value should
+   be the 32-character ID of this newly-created OAuthClient.
+1. Use `make` to build the extension against these settings.
+1. Load the built extension into Chrome and find its extension ID
+   (see "Loading an extension..." below).
+1. Return to the OAuthClient you created above in `h` and update the Redirect
+   URL to contain the real extension ID.
+
+That should do it!
 
 Loading an extension into Chrome
 --------------------------------
@@ -76,15 +75,10 @@ Once you've built the extension, you will be able to load the `build/` directory
 as an unpacked extension:
 
 1.  Go to `chrome://extensions/` in Chrome.
-2. If you used the `chrome-prod.json` settings file to build a production
+1. If you used the `chrome-prod.json` settings file to build a production
    extension, you will need to **remove** the "real" production extension from
    Chrome before loading your locally built one or create a new Chrome profile
    without the real one installed.
-3.  Tick **Developer mode**.
-4.  Click **Load unpacked extension**.
-5.  Browse to the `build/` directory where the extension was built and select it.
-
-Your extension should be working now! Remember that if you built a development
-extension it will point to a Hypothesis service running on
-<http://localhost:5000>. You may need to have Hypothesis running for the
-extension to function.
+1.  Tick **Developer mode**.
+1.  Click **Load unpacked extension**.
+1.  Browse to the `build/` directory where the extension was built and select it.
