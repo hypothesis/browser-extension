@@ -140,28 +140,16 @@ export default function TabState(initialState, onchange) {
   };
 
   /**
-   * Query the server for the annotation count for a URL
-   * and update the annotation count for the tab accordingly.
+   * Request the current annotation count for the tab's URL
    *
    * @method
    * @param {integer} tabId The id of the tab.
    * @param {string} tabUrl The URL of the tab.
    */
   this.updateAnnotationCount = function (tabId, tabUrl) {
-    var self = this;
-    return uriInfo
-      .query(tabUrl)
-      .then(function (result) {
-        self.setState(tabId, { annotationCount: result.total });
-      })
-      .catch(function (err) {
-        self.setState(tabId, { annotationCount: 0 });
-        console.error(
-          'Failed to fetch annotation count for %s: %s',
-          tabUrl,
-          err
-        );
-      });
+    return uriInfo.getAnnotationCount(tabUrl).then(count => {
+      this.setState(tabId, { annotationCount: count });
+    });
   };
 
   this.load(initialState || {});
