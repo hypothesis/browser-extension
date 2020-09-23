@@ -51,7 +51,7 @@ Building for a local `h` server
    for the extension to use in your local instance of `h`, using the following values:
    
    ```
-   Name: Browser Extension
+   Name: Chrome Extension
    Authority: localhost
    Grant type: authorization_code
    Redirect URL: chrome-extension://<extension id>
