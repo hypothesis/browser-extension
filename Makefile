@@ -87,6 +87,6 @@ format:
 
 .PHONY: test
 test:
-	npm test
+	yarn test
 
 -include build/.*.deps

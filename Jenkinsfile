@@ -40,7 +40,7 @@ node {
 
     stage('Setup') {
       nodeEnv.inside("-e HOME=${workspace}") {
-        sh "npm ci"
+        sh "yarn install"
       }
     }
 
@@ -49,7 +49,7 @@ node {
             nodeEnv.inside("-e HOME=${workspace}") {
                 // Update Hypothesis client and set the version of the extension
                 // to match the client release.
-                sh "npm install --save-dev hypothesis@latest"
+                sh "yarn add hypothesis@latest --dev"
                 newClientVersion = sh(
                     script: """node -p 'require("./package.json").devDependencies.hypothesis.match(/[0-9.]+/)[0]'""",
                     returnStdout: true
@@ -58,7 +58,7 @@ node {
                 // nb. Any additional steps to test the new client release with
                 // the extension can go here.
 
-                sh "npm --no-git-tag-version version ${newClientVersion}"
+                sh "yarn --no-git-tag-version version ${newClientVersion}"
             }
 
             withCredentials([
