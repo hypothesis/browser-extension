@@ -8,9 +8,10 @@
   "bugs": "https://github.com/hypothesis/browser-extension/issues",
   "repository": "hypothesis/browser-extension",
   "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
     "babel-plugin-mockable-imports": "^1.7.0",
-    "babel-preset-env": "^1.7.0",
-    "babelify": "^7.3.0",
+    "babelify": "^10.0.0",
     "browserify": "^16.5.2",
     "chai": "^4.2.0",
     "chrome-webstore-upload-cli": "^1.2.0",
