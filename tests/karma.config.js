@@ -68,7 +68,7 @@ module.exports = function (config) {
           // Use the "env" preset without any browsers listed, overriding the
           // defaults in .babelrc to enable ES2015 => ES5 transformation for all
           // language features.
-          presets: ['env'],
+          presets: ['@babel/preset-env'],
           plugins: [['mockable-imports', { excludeDirs: ['tests'] }]],
         });
       },
