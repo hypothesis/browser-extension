@@ -3,14 +3,14 @@
 # upgrade everything by simply updating the Alpine version.
 #
 # Alpine is updated every 6 months so all packages are pretty recent.
-FROM alpine:3.10
+FROM alpine:3.12
 
 RUN apk update && apk add --no-cache \
   chromium \
   git \
   make \
   nodejs \
-  npm \
+  yarn \
   zip
 
 # Do not download a Chrome build as part of installing the "puppeteer" package,
