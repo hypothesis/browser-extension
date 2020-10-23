@@ -1,6 +1,6 @@
 'use strict';
 
-/* global process */
+/* global __dirname, process */
 
 let chromeFlags = [];
 
@@ -65,11 +65,11 @@ module.exports = function (config) {
       debug: true,
       configure: function (bundle) {
         bundle.transform('babelify', {
-          // Use the "env" preset without any browsers listed, overriding the
-          // defaults in .babelrc to enable ES2015 => ES5 transformation for all
-          // language features.
-          presets: ['@babel/preset-env'],
           plugins: [['mockable-imports', { excludeDirs: ['tests'] }]],
+
+          // Enable Babel to load configuration from the `.babelrc` file when
+          // processing source files outside of the `tests/` directory.
+          root: `${__dirname}/../`,
         });
       },
     },
