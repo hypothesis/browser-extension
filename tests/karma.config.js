@@ -63,15 +63,19 @@ module.exports = function (config) {
 
     browserify: {
       debug: true,
-      configure: function (bundle) {
-        bundle.transform('babelify', {
-          plugins: [['mockable-imports', { excludeDirs: ['tests'] }]],
+      transform: [
+        [
+          'babelify',
+          {
+            extensions: ['.js'],
+            plugins: [['mockable-imports', { excludeDirs: ['tests'] }]],
 
-          // Enable Babel to load configuration from the `.babelrc` file when
-          // processing source files outside of the `tests/` directory.
-          root: `${__dirname}/../`,
-        });
-      },
+            // Enable Babel to load configuration from the `.babelrc` file when
+            // processing source files outside of the `tests/` directory.
+            root: `${__dirname}/../`,
+          },
+        ],
+      ],
     },
 
     mochaReporter: {
