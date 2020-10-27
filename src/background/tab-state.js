@@ -48,6 +48,12 @@ export default function TabState(initialState, onchange) {
   const self = this;
   let currentState;
 
+  // This variable contains a map between the tabId and a object with a
+  // cancellation function and the current waiting time.
+  // The cancellation function is used to abort the badge request in a debounce fashion
+  /** @type {Map<number, {cancel:function, waitMs: number}>} */
+  const pendingAnnotationCountRequests = new Map();
+
   this.onchange = onchange || null;
 
   /** Replaces the H state for all tabs with the state data
@@ -86,6 +92,7 @@ export default function TabState(initialState, onchange) {
 
   this.clearTab = function (tabId) {
     this.setState(tabId, null);
+    pendingAnnotationCountRequests.delete(tabId);
   };
 
   this.getState = function (tabId) {
@@ -140,16 +147,84 @@ export default function TabState(initialState, onchange) {
   };
 
   /**
-   * Request the current annotation count for the tab's URL
+   * Debouncing version of a badge request.
+   * It debounces previous requests for the same tabId that are either
+   * waiting or in-flight to be fulfilled.
+   *
+   * @param {()=>Promise<number>} request
+   * @param {number} tabId
+   * @return {Promise<number>}
+   */
+  function _debouncedRequest(request, tabId) {
+    /**
+     * It starts at INITIAL_WAIT_MS and it's doubled each time to a max defined
+     * by MAX_WAIT_MS
+     */
+    const INITIAL_WAIT_MS = 1000;
+    const MAX_WAIT_MS = 3000;
+    return new Promise(resolve => {
+      const pendingRequest = pendingAnnotationCountRequests.get(tabId);
+      const wait = Math.min(
+        pendingRequest?.waitMs ?? INITIAL_WAIT_MS,
+        MAX_WAIT_MS
+      );
+
+      const timerId = setTimeout(async () => {
+        resolve(await request());
+      }, wait);
+
+      // Cancel pending requests for the specific tabId, if any
+      if (pendingRequest?.cancel) {
+        pendingRequest.cancel();
+      }
+
+      // Add the cancellation function inmediately.
+      // The cancellation function does two things:
+      // 1. clears the timeout, and
+      // 2. resolves the pending promise with default value 0.
+      pendingAnnotationCountRequests.set(tabId, {
+        cancel: () => {
+          clearTimeout(timerId);
+          resolve(0);
+        },
+        waitMs: wait * 2,
+      });
+    });
+  }
+
+  /**
+   * Request the current annotation count for the tab's URL.
    *
    * @method
    * @param {integer} tabId The id of the tab.
    * @param {string} tabUrl The URL of the tab.
+   * @return {Promise<void>}
    */
-  this.updateAnnotationCount = function (tabId, tabUrl) {
-    return uriInfo.getAnnotationCount(tabUrl).then(count => {
-      this.setState(tabId, { annotationCount: count });
-    });
+  this.updateAnnotationCount = async function (tabId, tabUrl) {
+    const fetchCount = async () => {
+      try {
+        const annotationCount = await uriInfo.getAnnotationCount(tabUrl);
+        return annotationCount;
+      } catch (error) {
+        /**
+         * A variety of error conditions from `uriInfo.getAnnotationCount`
+         * can be capture here.
+         * Errors here can't be raised outside this catch, because
+         * of the finally clause
+         * A retry mechanism could be included here.
+         */
+        return 0;
+      } finally {
+        // Clear the pending request only at this point.
+        // This point it's never reach by a cancellation.
+        // Only reachable from a successful or unsucessful
+        // badge request
+        pendingAnnotationCountRequests.delete(tabId);
+      }
+    };
+
+    const annotationCount = await _debouncedRequest(fetchCount, tabId);
+    this.setState(tabId, { annotationCount });
   };
 
   this.load(initialState || {});

@@ -1,14 +1,12 @@
 import settings from './settings';
 
-const BLOCKLIST = [
-  /* browser-specific URLs don't correspond to a meaningful document to annotate */
-  { urlProperty: 'protocol', value: 'chrome:' },
-  /* The following sites are personal in nature, high potential traffic
-     and URLs don't correspond to identifiable content */
-  { urlProperty: 'hostname', value: 'facebook.com' },
-  { urlProperty: 'hostname', value: 'www.facebook.com' },
-  { urlProperty: 'hostname', value: 'mail.google.com' },
-];
+const ALLOWED_PROTOCOLS = new Set(['http:', 'https:']);
+
+const BLOCK_HOSTNAMES = new Set([
+  'facebook.com',
+  'www.facebook.com',
+  'mail.google.com',
+]);
 
 /** encodeUriQuery encodes a string for use in a query parameter */
 function encodeUriQuery(val) {
@@ -16,11 +14,12 @@ function encodeUriQuery(val) {
 }
 
 /**
- * Should we send a "badge" request to obtain the annotation count for the
- * URL `uri`?
+ * Based on the request protocol and hostname decide if the URL should be sent to the "badge"
+ * request endpoint.
  *
  * @param {string} uri
- * @return {boolean}
+ * @return {boolean} - false if the requested URL is not be sent to the "badge" request,
+ *                     otherwise true.
  */
 function shouldQueryUri(uri) {
   let url;
@@ -31,43 +30,51 @@ function shouldQueryUri(uri) {
     return false;
   }
 
-  // Make sure `uri` does not match ANY item in the blocklist
-  return BLOCKLIST.every(
-    blockedItem => url[blockedItem.urlProperty] !== blockedItem.value
-  );
+  if (!ALLOWED_PROTOCOLS.has(url.protocol)) {
+    return false;
+  }
+
+  if (BLOCK_HOSTNAMES.has(url.hostname)) {
+    return false;
+  }
+
+  return true;
 }
 
 /**
  * Queries the Hypothesis service that provides
  * statistics about the annotations for a given URL.
+ *
+ * @return {Promise<number>}
+ * @throws Will throw a variety of errors: network, json parsing, or wrong format errors.
  */
-function query(uri) {
-  return fetch(settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri), {
-    credentials: 'include',
-  }).then(res => res.json());
+async function query(uri) {
+  const response = await fetch(
+    settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri),
+    {
+      credentials: 'include',
+    }
+  );
+
+  const data = await response.json();
+
+  if (data && typeof data.total === 'number') {
+    return data.total;
+  }
+
+  throw new Error('Badge response has wrong format');
 }
 
 /**
  * Retrieve the count of available annotations for `uri`
  *
  * @return {Promise<number>} - Annotation count for `uri`. Will be 0 if URI
- *                             has a blocklist match or there are problems with
- *                             the request to or response from the API
+ *                             has a blocklist match.
  */
 export function getAnnotationCount(uri) {
-  const noValue = 0;
-  if (shouldQueryUri(uri)) {
-    return query(uri)
-      .then(data => {
-        if (!data || typeof data.total !== 'number') {
-          return noValue;
-        }
-        return data.total;
-      })
-      .catch(() => {
-        return noValue;
-      });
-  } else {
-    return Promise.resolve(noValue);
+  if (!shouldQueryUri(uri)) {
+    return Promise.resolve(0);
   }
+
+  return query(uri);
 }
