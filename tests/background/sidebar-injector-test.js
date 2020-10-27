@@ -4,16 +4,16 @@ import { toResult } from '../promise-util';
 
 // The root URL for the extension returned by the
 // extensionURL(path) fake
-var EXTENSION_BASE_URL = 'chrome-extension://hypothesis';
+const EXTENSION_BASE_URL = 'chrome-extension://hypothesis';
 
-var PDF_VIEWER_BASE_URL = EXTENSION_BASE_URL + '/pdfjs/web/viewer.html?file=';
+const PDF_VIEWER_BASE_URL = EXTENSION_BASE_URL + '/pdfjs/web/viewer.html?file=';
 
 /**
  * Creates an <iframe> for testing the effects of code injected
  * into the page by the sidebar injector
  */
 function createTestFrame() {
-  var frame = document.createElement('iframe');
+  const frame = document.createElement('iframe');
   document.body.appendChild(frame);
   frame.contentDocument.body.appendChild = function () {
     // no-op to avoid trying to actually load <script> tags injected into
@@ -23,23 +23,23 @@ function createTestFrame() {
 }
 
 describe('SidebarInjector', function () {
-  var injector;
-  var fakeChromeTabs;
-  var fakeFileAccess;
+  let injector;
+  let fakeChromeTabs;
+  let fakeFileAccess;
 
   // The content type that the detection script injected into
   // the page should report ('HTML' or 'PDF')
-  var contentType;
+  let contentType;
   // The return value from the content script which checks whether
   // the sidebar has already been injected into the page
-  var isAlreadyInjected;
+  let isAlreadyInjected;
 
   // An <iframe> created by some tests to verify the effects on the DOM of
   // code injected into the page by the sidebar
-  var contentFrame;
+  let contentFrame;
 
   // Mock return value from embed.js when injected into page
-  var embedScriptReturnValue;
+  let embedScriptReturnValue;
 
   beforeEach(function () {
     contentType = 'HTML';
@@ -49,7 +49,7 @@ describe('SidebarInjector', function () {
       installedURL: EXTENSION_BASE_URL + '/client/app.html',
     };
 
-    var executeScriptSpy = sinon.spy(function (tabId, details, callback) {
+    const executeScriptSpy = sinon.spy(function (tabId, details, callback) {
       if (contentFrame) {
         contentFrame.contentWindow.eval(details.code);
       }
@@ -86,7 +86,7 @@ describe('SidebarInjector', function () {
   });
 
   describe('.injectIntoTab', function () {
-    var urls = [
+    const urls = [
       'chrome://version',
       'chrome-devtools://host',
       'chrome-extension://1234/foo.html',
@@ -96,7 +96,7 @@ describe('SidebarInjector', function () {
       it(
         'bails early when trying to load an unsupported url: ' + url,
         function () {
-          var spy = fakeChromeTabs.executeScript;
+          const spy = fakeChromeTabs.executeScript;
           return toResult(injector.injectIntoTab({ id: 1, url: url })).then(
             function (result) {
               assert.ok(result.error);
@@ -109,17 +109,17 @@ describe('SidebarInjector', function () {
     });
 
     it('succeeds if the tab is already displaying the embedded PDF viewer', function () {
-      var url =
+      const url =
         PDF_VIEWER_BASE_URL + encodeURIComponent('http://origin/foo.pdf');
       return injector.injectIntoTab({ id: 1, url: url });
     });
 
     describe('when viewing a remote PDF', function () {
-      var url = 'http://example.com/foo.pdf';
+      const url = 'http://example.com/foo.pdf';
 
       it('injects hypothesis into the page', function () {
         contentType = 'PDF';
-        var spy = fakeChromeTabs.update.yields({ tab: 1 });
+        const spy = fakeChromeTabs.update.yields({ tab: 1 });
         return injector.injectIntoTab({ id: 1, url: url }).then(function () {
           assert.calledWith(spy, 1, {
             url: PDF_VIEWER_BASE_URL + encodeURIComponent(url),
@@ -129,8 +129,8 @@ describe('SidebarInjector', function () {
 
       it('preserves #annotations fragments in the URL', function () {
         contentType = 'PDF';
-        var spy = fakeChromeTabs.update.yields({ tab: 1 });
-        var hash = '#annotations:456';
+        const spy = fakeChromeTabs.update.yields({ tab: 1 });
+        const hash = '#annotations:456';
         return injector
           .injectIntoTab({ id: 1, url: url + hash })
           .then(function () {
@@ -143,8 +143,8 @@ describe('SidebarInjector', function () {
 
     describe('when viewing a remote HTML page', function () {
       it('injects hypothesis into the page', function () {
-        var spy = fakeChromeTabs.executeScript;
-        var url = 'http://example.com/foo.html';
+        const spy = fakeChromeTabs.executeScript;
+        const url = 'http://example.com/foo.html';
 
         return injector.injectIntoTab({ id: 1, url: url }).then(function () {
           assert.calledWith(spy, 1, {
@@ -157,7 +157,7 @@ describe('SidebarInjector', function () {
         embedScriptReturnValue = {
           installedURL: 'https://hypothes.is/app.html',
         };
-        var url = 'http://example.com';
+        const url = 'http://example.com';
         return toResult(injector.injectIntoTab({ id: 1, url: url })).then(
           function (result) {
             assert.ok(result.error);
@@ -168,11 +168,11 @@ describe('SidebarInjector', function () {
 
       it('injects config options into the page', function () {
         contentFrame = createTestFrame();
-        var url = 'http://example.com';
+        const url = 'http://example.com';
         return injector
           .injectIntoTab({ id: 1, url: url }, { annotations: '456' })
           .then(function () {
-            var configEl = contentFrame.contentDocument.querySelector(
+            const configEl = contentFrame.contentDocument.querySelector(
               'script.js-hypothesis-config'
             );
             assert.ok(configEl);
@@ -186,8 +186,8 @@ describe('SidebarInjector', function () {
     describe('when viewing a local PDF', function () {
       describe('when file access is enabled', function () {
         it('loads the PDFjs viewer', function () {
-          var spy = fakeChromeTabs.update.yields([]);
-          var url = 'file:///foo.pdf';
+          const spy = fakeChromeTabs.update.yields([]);
+          const url = 'file:///foo.pdf';
           contentType = 'PDF';
 
           return injector.injectIntoTab({ id: 1, url: url }).then(function () {
@@ -206,9 +206,9 @@ describe('SidebarInjector', function () {
         });
 
         it('returns an error', function () {
-          var url = 'file://foo.pdf';
+          const url = 'file://foo.pdf';
 
-          var promise = injector.injectIntoTab({ id: 1, url: url });
+          const promise = injector.injectIntoTab({ id: 1, url: url });
           return toResult(promise).then(function (result) {
             assert.instanceOf(result.error, errors.NoFileAccessError);
             assert.notCalled(fakeChromeTabs.executeScript);
@@ -218,8 +218,8 @@ describe('SidebarInjector', function () {
 
       describe('when viewing a local HTML file', function () {
         it('returns an error', function () {
-          var url = 'file://foo.html';
-          var promise = injector.injectIntoTab({ id: 1, url: url });
+          const url = 'file://foo.html';
+          const promise = injector.injectIntoTab({ id: 1, url: url });
           return toResult(promise).then(function (result) {
             assert.instanceOf(result.error, errors.LocalFileError);
           });
@@ -230,21 +230,21 @@ describe('SidebarInjector', function () {
 
   describe('.removeFromTab', function () {
     it('bails early when trying to unload a chrome url', function () {
-      var spy = fakeChromeTabs.executeScript;
-      var url = 'chrome://extensions/';
+      const spy = fakeChromeTabs.executeScript;
+      const url = 'chrome://extensions/';
 
       return injector.removeFromTab({ id: 1, url: url }).then(function () {
         assert.notCalled(spy);
       });
     });
 
-    var protocols = ['chrome:', 'chrome-devtools:', 'chrome-extension:'];
+    const protocols = ['chrome:', 'chrome-devtools:', 'chrome-extension:'];
     protocols.forEach(function (protocol) {
       it(
         'bails early when trying to unload an unsupported ' + protocol + ' url',
         function () {
-          var spy = fakeChromeTabs.executeScript;
-          var url = protocol + '//foobar/';
+          const spy = fakeChromeTabs.executeScript;
+          const url = protocol + '//foobar/';
 
           return injector.removeFromTab({ id: 1, url: url }).then(function () {
             assert.notCalled(spy);
@@ -255,8 +255,8 @@ describe('SidebarInjector', function () {
 
     describe('when viewing a PDF', function () {
       it('reverts the tab back to the original document', function () {
-        var spy = fakeChromeTabs.update.yields([]);
-        var url =
+        const spy = fakeChromeTabs.update.yields([]);
+        const url =
           PDF_VIEWER_BASE_URL +
           encodeURIComponent('http://example.com/foo.pdf') +
           '#foo';
@@ -268,8 +268,8 @@ describe('SidebarInjector', function () {
       });
 
       it('drops #annotations fragments', function () {
-        var spy = fakeChromeTabs.update.yields([]);
-        var url =
+        const spy = fakeChromeTabs.update.yields([]);
+        const url =
           PDF_VIEWER_BASE_URL +
           encodeURIComponent('http://example.com/foo.pdf') +
           '#annotations:456';

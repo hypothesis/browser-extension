@@ -138,13 +138,13 @@ describe('TabState', () => {
 
     it('queries the service and sets the annotation count', () => {
       const testValue = 42;
-      var getStub = sinon.stub().returns(Promise.resolve(testValue));
+      const getStub = sinon.stub().returns(Promise.resolve(testValue));
       $imports.$mock({
         './uri-info': {
           getAnnotationCount: getStub,
         },
       });
-      var tabState = new TabState({ 1: { state: states.ACTIVE } });
+      const tabState = new TabState({ 1: { state: states.ACTIVE } });
       return tabState.updateAnnotationCount(1, 'foobar.com').then(() => {
         assert.called(getStub);
         assert.equal(tabState.getState(1).annotationCount, testValue);

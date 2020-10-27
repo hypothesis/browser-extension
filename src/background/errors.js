@@ -49,7 +49,7 @@ function isKnownError(err) {
   return err instanceof ExtensionError;
 }
 
-var IGNORED_ERRORS = [
+const IGNORED_ERRORS = [
   // Errors that can happen when the tab is closed during injection
   /The tab was closed/,
   /No tab with id.*/,

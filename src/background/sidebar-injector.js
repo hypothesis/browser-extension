@@ -4,8 +4,8 @@ import detectContentType from './detect-content-type';
 import * as errors from './errors';
 import * as util from './util';
 
-var CONTENT_TYPE_HTML = 'HTML';
-var CONTENT_TYPE_PDF = 'PDF';
+const CONTENT_TYPE_HTML = 'HTML';
+const CONTENT_TYPE_PDF = 'PDF';
 
 function toIIFEString(fn) {
   return '(' + fn.toString() + ')()';
@@ -18,7 +18,7 @@ function toIIFEString(fn) {
  * content script, so it cannot reference any external variables.
  */
 function addJSONScriptTagFn(name, content) {
-  var scriptTag = document.createElement('script');
+  const scriptTag = document.createElement('script');
   scriptTag.className = name;
   scriptTag.textContent = content;
   scriptTag.type = 'application/json';
@@ -63,12 +63,12 @@ function extractContentScriptResult(result) {
 export default function SidebarInjector(chromeTabs, dependencies) {
   dependencies = dependencies || {};
 
-  var isAllowedFileSchemeAccess = dependencies.isAllowedFileSchemeAccess;
-  var extensionURL = dependencies.extensionURL;
+  const isAllowedFileSchemeAccess = dependencies.isAllowedFileSchemeAccess;
+  const extensionURL = dependencies.extensionURL;
 
-  var executeScriptFn = util.promisify(chromeTabs.executeScript);
+  const executeScriptFn = util.promisify(chromeTabs.executeScript);
 
-  var PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
+  const PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
 
   if (typeof extensionURL !== 'function') {
     throw new TypeError('extensionURL must be a function');
@@ -117,17 +117,17 @@ export default function SidebarInjector(chromeTabs, dependencies) {
     // Encode the original URL but preserve the fragment, so that a
     // '#annotations' fragment in the original URL will persist and trigger the
     // sidebar to focus and scroll to that annotation when the PDF viewer loads.
-    var parsedURL = new URL(url);
-    var hash = parsedURL.hash;
+    const parsedURL = new URL(url);
+    const hash = parsedURL.hash;
     parsedURL.hash = '';
-    var encodedURL = encodeURIComponent(parsedURL.href);
+    const encodedURL = encodeURIComponent(parsedURL.href);
     return PDFViewerBaseURL + '?file=' + encodedURL + hash;
   }
 
   // returns true if the extension is permitted to inject
   // a content script into a tab with a given URL.
   function canInjectScript(url) {
-    var canInject;
+    let canInject;
     if (isSupportedURL(url)) {
       canInject = Promise.resolve(true);
     } else if (isFileURL(url)) {
@@ -162,7 +162,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
         return executeScriptFn(tab.id, {
           code: toIIFEString(detectContentType),
         }).then(function (frameResults) {
-          var result = extractContentScriptResult(frameResults);
+          const result = extractContentScriptResult(frameResults);
           if (result) {
             return result.type;
           } else {
@@ -197,8 +197,8 @@ export default function SidebarInjector(chromeTabs, dependencies) {
   function isSupportedURL(url) {
     // Injection of content scripts is limited to a small number of protocols,
     // see https://developer.chrome.com/extensions/match_patterns
-    var parsedURL = new URL(url);
-    var SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
+    const parsedURL = new URL(url);
+    const SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
     return SUPPORTED_PROTOCOLS.some(function (protocol) {
       return parsedURL.protocol === protocol;
     });
@@ -229,7 +229,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
       // extension installed that provides a custom viewer for PDFs
       // (or some other format). In some cases we could extract the original
       // URL and open that in the Hypothesis viewer instead.
-      var protocol = tab.url.split(':')[0];
+      const protocol = tab.url.split(':')[0];
       return Promise.reject(
         new errors.RestrictedProtocolError(
           'Cannot load Hypothesis into ' + protocol + ' pages'
@@ -246,7 +246,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
             return injectIntoHTML(tab);
           })
           .then(function (results) {
-            var result = extractContentScriptResult(results);
+            const result = extractContentScriptResult(results);
             if (
               result &&
               typeof result.installedURL === 'string' &&
@@ -265,7 +265,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
     if (isPDFViewerURL(tab.url)) {
       return Promise.resolve();
     }
-    var updateFn = util.promisify(chromeTabs.update);
+    const updateFn = util.promisify(chromeTabs.update);
     return updateFn(tab.id, { url: getPDFViewerURL(tab.url) });
   }
 
@@ -289,12 +289,12 @@ export default function SidebarInjector(chromeTabs, dependencies) {
 
   function removeFromPDF(tab) {
     return new Promise(function (resolve) {
-      var parsedURL = new URL(tab.url);
-      var originalURL = queryString.parse(parsedURL.search).file;
+      const parsedURL = new URL(tab.url);
+      const originalURL = queryString.parse(parsedURL.search).file;
       if (!originalURL) {
         throw new Error('Failed to extract original URL from ' + tab.url);
       }
-      var hash = parsedURL.hash;
+      let hash = parsedURL.hash;
 
       // If the original URL was a direct link, drop the #annotations fragment
       // as otherwise the Chrome extension will re-activate itself on this tab
@@ -336,8 +336,8 @@ export default function SidebarInjector(chromeTabs, dependencies) {
    * running in isolated worlds.
    */
   function injectConfig(tabId, config) {
-    var configStr = JSON.stringify(config).replace(/"/g, '\\"');
-    var configCode =
+    const configStr = JSON.stringify(config).replace(/"/g, '\\"');
+    const configCode =
       'var hypothesisConfig = "' +
       configStr +
       '";\n' +

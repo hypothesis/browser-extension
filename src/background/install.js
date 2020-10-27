@@ -1,6 +1,6 @@
 import HypothesisChromeExtension from './hypothesis-chrome-extension';
 
-var browserExtension;
+let browserExtension;
 
 export function init() {
   browserExtension = new HypothesisChromeExtension({

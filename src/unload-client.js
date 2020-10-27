@@ -3,13 +3,13 @@
 
 'use strict';
 
-var annotatorLink = document.querySelector(
+const annotatorLink = document.querySelector(
   'link[type="application/annotator+html"]'
 );
 
 if (annotatorLink) {
   // Dispatch a 'destroy' event which is handled by the code in
   // annotator/main.js to remove the client.
-  var destroyEvent = new Event('destroy');
+  const destroyEvent = new Event('destroy');
   annotatorLink.dispatchEvent(destroyEvent);
 }

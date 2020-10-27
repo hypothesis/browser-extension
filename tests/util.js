@@ -31,7 +31,7 @@
  */
 function unroll(description, testFn, fixtures) {
   fixtures.forEach(function (fixture) {
-    var caseDescription = Object.keys(fixture).reduce(function (desc, key) {
+    const caseDescription = Object.keys(fixture).reduce(function (desc, key) {
       return desc.replace('#' + key, String(fixture[key]));
     }, description);
     it(caseDescription, function (done) {
@@ -39,7 +39,7 @@ function unroll(description, testFn, fixtures) {
         // Test case does not accept a 'done' callback argument, so we either
         // call done() immediately if it returns a non-Promiselike object
         // or when the Promise resolves otherwise
-        var result = testFn(fixture);
+        const result = testFn(fixture);
         if (typeof result === 'object' && result.then) {
           result.then(function () {
             done();

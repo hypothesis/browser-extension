@@ -1,7 +1,7 @@
 import detectContentType from '../../src/background/detect-content-type';
 
 describe('detectContentType()', function () {
-  var el;
+  let el;
   beforeEach(function () {
     el = document.createElement('div');
     document.body.appendChild(el);
@@ -22,7 +22,7 @@ describe('detectContentType()', function () {
   });
 
   it('returns "PDF" if Firefox PDF viewer is present', function () {
-    var fakeDocument = {
+    const fakeDocument = {
       querySelector: function () {
         return null;
       },

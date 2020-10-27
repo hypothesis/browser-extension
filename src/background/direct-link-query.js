@@ -25,21 +25,21 @@
 export default function directLinkQuery(url) {
   // Annotation IDs are url-safe-base64 identifiers
   // See https://tools.ietf.org/html/rfc4648#page-7
-  var idMatch = url.match(/#annotations:([A-Za-z0-9_-]+)$/);
+  const idMatch = url.match(/#annotations:([A-Za-z0-9_-]+)$/);
   if (idMatch) {
     return { annotations: idMatch[1] };
   }
 
-  var queryMatch = url.match(/#annotations:query:(.*)$/);
+  const queryMatch = url.match(/#annotations:query:(.*)$/);
   if (queryMatch) {
-    let query = decodeURIComponent(queryMatch[1]);
+    const query = decodeURIComponent(queryMatch[1]);
     return { query };
   }
 
   // Group IDs (and other "pubids" in h) are a subset of ASCII letters and
   // digits. As a special exception, the "Public" group has underscores in its
   // ID ("__world__").
-  var groupMatch = url.match(/#annotations:group:([A-Za-z0-9_]+)$/);
+  const groupMatch = url.match(/#annotations:group:([A-Za-z0-9_]+)$/);
   if (groupMatch) {
     return { group: groupMatch[1] };
   }

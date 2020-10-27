@@ -6,11 +6,11 @@
  * The tab ID is currently used but this is valid only for a browser session.
  */
 export default function TabStore(storage) {
-  var key = 'state';
-  var local;
+  const key = 'state';
+  let local;
 
   this.get = function (tabId) {
-    var value = local[tabId];
+    const value = local[tabId];
     if (!value) {
       throw new Error('TabStateStore could not find entry for tab: ' + tabId);
     }
@@ -39,7 +39,7 @@ export default function TabStore(storage) {
   this.reload = function () {
     try {
       local = {};
-      var loaded = JSON.parse(storage.getItem(key));
+      const loaded = JSON.parse(storage.getItem(key));
       Object.keys(loaded).forEach(function (key) {
         // ignore tab state saved by earlier versions of
         // the extension which saved the state as a {key: <state string>}

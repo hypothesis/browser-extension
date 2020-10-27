@@ -7,8 +7,8 @@ import SidebarInjector from './sidebar-injector';
 import TabState from './tab-state';
 import TabStore from './tab-store';
 
-var TAB_STATUS_LOADING = 'loading';
-var TAB_STATUS_COMPLETE = 'complete';
+const TAB_STATUS_LOADING = 'loading';
+const TAB_STATUS_COMPLETE = 'complete';
 
 /* The main extension application. This wires together all the smaller
  * modules. The app listens to all new created/updated/removed tab events
@@ -38,15 +38,15 @@ var TAB_STATUS_COMPLETE = 'complete';
  *   isAllowedFileSchemeAccess: chrome.extension.isAllowedFileSchemeAccess.
  */
 export default function HypothesisChromeExtension(dependencies) {
-  var chromeTabs = dependencies.chromeTabs;
-  var chromeExtension = dependencies.chromeExtension;
-  var chromeStorage = dependencies.chromeStorage;
-  var chromeBrowserAction = dependencies.chromeBrowserAction;
-  var help = new HelpPage(chromeTabs, dependencies.extensionURL);
-  var store = new TabStore(localStorage);
-  var state = new TabState(store.all(), onTabStateChange);
-  var browserAction = new BrowserAction(chromeBrowserAction);
-  var sidebar = new SidebarInjector(chromeTabs, {
+  const chromeTabs = dependencies.chromeTabs;
+  const chromeExtension = dependencies.chromeExtension;
+  const chromeStorage = dependencies.chromeStorage;
+  const chromeBrowserAction = dependencies.chromeBrowserAction;
+  const help = new HelpPage(chromeTabs, dependencies.extensionURL);
+  const store = new TabStore(localStorage);
+  const state = new TabState(store.all(), onTabStateChange);
+  const browserAction = new BrowserAction(chromeBrowserAction);
+  const sidebar = new SidebarInjector(chromeTabs, {
     extensionURL: dependencies.extensionURL,
     isAllowedFileSchemeAccess: dependencies.isAllowedFileSchemeAccess,
   });
@@ -129,7 +129,7 @@ export default function HypothesisChromeExtension(dependencies) {
   this._onTabStateChange = onTabStateChange;
 
   function onBrowserActionClicked(tab) {
-    var tabError = state.getState(tab.id).error;
+    const tabError = state.getState(tab.id).error;
     if (tabError) {
       help.showHelpForError(tab, tabError);
     } else if (state.isTabActive(tab.id)) {
@@ -144,7 +144,7 @@ export default function HypothesisChromeExtension(dependencies) {
    * which has just been navigated to.
    */
   function activeStateForNavigatedTab(tabId) {
-    var activeState = state.getState(tabId).state;
+    let activeState = state.getState(tabId).state;
     if (activeState === TabState.states.ERRORED) {
       // user had tried to activate H on the previous page but it failed,
       // retry on the new page
@@ -173,13 +173,13 @@ export default function HypothesisChromeExtension(dependencies) {
   function onTabUpdated(tabId, changeInfo, tab) {
     if (changeInfo.status === TAB_STATUS_LOADING) {
       resetTabState(tabId, tab.url);
-      var query = directLinkQuery(tab.url);
+      const query = directLinkQuery(tab.url);
       if (query) {
         state.setState(tab.id, { directLinkQuery: query });
       }
     } else if (changeInfo.status === TAB_STATUS_COMPLETE) {
-      var tabState = state.getState(tabId);
-      var newActiveState = tabState.state;
+      const tabState = state.getState(tabId);
+      let newActiveState = tabState.state;
       if (tabState.directLinkQuery) {
         newActiveState = TabState.states.ACTIVE;
       }
@@ -219,7 +219,7 @@ export default function HypothesisChromeExtension(dependencies) {
       return Promise.resolve();
     }
 
-    var isInstalled = state.getState(tab.id).extensionSidebarInstalled;
+    const isInstalled = state.getState(tab.id).extensionSidebarInstalled;
     if (state.isTabActive(tab.id) && !isInstalled) {
       // optimistically set the state flag indicating that the sidebar
       // has been installed
@@ -227,9 +227,9 @@ export default function HypothesisChromeExtension(dependencies) {
         extensionSidebarInstalled: true,
       });
 
-      var { directLinkQuery } = state.getState(tab.id);
+      const { directLinkQuery } = state.getState(tab.id);
 
-      var config = {
+      const config = {
         // Configure client to load assets and sidebar app from extension.
         // Note: Even though the sidebar app URL is correct here and the page
         // does load, Chrome devtools may incorrectly report that it failed to

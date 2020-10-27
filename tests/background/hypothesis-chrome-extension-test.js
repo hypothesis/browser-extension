@@ -30,18 +30,18 @@ function isValidState(state) {
 }
 
 describe('HypothesisChromeExtension', function () {
-  var sandbox = sinon.createSandbox();
-  var ext;
-  var fakeChromeExtension;
-  var fakeChromeStorage;
-  var fakeChromeTabs;
-  var fakeChromeBrowserAction;
-  var fakeErrors;
-  var fakeHelpPage;
-  var fakeTabStore;
-  var fakeTabState;
-  var fakeBrowserAction;
-  var fakeSidebarInjector;
+  let sandbox = sinon.createSandbox();
+  let ext;
+  let fakeChromeExtension;
+  let fakeChromeStorage;
+  let fakeChromeTabs;
+  let fakeChromeBrowserAction;
+  let fakeErrors;
+  let fakeHelpPage;
+  let fakeTabStore;
+  let fakeTabState;
+  let fakeBrowserAction;
+  let fakeSidebarInjector;
 
   function createExt() {
     return new HypothesisChromeExtension({
@@ -144,8 +144,8 @@ describe('HypothesisChromeExtension', function () {
   });
 
   describe('.install', function () {
-    var tabs;
-    var savedState;
+    let tabs;
+    let savedState;
 
     beforeEach(function () {
       tabs = [];
@@ -224,9 +224,9 @@ describe('HypothesisChromeExtension', function () {
     });
 
     describe('when a tab is updated', function () {
-      var tabState = {};
+      const tabState = {};
       function createTab(initialState) {
-        var tabId = 1;
+        const tabId = 1;
         tabState[tabId] = Object.assign(
           {
             state: TabState.states.INACTIVE,
@@ -261,13 +261,13 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('sets the tab state to ready when loading completes', function () {
-        var tab = createTab({ state: TabState.states.ACTIVE });
+        const tab = createTab({ state: TabState.states.ACTIVE });
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'complete' }, tab);
         assert.equal(tabState[tab.id].ready, true);
       });
 
       it('resets the tab state when loading', function () {
-        var tab = createTab({
+        const tab = createTab({
           state: TabState.states.ACTIVE,
           ready: true,
           extensionSidebarInstalled: true,
@@ -278,7 +278,7 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('resets the tab state to active if errored', function () {
-        var tab = createTab({ state: TabState.states.ERRORED });
+        const tab = createTab({ state: TabState.states.ERRORED });
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
         assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
       });
@@ -289,7 +289,7 @@ describe('HypothesisChromeExtension', function () {
         '#annotations:group:123',
       ].forEach(fragment => {
         it('injects the sidebar if a direct link is present', function () {
-          var tab = createTab();
+          const tab = createTab();
           tab.url += fragment;
           fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
           fakeChromeTabs.onUpdated.listener(
@@ -302,8 +302,8 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('injects the sidebar if the page rewrites the URL fragment', function () {
-        var tab = createTab();
-        var origURL = tab.url;
+        const tab = createTab();
+        const origURL = tab.url;
         tab.url += '#annotations:456';
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
 
@@ -316,7 +316,7 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('updates the badge count', function () {
-        var tab = createTab();
+        const tab = createTab();
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'complete' }, tab);
         assert.calledWith(
@@ -327,7 +327,7 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('updates the badge count if "chrome.storage.sync" is not supported', function () {
-        var tab = createTab();
+        const tab = createTab();
         delete fakeChromeStorage.sync;
 
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
@@ -341,7 +341,7 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('does not update the badge count if the option is disabled', function () {
-        var tab = createTab();
+        const tab = createTab();
         fakeChromeStorage.sync.get.callsArgWith(1, { badge: false });
 
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
@@ -421,8 +421,8 @@ describe('HypothesisChromeExtension', function () {
 
   describe('when injection fails', function () {
     function triggerInstall() {
-      var tab = { id: 1, url: 'file://foo.html', status: 'complete' };
-      var tabState = {
+      const tab = { id: 1, url: 'file://foo.html', status: 'complete' };
+      const tabState = {
         state: TabState.states.ACTIVE,
         extensionSidebarInstalled: false,
         ready: true,
@@ -439,7 +439,7 @@ describe('HypothesisChromeExtension', function () {
       ext.listen({ addEventListener: sandbox.stub() });
     });
 
-    var injectErrorCases = [
+    const injectErrorCases = [
       errors.LocalFileError,
       errors.NoFileAccessError,
       errors.RestrictedProtocolError,
@@ -448,7 +448,7 @@ describe('HypothesisChromeExtension', function () {
     injectErrorCases.forEach(function (ErrorType) {
       describe('with ' + ErrorType.name, function () {
         it('puts the tab into an errored state', function () {
-          var injectError = Promise.reject(new ErrorType('msg'));
+          const injectError = Promise.reject(new ErrorType('msg'));
           fakeSidebarInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
@@ -460,7 +460,7 @@ describe('HypothesisChromeExtension', function () {
         });
 
         it('shows the help page for ' + ErrorType.name, function () {
-          var tab = { id: 1, url: 'file://foo.html' };
+          const tab = { id: 1, url: 'file://foo.html' };
 
           fakeTabState.getState.returns({
             state: TabState.states.ERRORED,
@@ -478,11 +478,11 @@ describe('HypothesisChromeExtension', function () {
         });
 
         it('does not log known errors', function () {
-          var error = new Error('Some error');
+          const error = new Error('Some error');
           fakeErrors.shouldIgnoreInjectionError = function () {
             return true;
           };
-          var injectError = Promise.reject(error);
+          const injectError = Promise.reject(error);
           fakeSidebarInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
@@ -493,8 +493,8 @@ describe('HypothesisChromeExtension', function () {
         });
 
         it('logs unexpected errors', function () {
-          var error = new ErrorType('msg');
-          var injectError = Promise.reject(error);
+          const error = new ErrorType('msg');
+          const injectError = Promise.reject(error);
           fakeSidebarInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
@@ -513,10 +513,10 @@ describe('HypothesisChromeExtension', function () {
   });
 
   describe('TabState.onchange', function () {
-    var tabStates = TabState.states;
+    const tabStates = TabState.states;
 
-    var onChangeHandler;
-    var tab;
+    let onChangeHandler;
+    let tab;
 
     // simulate a tab state change from 'prev' to 'current'
     function onTabStateChange(current, prev) {

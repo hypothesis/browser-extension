@@ -1,8 +1,8 @@
 import TabStore from '../../src/background/tab-store';
 
 describe('TabStore', function () {
-  var store;
-  var fakeLocalStorage;
+  let store;
+  let fakeLocalStorage;
 
   beforeEach(function () {
     fakeLocalStorage = {
@@ -25,7 +25,7 @@ describe('TabStore', function () {
     });
 
     it('retrieves a key from the cache', function () {
-      var value = store.get(1);
+      const value = store.get(1);
       assert.equal(value.state, 'active');
     });
 
@@ -46,7 +46,7 @@ describe('TabStore', function () {
 
   describe('.set', function () {
     it('inserts a JSON string into the store for the tab id', function () {
-      var expected = JSON.stringify({
+      const expected = JSON.stringify({
         1: { state: 'active' },
       });
       store.set(1, { state: 'active' });
@@ -54,7 +54,7 @@ describe('TabStore', function () {
     });
 
     it('adds new properties to the serialized object with each new call', function () {
-      var expected = JSON.stringify({
+      const expected = JSON.stringify({
         1: { state: 'active' },
         2: { state: 'inactive' },
       });
@@ -64,7 +64,7 @@ describe('TabStore', function () {
     });
 
     it('overrides existing properties on the serialized object', function () {
-      var expected = JSON.stringify({
+      const expected = JSON.stringify({
         1: { state: 'inactive' },
       });
       store.set(1, { state: 'active' });
@@ -92,7 +92,7 @@ describe('TabStore', function () {
     });
 
     it('returns all items as an Object', function () {
-      var all = store.all();
+      const all = store.all();
       assert.deepEqual(all, { 1: { state: 'active' } });
     });
   });

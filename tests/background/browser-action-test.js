@@ -2,8 +2,8 @@ import BrowserAction, { $imports } from '../../src/background/browser-action';
 import TabState from '../../src/background/tab-state';
 
 describe('BrowserAction', function () {
-  var action;
-  var fakeChromeBrowserAction;
+  let action;
+  let fakeChromeBrowserAction;
 
   beforeEach(function () {
     fakeChromeBrowserAction = {
@@ -43,12 +43,12 @@ describe('BrowserAction', function () {
     });
 
     it('does not set the title if there is badge text showing', function () {
-      var state = {
+      const state = {
         state: TabState.states.INACTIVE,
         annotationCount: 9,
       };
       action.update(1, state);
-      var prevTitle = fakeChromeBrowserAction.title;
+      const prevTitle = fakeChromeBrowserAction.title;
       action.update(1, Object.assign(state, { state: TabState.states.ACTIVE }));
       assert.equal(fakeChromeBrowserAction.title, prevTitle);
     });
@@ -157,7 +157,7 @@ describe('BrowserAction', function () {
 
   describe('build type', function () {
     beforeEach(function () {
-      var fakeSettings = {
+      let fakeSettings = {
         buildType: 'qa',
       };
       $imports.$mock({
