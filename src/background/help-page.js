@@ -50,12 +50,12 @@ export default function HelpPage(chromeTabs, extensionURL, browserName_) {
    * @param {Error} error - The error which prompted the help page.
    */
   function showHelpPage(helpSection, tab, error) {
-    var params = '';
+    let params = '';
     if (error) {
       params = '?message=' + encodeURIComponent(error.message);
     }
 
-    var tabOpts = {
+    const tabOpts = {
       index: tab.index + 1,
       url: extensionURL('/help/index.html' + params + '#' + helpSection),
     };

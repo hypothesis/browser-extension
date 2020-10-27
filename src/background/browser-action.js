@@ -2,11 +2,11 @@ import settings from './settings';
 import TabState from './tab-state';
 
 // Cache the tab state constants.
-var states = TabState.states;
+const states = TabState.states;
 
 // Each button state has two icons one for normal resolution (19) and one
 // for hi-res screens (38).
-var icons = {};
+const icons = {};
 icons[states.ACTIVE] = {
   19: 'images/browser-icon-active.png',
   38: 'images/browser-icon-active@2x.png',
@@ -18,7 +18,7 @@ icons[states.INACTIVE] = {
 
 // themes to apply to the toolbar icon badge depending on the type of
 // build. Production builds use the default color and no text
-var badgeThemes = {
+const badgeThemes = {
   dev: {
     defaultText: 'DEV',
     color: '#5BCF59', // Emerald green
@@ -42,7 +42,7 @@ function _(str) {
  * the badge state.
  */
 export default function BrowserAction(chromeBrowserAction) {
-  var buildType = settings.buildType;
+  const buildType = settings.buildType;
 
   /**
    * Updates the state of the browser action to reflect the logical
@@ -51,9 +51,9 @@ export default function BrowserAction(chromeBrowserAction) {
    * @param state - The H state of a tab. See the 'tab-state' module.
    */
   this.update = function (tabId, state) {
-    var activeIcon = icons[states.INACTIVE];
-    var title = '';
-    var badgeText = '';
+    let activeIcon = icons[states.INACTIVE];
+    let title = '';
+    let badgeText = '';
 
     if (state.state === states.ACTIVE) {
       activeIcon = icons[states.ACTIVE];
@@ -69,8 +69,8 @@ export default function BrowserAction(chromeBrowserAction) {
 
     // display the annotation count on the badge
     if (state.state !== states.ERRORED && state.annotationCount) {
-      var countLabel;
-      var totalString = state.annotationCount.toString();
+      let countLabel;
+      let totalString = state.annotationCount.toString();
       if (state.annotationCount > 999) {
         totalString = '999+';
       }
@@ -86,7 +86,7 @@ export default function BrowserAction(chromeBrowserAction) {
     }
 
     // update the badge style to reflect the build type
-    var badgeTheme = badgeThemes[buildType];
+    const badgeTheme = badgeThemes[buildType];
     if (badgeTheme) {
       chromeBrowserAction.setBadgeBackgroundColor({
         tabId: tabId,

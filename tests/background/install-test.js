@@ -1,4 +1,4 @@
-var extension;
+let extension;
 
 function FakeHypothesisChromeExtension(deps) {
   extension = this; // eslint-disable-line consistent-this
@@ -16,9 +16,9 @@ function eventListenerStub() {
 }
 
 describe('install', function () {
-  var origChrome;
-  var fakeChrome;
-  var install;
+  let origChrome;
+  let fakeChrome;
+  let install;
 
   beforeEach(function () {
     fakeChrome = {
@@ -64,7 +64,7 @@ describe('install', function () {
 
   context('when the extension is installed', function () {
     function triggerInstallEvent() {
-      var cb = fakeChrome.runtime.onInstalled.addListener.args[0][0];
+      const cb = fakeChrome.runtime.onInstalled.addListener.args[0][0];
       cb({ reason: 'install' });
     }
 

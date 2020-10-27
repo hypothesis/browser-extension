@@ -2,14 +2,14 @@ import isShallowEqual from 'is-equal-shallow';
 
 import * as uriInfo from './uri-info';
 
-var states = {
+const states = {
   ACTIVE: 'active',
   INACTIVE: 'inactive',
   ERRORED: 'errored',
 };
 
 /** The default H state for a new browser tab */
-var DEFAULT_STATE = {
+const DEFAULT_STATE = {
   /** Whether or not H is active on the page */
   state: states.INACTIVE,
   /** The count of annotations on the page visible to the user,
@@ -45,8 +45,8 @@ var DEFAULT_STATE = {
  * onchange     - A function that recieves onchange(tabId, current).
  */
 export default function TabState(initialState, onchange) {
-  var self = this;
-  var currentState;
+  const self = this;
+  let currentState;
 
   this.onchange = onchange || null;
 
@@ -58,7 +58,7 @@ export default function TabState(initialState, onchange) {
    *                   state for a tab.
    */
   this.load = function (newState) {
-    var newCurrentState = {};
+    const newCurrentState = {};
     Object.keys(newState).forEach(function (tabId) {
       newCurrentState[tabId] = Object.assign(
         {},
@@ -120,7 +120,7 @@ export default function TabState(initialState, onchange) {
    *                      state should be removed.
    */
   this.setState = function (tabId, stateUpdate) {
-    var newState;
+    let newState;
     if (stateUpdate) {
       newState = Object.assign({}, this.getState(tabId), stateUpdate);
       if (newState.state !== states.ERRORED) {

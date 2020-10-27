@@ -2,10 +2,10 @@ import * as errors from '../../src/background/errors';
 import HelpPage from '../../src/background/help-page';
 
 describe('HelpPage', function () {
-  var fakeBrowserName;
-  var fakeChromeTabs;
-  var fakeExtensionURL;
-  var help;
+  let fakeBrowserName;
+  let fakeChromeTabs;
+  let fakeExtensionURL;
+  let help;
 
   beforeEach(function () {
     fakeBrowserName = sinon.stub().returns('chrome');
@@ -119,7 +119,7 @@ describe('HelpPage', function () {
   context('in Firefox', function () {
     it('does not set the "openerTabId" argument when creating a new tab', function () {
       fakeBrowserName.returns('firefox');
-      var help = new HelpPage(
+      const help = new HelpPage(
         fakeChromeTabs,
         fakeExtensionURL,
         fakeBrowserName

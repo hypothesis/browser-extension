@@ -47,7 +47,7 @@ function convertLocalURLsToFilenames(url) {
  */
 function translateSourceURLs(data) {
   try {
-    var frames = data.exception.values[0].stacktrace.frames;
+    const frames = data.exception.values[0].stacktrace.frames;
     frames.forEach(function (frame) {
       frame.filename = convertLocalURLsToFilenames(frame.filename);
     });
@@ -90,7 +90,7 @@ export function report(error, when, context) {
     }
   }
 
-  var extra = Object.assign({ when: when }, context);
+  const extra = Object.assign({ when: when }, context);
   Raven.captureException(error, { extra: extra });
 }
 

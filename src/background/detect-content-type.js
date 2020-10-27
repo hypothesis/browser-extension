@@ -45,9 +45,9 @@ export default function detectContentType(document_) {
     return null;
   }
 
-  var detectFns = [detectChromePDFViewer, detectFirefoxPDFViewer];
-  for (var i = 0; i < detectFns.length; i++) {
-    var typeInfo = detectFns[i]();
+  const detectFns = [detectChromePDFViewer, detectFirefoxPDFViewer];
+  for (let i = 0; i < detectFns.length; i++) {
+    const typeInfo = detectFns[i]();
     if (typeInfo) {
       return typeInfo;
     }

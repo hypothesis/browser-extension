@@ -24,12 +24,12 @@ function getLastError() {
  */
 export function promisify(fn) {
   return function () {
-    var args = [].slice.call(arguments);
-    var result = new Promise(function (resolve, reject) {
+    const args = [].slice.call(arguments);
+    const result = new Promise(function (resolve, reject) {
       fn.apply(
         this,
         args.concat(function (result) {
-          var lastError = getLastError();
+          const lastError = getLastError();
           if (lastError) {
             reject(lastError);
           } else {

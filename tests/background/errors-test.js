@@ -1,7 +1,7 @@
 import * as errors from '../../src/background/errors';
 
 describe('errors', function () {
-  var fakeRaven;
+  let fakeRaven;
 
   beforeEach(function () {
     fakeRaven = {
@@ -19,7 +19,7 @@ describe('errors', function () {
   });
 
   describe('#shouldIgnoreInjectionError', function () {
-    var ignoredErrors = [
+    const ignoredErrors = [
       'The tab was closed',
       'No tab with id 42',
       'Cannot access contents of url "file:///C:/t/cpp.pdf". ' +
@@ -28,37 +28,37 @@ describe('errors', function () {
       'The extensions gallery cannot be scripted.',
     ];
 
-    var unexpectedErrors = ['SyntaxError: A typo'];
+    const unexpectedErrors = ['SyntaxError: A typo'];
 
     it('should be true for "expected" errors', function () {
       ignoredErrors.forEach(function (message) {
-        var error = { message: message };
+        const error = { message: message };
         assert.isTrue(errors.shouldIgnoreInjectionError(error));
       });
     });
 
     it('should be false for unexpected errors', function () {
       unexpectedErrors.forEach(function (message) {
-        var error = { message: message };
+        const error = { message: message };
         assert.isFalse(errors.shouldIgnoreInjectionError(error));
       });
     });
 
     it("should be true for the extension's custom error classes", function () {
-      var error = new errors.LocalFileError('some message');
+      const error = new errors.LocalFileError('some message');
       assert.isTrue(errors.shouldIgnoreInjectionError(error));
     });
   });
 
   describe('#report', function () {
     it('reports unknown errors via Raven', function () {
-      var error = new Error('A most unexpected error');
+      const error = new Error('A most unexpected error');
       errors.report(error, 'injecting the sidebar');
       assert.calledWith(fakeRaven.report, error, 'injecting the sidebar');
     });
 
     it('does not report known errors via Raven', function () {
-      var error = new errors.LocalFileError('some message');
+      const error = new errors.LocalFileError('some message');
       errors.report(error, 'injecting the sidebar');
       assert.notCalled(fakeRaven.report);
     });
