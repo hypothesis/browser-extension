@@ -132,23 +132,131 @@ describe('TabState', () => {
   });
 
   describe('#updateAnnotationCount', () => {
-    afterEach(() => {
-      $imports.$restore();
-    });
+    let clock;
+    let getStub;
+    const INITIAL_WAIT_MS = 1000;
+    const MAX_WAIT_MS = 3000;
 
-    it('queries the service and sets the annotation count', () => {
-      const testValue = 42;
-      const getStub = sinon.stub().returns(Promise.resolve(testValue));
+    beforeEach(() => {
+      clock = sinon.useFakeTimers();
+      getStub = sinon.stub();
       $imports.$mock({
         './uri-info': {
           getAnnotationCount: getStub,
         },
       });
+    });
+
+    afterEach(() => {
+      $imports.$restore();
+      clock.restore();
+    });
+
+    it(`queries the service and sets the annotation count after waiting for a period of ${INITIAL_WAIT_MS}ms`, async () => {
+      const testValue = 42;
+      getStub.resolves(testValue);
       const tabState = new TabState({ 1: { state: states.ACTIVE } });
-      return tabState.updateAnnotationCount(1, 'foobar.com').then(() => {
-        assert.called(getStub);
-        assert.equal(tabState.getState(1).annotationCount, testValue);
+
+      const promise = tabState.updateAnnotationCount(1, 'foobar.com');
+      clock.tick(INITIAL_WAIT_MS);
+
+      await promise;
+      assert.called(getStub);
+      assert.equal(tabState.getState(1).annotationCount, testValue);
+    });
+
+    it(`resolves last request after a maximum of ${MAX_WAIT_MS}ms when several requests are made in successsion to the service`, async () => {
+      const testValue = 42;
+      getStub.resolves(testValue);
+      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+
+      // Simulate several URL changes in rapid succession.
+      const start = Date.now();
+      let done;
+      for (let i = 0; i < 10; i++) {
+        done = tabState.updateAnnotationCount(1, 'foobar.com');
+      }
+      await clock.runToLastAsync();
+      await done;
+      const end = Date.now();
+
+      // all pending requests are cancelled except the last one which is resolved in no more than MAX_WAIT_MS
+      assert.equal(end - start, MAX_WAIT_MS);
+      assert.calledOnce(getStub);
+      assert.equal(tabState.getState(1).annotationCount, testValue);
+    });
+
+    it('cancels the first query (during waiting stage) when the service is called two consecutive times for the same tab', async () => {
+      const testValue = 42;
+      getStub.resolves(testValue);
+      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+
+      const promise1 = tabState.updateAnnotationCount(1, 'foobar.com');
+      const promise2 = tabState.updateAnnotationCount(1, 'foobar.com'); // promise 1 is still waiting when promise2 is called
+      assert.equal(tabState.getState(1).annotationCount, 0);
+      clock.tick(MAX_WAIT_MS);
+
+      await promise1;
+      await promise2;
+      assert.calledOnce(getStub);
+      assert.equal(tabState.getState(1).annotationCount, testValue);
+    });
+
+    it('cancels the first query (during the fetch stage) when the service is called two consecutive times for the same tab', async () => {
+      const testValue = 42;
+
+      // Takes 2000ms to return a response
+      const WAIT_FETCH = 2000;
+      getStub.returns(
+        new Promise(resolve => setTimeout(() => resolve(testValue), WAIT_FETCH))
+      );
+
+      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+
+      const promise1 = tabState.updateAnnotationCount(1, 'foobar.com');
+      clock.tick(INITIAL_WAIT_MS); // promise1 finished waiting and it is fetching the request
+      const promise2 = tabState.updateAnnotationCount(1, 'foobar.com');
+      assert.equal(tabState.getState(1).annotationCount, 0);
+      clock.tick(MAX_WAIT_MS + WAIT_FETCH);
+
+      await promise1;
+      await promise2;
+      assert.calledTwice(getStub); // request is not cancelled
+      assert.equal(tabState.getState(1).annotationCount, testValue);
+    });
+
+    it('resolves two concurrent requests if they are made for different tabs', async () => {
+      const testValue = 42;
+      getStub.resolves(testValue);
+
+      const tabState = new TabState({
+        1: { state: states.ACTIVE },
+        2: { state: states.ACTIVE },
       });
+
+      const promise1 = tabState.updateAnnotationCount(1, 'foobar.com');
+      const promise2 = tabState.updateAnnotationCount(2, 'foobar.com');
+      clock.tick(INITIAL_WAIT_MS);
+
+      await promise1;
+      await promise2;
+      assert.calledTwice(getStub);
+      assert.equal(tabState.getState(1).annotationCount, testValue);
+      assert.equal(tabState.getState(2).annotationCount, testValue);
+    });
+
+    it('sets the annotation count to zero if badge request is rejected', async () => {
+      getStub.rejects('some error condition');
+
+      const tabState = new TabState({
+        1: { state: states.ACTIVE },
+      });
+
+      const promise = tabState.updateAnnotationCount(1, 'foobar.com');
+      clock.tick(MAX_WAIT_MS);
+
+      await promise;
+      assert.equal(tabState.getState(1).annotationCount, 0);
     });
   });
 });

@@ -10,19 +10,17 @@ const states = {
 
 /** The default H state for a new browser tab */
 const DEFAULT_STATE = {
-  /** Whether or not H is active on the page */
+  // Whether or not H is active on the page
   state: states.INACTIVE,
-  /** The count of annotations on the page visible to the user,
-   * as returned by the badge API
-   */
+  // The count of annotations on the page visible to the user,
+  // as returned by the badge API
   annotationCount: 0,
-  /** Whether or not the H sidebar has been installed onto the page by
-   * the extension
-   */
+  // Whether or not the H sidebar has been installed onto the page by
+  // the extension
   extensionSidebarInstalled: false,
-  /** Whether the tab is loaded and ready for the sidebar to be installed. */
+  // Whether the tab is loaded and ready for the sidebar to be installed.
   ready: false,
-  /** The error for the current tab. */
+  // The error for the current tab.
   error: undefined,
 };
 
@@ -47,6 +45,16 @@ const DEFAULT_STATE = {
 export default function TabState(initialState, onchange) {
   const self = this;
   let currentState;
+
+  /**
+   * @typedef BadgeRequest - this object is used to cancel a pending badge request
+   * @prop {function} cancel - cancellation function to abort pending request
+   * @prop {number} waitMs - the current waiting time after which the request will be invoked
+   */
+
+  // This variable contains a map between the tabId and current badge request.
+  /** @type {Map<number, BadgeRequest>} */
+  const pendingAnnotationCountRequests = new Map();
 
   this.onchange = onchange || null;
 
@@ -86,6 +94,7 @@ export default function TabState(initialState, onchange) {
 
   this.clearTab = function (tabId) {
     this.setState(tabId, null);
+    pendingAnnotationCountRequests.delete(tabId);
   };
 
   this.getState = function (tabId) {
@@ -140,16 +149,48 @@ export default function TabState(initialState, onchange) {
   };
 
   /**
-   * Request the current annotation count for the tab's URL
+   * Request the current annotation count for the tab's URL.
    *
    * @method
    * @param {integer} tabId The id of the tab.
    * @param {string} tabUrl The URL of the tab.
+   * @return {Promise<void>}
    */
-  this.updateAnnotationCount = function (tabId, tabUrl) {
-    return uriInfo.getAnnotationCount(tabUrl).then(count => {
-      this.setState(tabId, { annotationCount: count });
+  this.updateAnnotationCount = async function (tabId, tabUrl) {
+    const INITIAL_WAIT_MS = 1000;
+    const MAX_WAIT_MS = 3000;
+
+    const pendingRequest = pendingAnnotationCountRequests.get(tabId);
+    const wait = Math.min(
+      pendingRequest?.waitMs ?? INITIAL_WAIT_MS,
+      MAX_WAIT_MS
+    );
+
+    pendingRequest?.cancel();
+
+    const debouncedFetch = new Promise(resolve => {
+      const timerId = setTimeout(async () => {
+        let count;
+        try {
+          count = await uriInfo.getAnnotationCount(tabUrl);
+        } catch {
+          count = 0;
+        }
+        pendingAnnotationCountRequests.delete(tabId);
+        resolve(count);
+      }, wait);
+
+      pendingAnnotationCountRequests.set(tabId, {
+        cancel: () => {
+          clearTimeout(timerId);
+          resolve(0);
+        },
+        waitMs: wait * 2,
+      });
     });
+
+    const annotationCount = await debouncedFetch;
+    this.setState(tabId, { annotationCount });
   };
 
   this.load(initialState || {});
