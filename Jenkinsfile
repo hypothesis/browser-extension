@@ -57,8 +57,7 @@ node {
 
                 // nb. Any additional steps to test the new client release with
                 // the extension can go here.
-
-                sh "yarn --no-git-tag-version version ${newClientVersion}"
+                sh "yarn version --no-git-tag-version --new-version ${newClientVersion}"
             }
 
             withCredentials([
