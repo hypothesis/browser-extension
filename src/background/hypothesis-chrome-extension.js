@@ -153,14 +153,13 @@ export default function HypothesisChromeExtension(dependencies) {
     return activeState;
   }
 
-  function resetTabState(tabId, url) {
+  function resetTabState(tabId) {
     state.setState(tabId, {
       state: activeStateForNavigatedTab(tabId),
       ready: false,
       annotationCount: 0,
       extensionSidebarInstalled: false,
     });
-    updateAnnotationCountIfEnabled(tabId, url);
   }
 
   // This function will be called multiple times as the tab reloads.
@@ -187,6 +186,7 @@ export default function HypothesisChromeExtension(dependencies) {
         ready: true,
         state: newActiveState,
       });
+      updateAnnotationCountIfEnabled(tabId, tab.url);
     }
   }
 
