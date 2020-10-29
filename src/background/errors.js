@@ -12,6 +12,8 @@ export class BlockedSiteError extends ExtensionError {}
 
 export class AlreadyInjectedError extends ExtensionError {}
 
+export class RequestCanceledError extends Error {}
+
 /**
  * Returns true if `err` is a recognized 'expected' error.
  */

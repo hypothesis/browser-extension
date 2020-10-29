@@ -104,7 +104,7 @@ describe('background/uri-info', () => {
       }
     );
 
-    it('throws an error if the reponse is not valid JSON', () => {
+    it('throws an error if the response is not valid JSON', () => {
       fetchStub.resolves(
         new Response('this is not valid json', {
           status: 200,
