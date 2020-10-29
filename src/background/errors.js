@@ -14,6 +14,8 @@ export class AlreadyInjectedError extends ExtensionError {}
 
 export class RequestCanceledError extends Error {}
 
+export class BadgeUriError extends Error {}
+
 /**
  * Returns true if `err` is a recognized 'expected' error.
  */
