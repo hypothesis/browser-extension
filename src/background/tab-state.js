@@ -1,4 +1,5 @@
 import isShallowEqual from 'is-equal-shallow';
+import { RequestCanceledError } from './errors';
 
 import * as uriInfo from './uri-info';
 
@@ -40,7 +41,7 @@ const DEFAULT_STATE = {
  * initialState - An Object of tabId/state keys. Used when loading state
  *   from a persisted store such as localStorage. This will be merged with
  *   the default state for a tab.
- * onchange     - A function that recieves onchange(tabId, current).
+ * onchange     - A function that receives onchange(tabId, current).
  */
 export default function TabState(initialState, onchange) {
   const self = this;
@@ -48,7 +49,7 @@ export default function TabState(initialState, onchange) {
 
   /**
    * @typedef BadgeRequest - this object is used to cancel a pending badge request
-   * @prop {function} cancel - cancellation function to abort pending request
+   * @prop {function} cancel - cancelation function to abort pending request
    * @prop {number} waitMs - the current waiting time after which the request will be invoked
    */
 
@@ -168,7 +169,7 @@ export default function TabState(initialState, onchange) {
 
     pendingRequest?.cancel();
 
-    const debouncedFetch = new Promise(resolve => {
+    const debouncedFetch = new Promise((resolve, reject) => {
       const timerId = setTimeout(async () => {
         let count;
         try {
@@ -183,14 +184,22 @@ export default function TabState(initialState, onchange) {
       pendingAnnotationCountRequests.set(tabId, {
         cancel: () => {
           clearTimeout(timerId);
-          resolve(0);
+          reject(new RequestCanceledError('Badge request canceled'));
         },
         waitMs: wait * 2,
       });
     });
 
-    const annotationCount = await debouncedFetch;
-    this.setState(tabId, { annotationCount });
+    try {
+      const annotationCount = await debouncedFetch;
+      this.setState(tabId, { annotationCount });
+    } catch (error) {
+      if (error instanceof RequestCanceledError) {
+        // Do nothing
+        return;
+      }
+      throw error;
+    }
   };
 
   this.load(initialState || {});

@@ -165,7 +165,7 @@ describe('TabState', () => {
       assert.equal(tabState.getState(1).annotationCount, testValue);
     });
 
-    it(`resolves last request after a maximum of ${MAX_WAIT_MS}ms when several requests are made in successsion to the service`, async () => {
+    it(`resolves last request after a maximum of ${MAX_WAIT_MS}ms when several requests are made in succession to the service`, async () => {
       const testValue = 42;
       getStub.resolves(testValue);
       const tabState = new TabState({ 1: { state: states.ACTIVE } });
@@ -180,20 +180,23 @@ describe('TabState', () => {
       await done;
       const end = Date.now();
 
-      // all pending requests are cancelled except the last one which is resolved in no more than MAX_WAIT_MS
+      // all pending requests are canceled except the last one which is resolved in no more than MAX_WAIT_MS
       assert.equal(end - start, MAX_WAIT_MS);
       assert.calledOnce(getStub);
       assert.equal(tabState.getState(1).annotationCount, testValue);
     });
 
     it('cancels the first query (during waiting stage) when the service is called two consecutive times for the same tab', async () => {
+      const initialValue = 33;
       const testValue = 42;
       getStub.resolves(testValue);
-      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+      const tabState = new TabState({
+        1: { state: states.ACTIVE, annotationCount: initialValue },
+      });
 
       const promise1 = tabState.updateAnnotationCount(1, 'foobar.com');
       const promise2 = tabState.updateAnnotationCount(1, 'foobar.com'); // promise 1 is still waiting when promise2 is called
-      assert.equal(tabState.getState(1).annotationCount, 0);
+      assert.equal(tabState.getState(1).annotationCount, initialValue);
       clock.tick(MAX_WAIT_MS);
 
       await promise1;
@@ -203,20 +206,22 @@ describe('TabState', () => {
     });
 
     it('cancels the first query (during the fetch stage) when the service is called two consecutive times for the same tab', async () => {
+      const initialValue = 33;
       const testValue = 42;
 
-      // Takes 2000ms to return a response
-      const WAIT_FETCH = 2000;
+      const WAIT_FETCH = 2000; // Takes 2000ms to return a response
       getStub.returns(
         new Promise(resolve => setTimeout(() => resolve(testValue), WAIT_FETCH))
       );
 
-      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+      const tabState = new TabState({
+        1: { state: states.ACTIVE, annotationCount: initialValue },
+      });
 
       const promise1 = tabState.updateAnnotationCount(1, 'foobar.com');
       clock.tick(INITIAL_WAIT_MS); // promise1 finished waiting and it is fetching the request
       const promise2 = tabState.updateAnnotationCount(1, 'foobar.com');
-      assert.equal(tabState.getState(1).annotationCount, 0);
+      assert.equal(tabState.getState(1).annotationCount, initialValue);
       clock.tick(MAX_WAIT_MS + WAIT_FETCH);
 
       await promise1;
@@ -249,7 +254,7 @@ describe('TabState', () => {
       getStub.rejects('some error condition');
 
       const tabState = new TabState({
-        1: { state: states.ACTIVE },
+        1: { state: states.ACTIVE, annotationCount: 33 },
       });
 
       const promise = tabState.updateAnnotationCount(1, 'foobar.com');
