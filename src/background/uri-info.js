@@ -1,4 +1,5 @@
 import settings from './settings';
+import { BadgeUriError } from './errors';
 
 const ALLOWED_PROTOCOLS = new Set(['http:', 'https:']);
 
@@ -16,30 +17,33 @@ function encodeUriQuery(val) {
 }
 
 /**
- * Based on the request protocol and hostname decide if the URL should be sent to the "badge"
- * request endpoint.
+ * Returns a normalized version of URI for use in badge requests, or throws BadgeUrlError
+ * if badge requests cannot be made for the given URL
+ *
+ * The normalization consist on (1) adding a final '/' at the end of the URL and
+ * (2) removing the fragment from the URL. The URL fragment can be ignored as it
+ *  will result the same badge count.
+ *
+ *  In addition, this normalization facilitates the identification of unique URLs.
  *
  * @param {string} uri
- * @return {boolean} - false if the URL should not be sent to the "badge" request endpoint
+ * @return {string} - URL without fragment
+ * @throws Will throw if URL is invalid or should not be sent to the 'badge' request endpoint
  */
-function shouldQueryUri(uri) {
-  let url;
-
-  try {
-    url = new URL(uri);
-  } catch (e) {
-    return false;
-  }
+export function uriForBadgeRequest(uri) {
+  const url = new URL(uri);
 
   if (!ALLOWED_PROTOCOLS.has(url.protocol)) {
-    return false;
+    throw new BadgeUriError('Blocked protocol');
   }
 
   if (BLOCKED_HOSTNAMES.has(url.hostname)) {
-    return false;
+    throw new BadgeUriError('Blocked hostname');
   }
 
-  return true;
+  url.hash = '';
+
+  return url.toString();
 }
 
 /**
@@ -47,8 +51,9 @@ function shouldQueryUri(uri) {
  * statistics about the annotations for a given URL.
  *
  * @return {Promise<number>}
+ * @throws Will throw a variety of errors: network, json parsing, or wrong format errors.
  */
-async function query(uri) {
+export async function fetchAnnotationCount(uri) {
   const response = await fetch(
     settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri),
     {
@@ -63,19 +68,4 @@ async function query(uri) {
   }
 
   throw new Error('Unable to parse badge response');
-}
-
-/**
- * Retrieve the count of available annotations for `uri`
- *
- * @return {Promise<number>} - Annotation count for `uri`. Will be 0 if URI
- *                             has a blocklist match.
- * @throws Will throw a variety of errors: network, json parsing, or wrong format errors.
- */
-export function getAnnotationCount(uri) {
-  if (!shouldQueryUri(uri)) {
-    return Promise.resolve(0);
-  }
-
-  return query(uri);
 }
