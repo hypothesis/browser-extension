@@ -1,8 +1,15 @@
 'use strict';
 
+/**
+ * Return the checkbox that toggles whether badge requests are sent.
+ */
+function badgeCheckbox() {
+  return /** @type {HTMLInputElement} */ (document.getElementById('badge'));
+}
+
 function saveOptions() {
   chrome.storage.sync.set({
-    badge: document.getElementById('badge').checked,
+    badge: badgeCheckbox().checked,
   });
 }
 
@@ -12,10 +19,10 @@ function loadOptions() {
       badge: true,
     },
     function (items) {
-      document.getElementById('badge').checked = items.badge;
+      badgeCheckbox().checked = items.badge;
     }
   );
 }
 
 document.addEventListener('DOMContentLoaded', loadOptions);
-document.getElementById('badge').addEventListener('click', saveOptions);
+badgeCheckbox().addEventListener('click', saveOptions);

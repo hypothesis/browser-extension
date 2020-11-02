@@ -143,7 +143,7 @@ export default function TabState(initialState, onchange) {
    * Request the current annotation count for the tab's URL
    *
    * @method
-   * @param {integer} tabId The id of the tab.
+   * @param {number} tabId The id of the tab.
    * @param {string} tabUrl The URL of the tab.
    */
   this.updateAnnotationCount = function (tabId, tabUrl) {
