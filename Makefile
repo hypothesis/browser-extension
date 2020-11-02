@@ -76,6 +76,7 @@ dist/%.zip dist/%.xpi: extension
 .PHONY: lint
 lint:
 	$(ESLINT) .
+	yarn typecheck
 
 .PHONY: checkformatting
 checkformatting:
