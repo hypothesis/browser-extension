@@ -46,7 +46,7 @@ export default function HelpPage(chromeTabs, extensionURL, browserName_) {
    * Open a tab displaying the help page.
    *
    * @param {string} helpSection - ID of a <section> within the help page.
-   * @param {tabs.Tab} tab - The tab where the error occurred.
+   * @param {chrome.tabs.Tab} tab - The tab where the error occurred.
    * @param {Error} error - The error which prompted the help page.
    */
   function showHelpPage(helpSection, tab, error) {

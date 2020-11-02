@@ -81,7 +81,7 @@ export default function SidebarInjector(chromeTabs, dependencies) {
   /**
    * Injects the Hypothesis sidebar into the tab provided.
    *
-   * @param {Tab} tab - A tab object representing the tab to insert the sidebar
+   * @param {chrome.tabs.Tab} tab - A tab object representing the tab to insert the sidebar
    *        into.
    * @param {Object?} config - An object containing configuration info that
    *        is passed to the app when it loads.

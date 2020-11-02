@@ -16,7 +16,9 @@ document.head.appendChild(configScript);
 // Listen for `webviewerloaded` event to configure the viewer after its files
 // have been loaded but before it is initialized.
 document.addEventListener('webviewerloaded', () => {
+  // @ts-expect-error - PDFViewerApplicationOptions is missing from types.
   const appOptions = window.PDFViewerApplicationOptions;
+  // @ts-expect-error - PDFViewerApplication is missing from types.
   const app = window.PDFViewerApplication;
 
   // Ensure that PDF.js viewer events such as "documentloaded" are dispatched

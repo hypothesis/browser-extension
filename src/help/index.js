@@ -26,6 +26,8 @@ chrome.runtime.getPlatformInfo(function (info) {
 
 const query = parseQuery(window.location.search);
 if (query.message) {
-  const errorTextEl = document.querySelector('.js-error-message');
+  const errorTextEl = /** @type {HTMLElement} */ (document.querySelector(
+    '.js-error-message'
+  ));
   errorTextEl.textContent = query.message;
 }

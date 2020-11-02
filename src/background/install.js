@@ -16,9 +16,10 @@ export function init() {
     },
   });
 
-  browserExtension.listen(window);
+  browserExtension.listen();
 }
 
+// @ts-expect-error - `isFakeChrome` is missing from types.
 if (!chrome.isFakeChrome) {
   init();
 }
