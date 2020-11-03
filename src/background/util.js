@@ -27,6 +27,7 @@ export function promisify(fn) {
     const args = [].slice.call(arguments);
     const result = new Promise(function (resolve, reject) {
       fn.apply(
+        // @ts-ignore - `this` is implicitly `any`
         this,
         args.concat(function (result) {
           const lastError = getLastError();

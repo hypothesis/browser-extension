@@ -16,8 +16,10 @@ function parseQuery(query) {
 
 // Detect the current OS and show approprite help.
 chrome.runtime.getPlatformInfo(function (info) {
-  const opts = document.querySelectorAll('[data-extension-path]');
-  [].forEach.call(opts, function (opt) {
+  const opts = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll(
+    '[data-extension-path]'
+  ));
+  opts.forEach(opt => {
     if (opt.dataset.extensionPath !== info.os) {
       opt.hidden = true;
     }
