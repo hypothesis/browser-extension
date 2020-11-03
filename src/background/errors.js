@@ -1,46 +1,16 @@
 import * as raven from './raven';
 
-export function ExtensionError(message) {
-  Error.apply(this, [message]);
-  this.message = message;
-}
+export class ExtensionError extends Error {}
 
-ExtensionError.prototype = Object.create(Error.prototype);
+export class LocalFileError extends ExtensionError {}
 
-export function LocalFileError(message) {
-  Error.apply(this, [message]);
-  this.message = message;
-}
+export class NoFileAccessError extends ExtensionError {}
 
-LocalFileError.prototype = Object.create(ExtensionError.prototype);
+export class RestrictedProtocolError extends ExtensionError {}
 
-export function NoFileAccessError(message) {
-  Error.apply(this, [message]);
-  this.message = message;
-}
+export class BlockedSiteError extends ExtensionError {}
 
-NoFileAccessError.prototype = Object.create(ExtensionError.prototype);
-
-export function RestrictedProtocolError(message) {
-  Error.apply(this, [message]);
-  this.message = message;
-}
-
-RestrictedProtocolError.prototype = Object.create(ExtensionError.prototype);
-
-export function BlockedSiteError(message) {
-  Error.apply(this, [message]);
-  this.message = message;
-}
-
-BlockedSiteError.prototype = Object.create(ExtensionError.prototype);
-
-export function AlreadyInjectedError(message) {
-  Error.apply(this, [message]);
-  this.message = message;
-}
-
-AlreadyInjectedError.prototype = Object.create(ExtensionError.prototype);
+export class AlreadyInjectedError extends ExtensionError {}
 
 /**
  * Returns true if `err` is a recognized 'expected' error.
