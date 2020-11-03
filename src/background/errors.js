@@ -1,42 +1,42 @@
 import * as raven from './raven';
 
 export function ExtensionError(message) {
-  Error.apply(this, arguments);
+  Error.apply(this, [message]);
   this.message = message;
 }
 
 ExtensionError.prototype = Object.create(Error.prototype);
 
 export function LocalFileError(message) {
-  Error.apply(this, arguments);
+  Error.apply(this, [message]);
   this.message = message;
 }
 
 LocalFileError.prototype = Object.create(ExtensionError.prototype);
 
 export function NoFileAccessError(message) {
-  Error.apply(this, arguments);
+  Error.apply(this, [message]);
   this.message = message;
 }
 
 NoFileAccessError.prototype = Object.create(ExtensionError.prototype);
 
 export function RestrictedProtocolError(message) {
-  Error.apply(this, arguments);
+  Error.apply(this, [message]);
   this.message = message;
 }
 
 RestrictedProtocolError.prototype = Object.create(ExtensionError.prototype);
 
 export function BlockedSiteError(message) {
-  Error.apply(this, arguments);
+  Error.apply(this, [message]);
   this.message = message;
 }
 
 BlockedSiteError.prototype = Object.create(ExtensionError.prototype);
 
 export function AlreadyInjectedError(message) {
-  Error.apply(this, arguments);
+  Error.apply(this, [message]);
   this.message = message;
 }
 
