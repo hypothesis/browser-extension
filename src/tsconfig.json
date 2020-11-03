@@ -3,8 +3,6 @@
     "allowJs": true,
     "checkJs": true,
     "lib": ["es2018", "dom"],
-    "jsx": "react",
-    "jsxFactory": "createElement",
     "module": "commonjs",
     "noEmit": true,
     "strict": true,
