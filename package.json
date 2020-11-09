@@ -16,7 +16,7 @@
     "browserify": "^16.5.2",
     "chai": "^4.2.0",
     "chrome-webstore-upload-cli": "^1.2.0",
-    "diff": "^4.0.2",
+    "diff": "^5.0.0",
     "eslint": "^7.13.0",
     "eslint-config-hypothesis": "^2.4.0",
     "eslint-plugin-mocha": "^8.0.0",
