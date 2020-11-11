@@ -1,8 +1,6 @@
 import TabState, { $imports } from '../../src/background/tab-state';
 
 describe('TabState', () => {
-  const states = TabState.states;
-
   let state;
   let onChange;
 
@@ -10,7 +8,7 @@ describe('TabState', () => {
     onChange = sinon.spy();
     state = new TabState(
       {
-        1: { state: states.ACTIVE },
+        1: { state: 'active' },
       },
       onChange
     );
@@ -32,7 +30,7 @@ describe('TabState', () => {
 
   describe('#load', () => {
     it('replaces the current tab states with a new object', () => {
-      state.load({ 2: { state: states.INACTIVE } });
+      state.load({ 2: { state: 'inactive' } });
       // `load` (re)sets all tabs to their default state, which is inactive
       assert.equal(state.isTabActive(1), false);
       assert.equal(state.isTabInactive(2), true);
@@ -47,7 +45,7 @@ describe('TabState', () => {
 
     it('triggers an onchange handler', () => {
       state.activateTab(2);
-      assert.calledWith(onChange, 2, sinon.match({ state: states.ACTIVE }));
+      assert.calledWith(onChange, 2, sinon.match({ state: 'active' }));
     });
   });
 
@@ -59,7 +57,7 @@ describe('TabState', () => {
 
     it('triggers an onchange handler', () => {
       state.deactivateTab(2);
-      assert.calledWith(onChange, 2, sinon.match({ state: states.INACTIVE }));
+      assert.calledWith(onChange, 2, sinon.match({ state: 'inactive' }));
     });
   });
 
@@ -71,7 +69,7 @@ describe('TabState', () => {
 
     it('triggers an onchange handler', () => {
       state.errorTab(2);
-      assert.calledWith(onChange, 2, sinon.match({ state: states.ERRORED }));
+      assert.calledWith(onChange, 2, sinon.match({ state: 'errored' }));
     });
   });
 
@@ -126,7 +124,7 @@ describe('TabState', () => {
     it('clears the error when not errored', () => {
       state.errorTab(1, new Error('Some error'));
       assert.ok(state.getState(1).error instanceof Error);
-      state.setState(1, { state: states.INACTIVE });
+      state.setState(1, { state: 'inactive' });
       assert.notOk(state.getState(1).error);
     });
   });
@@ -160,7 +158,7 @@ describe('TabState', () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
       uriForBadgeRequestStub.throws('any error');
-      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+      const tabState = new TabState({ 1: { state: 'active' } });
 
       const promise = tabState.updateAnnotationCount(1, 'invalidOrblocked');
       clock.tick(INITIAL_WAIT_MS);
@@ -176,8 +174,8 @@ describe('TabState', () => {
       fetchAnnotationCountStub.onCall(0).resolves(firstValue);
       fetchAnnotationCountStub.onCall(1).resolves(secondValue);
       const tabState = new TabState({
-        1: { state: states.ACTIVE },
-        2: { state: states.ACTIVE },
+        1: { state: 'active' },
+        2: { state: 'active' },
       });
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
@@ -217,8 +215,8 @@ describe('TabState', () => {
       );
 
       const tabState = new TabState({
-        1: { state: states.ACTIVE },
-        2: { state: states.ACTIVE },
+        1: { state: 'active' },
+        2: { state: 'active' },
       });
 
       // This is the scenario:
@@ -251,7 +249,7 @@ describe('TabState', () => {
     it(`queries the service and sets the annotation count after waiting for a period of ${INITIAL_WAIT_MS}ms`, async () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
-      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+      const tabState = new TabState({ 1: { state: 'active' } });
 
       const promise = tabState.updateAnnotationCount(1, 'http://foobar.com');
       clock.tick(INITIAL_WAIT_MS);
@@ -264,7 +262,7 @@ describe('TabState', () => {
     it(`resolves last request after a maximum of ${MAX_WAIT_MS}ms when several requests are made in succession to the service`, async () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
-      const tabState = new TabState({ 1: { state: states.ACTIVE } });
+      const tabState = new TabState({ 1: { state: 'active' } });
 
       // Simulate several URL changes in rapid succession
       const start = Date.now();
@@ -287,7 +285,7 @@ describe('TabState', () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
       const tabState = new TabState({
-        1: { state: states.ACTIVE, annotationCount: initialValue },
+        1: { state: 'active', annotationCount: initialValue },
       });
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
@@ -311,7 +309,7 @@ describe('TabState', () => {
       );
 
       const tabState = new TabState({
-        1: { state: states.ACTIVE, annotationCount: initialValue },
+        1: { state: 'active', annotationCount: initialValue },
       });
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
@@ -331,8 +329,8 @@ describe('TabState', () => {
       fetchAnnotationCountStub.resolves(testValue);
 
       const tabState = new TabState({
-        1: { state: states.ACTIVE },
-        2: { state: states.ACTIVE },
+        1: { state: 'active' },
+        2: { state: 'active' },
       });
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
@@ -350,7 +348,7 @@ describe('TabState', () => {
       fetchAnnotationCountStub.rejects('some error condition');
 
       const tabState = new TabState({
-        1: { state: states.ACTIVE, annotationCount: 33 },
+        1: { state: 'active', annotationCount: 33 },
       });
 
       const promise = tabState.updateAnnotationCount(1, 'http://foobar.com');

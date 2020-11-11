@@ -3,48 +3,61 @@ import { RequestCanceledError } from './errors';
 
 import * as uriInfo from './uri-info';
 
-const states = {
-  ACTIVE: 'active',
-  INACTIVE: 'inactive',
-  ERRORED: 'errored',
-};
+/**
+ * @typedef {import('./direct-link-query').Query} Query
+ */
 
-/** The default H state for a new browser tab */
+/**
+ * Hypothesis-related state for a specific tab.
+ *
+ * This should really be named `TabState` but that will conflict with the
+ * `TabState` class below. That class needs to be renamed first.
+ *
+ * @typedef State
+ * @prop {'active'|'inactive'|'errored'} state - Whether or not H is active on the page
+ * @prop {number} annotationCount -
+ *   The count of annotations on the page visible to the user, as returned by
+ *   the badge API
+ * @prop {boolean} extensionSidebarInstalled - Has the client been loaded into this tab?
+ * @prop {boolean} ready - Is the tab loaded and ready for the client to be loaded?
+ * @prop {Error} [error]
+ * @prop {Query} [directLinkQuery]
+ */
+
+/**
+ * The default H state for a new browser tab.
+ *
+ * @type {State}
+ */
 const DEFAULT_STATE = {
-  // Whether or not H is active on the page
-  state: states.INACTIVE,
-  // The count of annotations on the page visible to the user,
-  // as returned by the badge API
+  state: 'inactive',
   annotationCount: 0,
-  // Whether or not the H sidebar has been installed onto the page by
-  // the extension
   extensionSidebarInstalled: false,
-  // Whether the tab is loaded and ready for the sidebar to be installed.
   ready: false,
-  // The error for the current tab.
   error: undefined,
 };
 
-/** TabState stores the H state for a tab. This state includes:
+/**
+ * @typedef {{ [tabId: number]: State }} TabStateMap
+ */
+
+/**
+ * TabState stores the Hypothesis-related state for tabs in the current browser
+ * session.
  *
- * - Whether the extension has been activated on a tab
- * - Whether the sidebar is currently installed on a tab
- * - The count of annotations visible to the user on the URL currently
- *   displayed in the tab.
- *
- * The H state for a tab is updated via the setState() method and
- * retrieved via getState().
- *
- * When the H state for a tab changes, the `onchange()` callback will
- * be triggered with the tab ID and current and previous states.
- *
- * initialState - An Object of tabId/state keys. Used when loading state
- *   from a persisted store such as localStorage. This will be merged with
- *   the default state for a tab.
- * onchange     - A function that receives onchange(tabId, current).
+ * @param {TabStateMap} initialState - Initial state information for tabs, eg.
+ *   from a persistent store.
+ * @param {(tabId: number, current: undefined|State) => any} onchange -
+ *   Callback invoked when state for a tab changes
  */
 export default function TabState(initialState, onchange) {
   const self = this;
+
+  /**
+   * Current Hypothesis-related state for each tab.
+   *
+   * @type {TabStateMap}
+   */
   let currentState;
 
   /**
@@ -63,14 +76,15 @@ export default function TabState(initialState, onchange) {
 
   this.onchange = onchange || null;
 
-  /** Replaces the H state for all tabs with the state data
-   * from `newState`.
+  /**
+   * Replaces the H state for all tabs.
    *
-   * @param newState - A dictionary mapping tab ID to tab state objects.
+   * @param {TabStateMap} newState - A dictionary mapping tab ID to tab state objects.
    *                   The provided state will be merged with the default
    *                   state for a tab.
    */
   this.load = function (newState) {
+    /** @type {TabStateMap} */
     const newCurrentState = {};
     Object.keys(newState).forEach(function (tabId) {
       newCurrentState[tabId] = Object.assign(
@@ -82,26 +96,53 @@ export default function TabState(initialState, onchange) {
     currentState = newCurrentState;
   };
 
+  /**
+   * Mark a tab as having Hypothesis loaded in it.
+   *
+   * @param {number} tabId
+   */
   this.activateTab = function (tabId) {
-    this.setState(tabId, { state: states.ACTIVE });
+    this.setState(tabId, { state: 'active' });
   };
 
+  /**
+   * Mark a tab as not having Hypothesis loaded.
+   *
+   * @param {number} tabId
+   */
   this.deactivateTab = function (tabId) {
-    this.setState(tabId, { state: states.INACTIVE });
+    this.setState(tabId, { state: 'inactive' });
   };
 
+  /**
+   * Mark a tab as having encountered an error when trying to load Hypothesis into it.
+   *
+   * @param {number} tabId
+   * @param {Error} error
+   */
   this.errorTab = function (tabId, error) {
     this.setState(tabId, {
-      state: states.ERRORED,
+      state: 'errored',
       error: error,
     });
   };
 
+  /**
+   * Remove Hypothesis-related state about a given tab.
+   *
+   * @param {number} tabId
+   */
   this.clearTab = function (tabId) {
     this.setState(tabId, null);
     pendingAnnotationCountRequests.delete(tabId);
   };
 
+  /**
+   * Return the current Hypothesis-related state for a tab.
+   *
+   * @param {number} tabId
+   * @return {State}
+   */
   this.getState = function (tabId) {
     if (!currentState[tabId]) {
       return DEFAULT_STATE;
@@ -109,35 +150,54 @@ export default function TabState(initialState, onchange) {
     return currentState[tabId];
   };
 
+  /**
+   * Return the badge count for a given tab.
+   *
+   * @param {number} tabId
+   */
   this.annotationCount = function (tabId) {
     return this.getState(tabId).annotationCount;
   };
 
+  /**
+   * Return `true` if Hypothesis is loaded into a given tab.
+   *
+   * @param {number} tabId
+   */
   this.isTabActive = function (tabId) {
-    return this.getState(tabId).state === states.ACTIVE;
+    return this.getState(tabId).state === 'active';
   };
 
+  /**
+   * Return `true` if Hypothesis is not loaded in a given tab.
+   *
+   * @param {number} tabId
+   */
   this.isTabInactive = function (tabId) {
-    return this.getState(tabId).state === states.INACTIVE;
+    return this.getState(tabId).state === 'inactive';
   };
 
+  /**
+   * Return `true` if an error occurred while trying to load Hypothesis into a given tab.
+   *
+   * @param {number} tabId
+   */
   this.isTabErrored = function (tabId) {
-    return this.getState(tabId).state === states.ERRORED;
+    return this.getState(tabId).state === 'errored';
   };
 
   /**
    * Updates the H state for a tab.
    *
-   * @param tabId - The ID of the tab being updated
-   * @param stateUpdate - A dictionary of {key:value} properties for
-   *                      state properties to update or null if the
-   *                      state should be removed.
+   * @param {number} tabId - The ID of the tab being updated
+   * @param {Partial<State>|null} stateUpdate
    */
   this.setState = function (tabId, stateUpdate) {
+    /** @type {State|undefined} */
     let newState;
     if (stateUpdate) {
       newState = Object.assign({}, this.getState(tabId), stateUpdate);
-      if (newState.state !== states.ERRORED) {
+      if (newState.state !== 'errored') {
         newState.error = undefined;
       }
     }
@@ -146,7 +206,11 @@ export default function TabState(initialState, onchange) {
       return;
     }
 
-    currentState[tabId] = newState;
+    if (newState) {
+      currentState[tabId] = newState;
+    } else {
+      delete currentState[tabId];
+    }
 
     if (self.onchange) {
       self.onchange(tabId, newState);
@@ -156,7 +220,6 @@ export default function TabState(initialState, onchange) {
   /**
    * Request the current annotation count for the tab's URL.
    *
-   * @method
    * @param {number} tabId The id of the tab.
    * @param {string} tabUrl The URL of the tab.
    * @return {Promise<void>}
@@ -233,5 +296,3 @@ export default function TabState(initialState, onchange) {
 
   this.load(initialState || {});
 }
-
-TabState.states = states;

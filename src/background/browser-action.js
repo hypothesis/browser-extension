@@ -1,19 +1,16 @@
 import settings from './settings';
-import TabState from './tab-state';
-
-// Cache the tab state constants.
-const states = TabState.states;
 
 // Each button state has two icons one for normal resolution (19) and one
 // for hi-res screens (38).
-const icons = {};
-icons[states.ACTIVE] = {
-  19: 'images/browser-icon-active.png',
-  38: 'images/browser-icon-active@2x.png',
-};
-icons[states.INACTIVE] = {
-  19: 'images/browser-icon-inactive.png',
-  38: 'images/browser-icon-inactive@2x.png',
+const icons = {
+  active: {
+    19: 'images/browser-icon-active.png',
+    38: 'images/browser-icon-active@2x.png',
+  },
+  inactive: {
+    19: 'images/browser-icon-inactive.png',
+    38: 'images/browser-icon-inactive@2x.png',
+  },
 };
 
 // themes to apply to the toolbar icon badge depending on the type of
@@ -34,12 +31,15 @@ function _(str) {
   return str;
 }
 
-/* Controls the display of the browser action button setting the icon, title
+/**
+ * Controls the display of the browser action button setting the icon, title
  * and badges depending on the current state of the tab.
  *
  * BrowserAction is responsible for mapping the logical H state of
  * a tab (whether the extension is active, annotation count) to
  * the badge state.
+ *
+ * @param {chrome.browserAction} chromeBrowserAction
  */
 export default function BrowserAction(chromeBrowserAction) {
   const buildType = settings.buildType;
@@ -51,16 +51,16 @@ export default function BrowserAction(chromeBrowserAction) {
    * @param state - The H state of a tab. See the 'tab-state' module.
    */
   this.update = function (tabId, state) {
-    let activeIcon = icons[states.INACTIVE];
+    let activeIcon = icons.inactive;
     let title = '';
     let badgeText = '';
 
-    if (state.state === states.ACTIVE) {
-      activeIcon = icons[states.ACTIVE];
+    if (state.state === 'active') {
+      activeIcon = icons.active;
       title = 'Hypothesis is active';
-    } else if (state.state === states.INACTIVE) {
+    } else if (state.state === 'inactive') {
       title = 'Hypothesis is inactive';
-    } else if (state.state === states.ERRORED) {
+    } else if (state.state === 'errored') {
       title = 'Hypothesis failed to load';
       badgeText = '!';
     } else {
@@ -68,7 +68,7 @@ export default function BrowserAction(chromeBrowserAction) {
     }
 
     // display the annotation count on the badge
-    if (state.state !== states.ERRORED && state.annotationCount) {
+    if (state.state !== 'errored' && state.annotationCount) {
       let countLabel;
       let totalString = state.annotationCount.toString();
       if (state.annotationCount > 999) {

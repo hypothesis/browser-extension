@@ -2,7 +2,6 @@ import * as errors from '../../src/background/errors';
 import HypothesisChromeExtension, {
   $imports,
 } from '../../src/background/hypothesis-chrome-extension';
-import TabState from '../../src/background/tab-state';
 import { toResult } from '../promise-util';
 
 // Creates a constructor function which takes no arguments
@@ -23,10 +22,11 @@ function FakeListener() {
 
 /**
  * Return true if a tab state is valid
+ *
  * @param {TabState} state
  */
 function isValidState(state) {
-  return Object.values(TabState.states).indexOf(state.state) !== -1;
+  return ['active', 'inactive', 'errored'].includes(state.state);
 }
 
 describe('HypothesisChromeExtension', function () {
@@ -119,7 +119,6 @@ describe('HypothesisChromeExtension', function () {
       fakeTabState.onChangeHandler = onchange;
     }
     FakeTabState.prototype = fakeTabState;
-    FakeTabState.states = TabState.states;
 
     $imports.$mock({
       './tab-state': FakeTabState,
@@ -151,7 +150,7 @@ describe('HypothesisChromeExtension', function () {
       tabs = [];
       savedState = {
         1: {
-          state: TabState.states.ACTIVE,
+          state: 'active',
         },
       };
       tabs.push({ id: 1, url: 'http://example.com' });
@@ -229,7 +228,7 @@ describe('HypothesisChromeExtension', function () {
         const tabId = 1;
         tabState[tabId] = Object.assign(
           {
-            state: TabState.states.INACTIVE,
+            state: 'inactive',
             annotationCount: 0,
             ready: false,
           },
@@ -245,10 +244,10 @@ describe('HypothesisChromeExtension', function () {
       beforeEach(function () {
         fakeTabState.clearTab = sandbox.spy();
         fakeTabState.isTabActive = function (tabId) {
-          return tabState[tabId].state === TabState.states.ACTIVE;
+          return tabState[tabId].state === 'active';
         };
         fakeTabState.isTabErrored = function (tabId) {
-          return tabState[tabId].state === TabState.states.ERRORED;
+          return tabState[tabId].state === 'errored';
         };
         fakeTabState.getState = function (tabId) {
           return tabState[tabId];
@@ -261,14 +260,14 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('sets the tab state to ready when loading completes', function () {
-        const tab = createTab({ state: TabState.states.ACTIVE });
+        const tab = createTab({ state: 'active' });
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'complete' }, tab);
         assert.equal(tabState[tab.id].ready, true);
       });
 
       it('resets the tab state when loading', function () {
         const tab = createTab({
-          state: TabState.states.ACTIVE,
+          state: 'active',
           ready: true,
           extensionSidebarInstalled: true,
         });
@@ -278,9 +277,9 @@ describe('HypothesisChromeExtension', function () {
       });
 
       it('resets the tab state to active if errored', function () {
-        const tab = createTab({ state: TabState.states.ERRORED });
+        const tab = createTab({ state: 'errored' });
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
-        assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
+        assert.equal(tabState[tab.id].state, 'active');
       });
 
       [
@@ -297,7 +296,7 @@ describe('HypothesisChromeExtension', function () {
             { status: 'complete' },
             tab
           );
-          assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
+          assert.equal(tabState[tab.id].state, 'active');
         });
       });
 
@@ -312,7 +311,7 @@ describe('HypothesisChromeExtension', function () {
         tab.url = origURL + '#modified-fragment';
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'complete' }, tab);
-        assert.equal(tabState[tab.id].state, TabState.states.ACTIVE);
+        assert.equal(tabState[tab.id].state, 'active');
       });
 
       it('updates the badge count', function () {
@@ -358,23 +357,23 @@ describe('HypothesisChromeExtension', function () {
 
       it('preserves the active state of the previous tab', function () {
         fakeTabState.getState = sandbox.stub().returns({
-          state: TabState.states.ACTIVE,
+          state: 'active',
         });
         fakeChromeTabs.onReplaced.listener(1, 2);
         assert.calledWith(fakeTabState.clearTab, 2);
         assert.calledWith(fakeTabState.setState, 1, {
-          state: TabState.states.ACTIVE,
+          state: 'active',
           ready: true,
         });
       });
 
       it('reactivates errored tabs', function () {
         fakeTabState.getState = sandbox.stub().returns({
-          state: TabState.states.ERRORED,
+          state: 'errored',
         });
         fakeChromeTabs.onReplaced.listener(1, 2);
         assert.calledWith(fakeTabState.setState, 1, {
-          state: TabState.states.ACTIVE,
+          state: 'active',
           ready: true,
         });
       });
@@ -423,7 +422,7 @@ describe('HypothesisChromeExtension', function () {
     function triggerInstall() {
       const tab = { id: 1, url: 'file://foo.html', status: 'complete' };
       const tabState = {
-        state: TabState.states.ACTIVE,
+        state: 'active',
         extensionSidebarInstalled: false,
         ready: true,
       };
@@ -463,7 +462,7 @@ describe('HypothesisChromeExtension', function () {
           const tab = { id: 1, url: 'file://foo.html' };
 
           fakeTabState.getState.returns({
-            state: TabState.states.ERRORED,
+            state: 'errored',
             error: new ErrorType('msg'),
           });
           fakeTabState.isTabErrored.withArgs(1).returns(true);
@@ -513,8 +512,6 @@ describe('HypothesisChromeExtension', function () {
   });
 
   describe('TabState.onchange', function () {
-    const tabStates = TabState.states;
-
     let onChangeHandler;
     let tab;
 
@@ -543,47 +540,47 @@ describe('HypothesisChromeExtension', function () {
 
     it('updates the browser icon', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.ACTIVE,
+        state: 'active',
       });
-      onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
+      onTabStateChange('active', 'inactive');
       assert.calledWith(fakeBrowserAction.update, 1, {
-        state: tabStates.ACTIVE,
+        state: 'active',
       });
     });
 
     it('updates the TabStore if the tab has not errored', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.ACTIVE,
+        state: 'active',
       });
-      onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
+      onTabStateChange('active', 'inactive');
       assert.calledWith(fakeTabStore.set, 1, {
-        state: tabStates.ACTIVE,
+        state: 'active',
       });
     });
 
     it('does not update the TabStore if the tab has errored', function () {
       fakeTabState.isTabErrored.returns(true);
-      onTabStateChange(tabStates.ERRORED, tabStates.INACTIVE);
+      onTabStateChange('errored', 'inactive');
       assert.notCalled(fakeTabStore.set);
     });
 
     it('injects the sidebar if the tab has been activated', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.ACTIVE,
+        state: 'active',
         ready: true,
       });
       fakeTabState.isTabActive.returns(true);
-      onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
+      onTabStateChange('active', 'inactive');
       assert.calledWith(fakeSidebarInjector.injectIntoTab, tab);
     });
 
     it('configures the client to load assets from the extension', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.ACTIVE,
+        state: 'active',
         ready: true,
       });
       fakeTabState.isTabActive.returns(true);
-      onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
+      onTabStateChange('active', 'inactive');
       assert.calledWith(fakeSidebarInjector.injectIntoTab, tab, {
         assetRoot: 'chrome://1234/client/',
         sidebarAppUrl: 'chrome://1234/client/app.html',
@@ -592,18 +589,18 @@ describe('HypothesisChromeExtension', function () {
 
     it('does not inject the sidebar if already installed', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.ACTIVE,
+        state: 'active',
         extensionSidebarInstalled: true,
         ready: true,
       });
       fakeTabState.isTabActive.returns(true);
-      onTabStateChange(tabStates.ACTIVE, tabStates.ACTIVE);
+      onTabStateChange('active', 'active');
       assert.notCalled(fakeSidebarInjector.injectIntoTab);
     });
 
     it('removes the sidebar if the tab has been deactivated', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.INACTIVE,
+        state: 'inactive',
         extensionSidebarInstalled: true,
         ready: true,
       });
@@ -612,41 +609,41 @@ describe('HypothesisChromeExtension', function () {
         id: 1,
         status: 'complete',
       });
-      onTabStateChange(tabStates.INACTIVE, tabStates.ACTIVE);
+      onTabStateChange('inactive', 'active');
       assert.calledWith(fakeSidebarInjector.removeFromTab, tab);
     });
 
     it('does not remove the sidebar if not installed', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.INACTIVE,
+        state: 'inactive',
         extensionSidebarInstalled: false,
         ready: true,
       });
       fakeTabState.isTabInactive.returns(true);
       fakeChromeTabs.get = sandbox.stub().yields({ id: 1, status: 'complete' });
-      onTabStateChange(tabStates.INACTIVE, tabStates.ACTIVE);
+      onTabStateChange('inactive', 'active');
       assert.notCalled(fakeSidebarInjector.removeFromTab);
     });
 
     it('does nothing with the sidebar if the tab is errored', function () {
       fakeTabState.isTabErrored.returns(true);
-      onTabStateChange(tabStates.ERRORED, tabStates.INACTIVE);
+      onTabStateChange('errored', 'inactive');
       assert.notCalled(fakeSidebarInjector.injectIntoTab);
       assert.notCalled(fakeSidebarInjector.removeFromTab);
     });
 
     it('does nothing if the tab is still loading', function () {
       fakeTabState.getState = sandbox.stub().returns({
-        state: tabStates.ACTIVE,
+        state: 'active',
         extensionSidebarInstalled: false,
         ready: false,
       });
-      onTabStateChange(tabStates.ACTIVE, tabStates.INACTIVE);
+      onTabStateChange('active', 'inactive');
       assert.notCalled(fakeSidebarInjector.injectIntoTab);
     });
 
     it('removes the tab from the store if the tab was closed', function () {
-      onTabStateChange(null, tabStates.INACTIVE);
+      onTabStateChange(null, 'inactive');
       assert.called(fakeTabStore.unset);
       assert.calledWith(fakeTabStore.unset);
     });

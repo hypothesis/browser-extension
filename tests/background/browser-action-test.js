@@ -1,5 +1,4 @@
 import BrowserAction, { $imports } from '../../src/background/browser-action';
-import TabState from '../../src/background/tab-state';
 
 describe('BrowserAction', function () {
   let action;
@@ -30,58 +29,49 @@ describe('BrowserAction', function () {
 
   describe('active state', function () {
     it('sets the active browser icon', function () {
-      action.update(1, { state: TabState.states.ACTIVE });
-      assert.equal(
-        fakeChromeBrowserAction.icon,
-        BrowserAction.icons[TabState.states.ACTIVE]
-      );
+      action.update(1, { state: 'active' });
+      assert.equal(fakeChromeBrowserAction.icon, BrowserAction.icons.active);
     });
 
     it('sets the title of the browser icon', function () {
-      action.update(1, { state: TabState.states.ACTIVE });
+      action.update(1, { state: 'active' });
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis is active');
     });
 
     it('does not set the title if there is badge text showing', function () {
       const state = {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 9,
       };
       action.update(1, state);
       const prevTitle = fakeChromeBrowserAction.title;
-      action.update(1, Object.assign(state, { state: TabState.states.ACTIVE }));
+      action.update(1, Object.assign(state, { state: 'active' }));
       assert.equal(fakeChromeBrowserAction.title, prevTitle);
     });
   });
 
   describe('inactive state', function () {
     it('sets the inactive browser icon and title', function () {
-      action.update(1, { state: TabState.states.INACTIVE });
-      assert.equal(
-        fakeChromeBrowserAction.icon,
-        BrowserAction.icons[TabState.states.INACTIVE]
-      );
+      action.update(1, { state: 'inactive' });
+      assert.equal(fakeChromeBrowserAction.icon, BrowserAction.icons.inactive);
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis is inactive');
     });
   });
 
   describe('error state', function () {
     it('sets the inactive browser icon', function () {
-      action.update(1, { state: TabState.states.ERRORED });
-      assert.equal(
-        fakeChromeBrowserAction.icon,
-        BrowserAction.icons[TabState.states.INACTIVE]
-      );
+      action.update(1, { state: 'errored' });
+      assert.equal(fakeChromeBrowserAction.icon, BrowserAction.icons.inactive);
     });
 
     it('sets the title of the browser icon', function () {
-      action.update(1, { state: TabState.states.ERRORED });
+      action.update(1, { state: 'errored' });
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis failed to load');
     });
 
     it('still sets the title even there is badge text showing', function () {
       action.update(1, {
-        state: TabState.states.ERRORED,
+        state: 'errored',
         annotationCount: 9,
       });
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis failed to load');
@@ -89,7 +79,7 @@ describe('BrowserAction', function () {
 
     it('shows a badge', function () {
       action.update(1, {
-        state: TabState.states.ERRORED,
+        state: 'errored',
       });
       assert.equal(fakeChromeBrowserAction.badgeText, '!');
     });
@@ -98,7 +88,7 @@ describe('BrowserAction', function () {
   describe('annotation counts', function () {
     it('sets the badge text', function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 23,
       });
       assert.equal(fakeChromeBrowserAction.badgeText, '23');
@@ -106,7 +96,7 @@ describe('BrowserAction', function () {
 
     it("sets the badge title when there's 1 annotation", function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 1,
       });
       assert.equal(
@@ -117,7 +107,7 @@ describe('BrowserAction', function () {
 
     it("sets the badge title when there's >1 annotation", function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 23,
       });
       assert.equal(
@@ -128,7 +118,7 @@ describe('BrowserAction', function () {
 
     it('does not set the badge text if there are 0 annotations', function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 0,
       });
       assert.equal(fakeChromeBrowserAction.badgeText, '');
@@ -136,7 +126,7 @@ describe('BrowserAction', function () {
 
     it('does not set the badge title if there are 0 annotations', function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 0,
       });
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis is inactive');
@@ -144,7 +134,7 @@ describe('BrowserAction', function () {
 
     it("truncates numbers greater than 999 to '999+'", function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 1001,
       });
       assert.equal(fakeChromeBrowserAction.badgeText, '999+');
@@ -174,7 +164,7 @@ describe('BrowserAction', function () {
 
     it('sets the text to QA when there are no annotations', function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 0,
       });
       assert.equal(fakeChromeBrowserAction.badgeText, 'QA');
@@ -182,7 +172,7 @@ describe('BrowserAction', function () {
 
     it('shows the annotation count when there are annotations', function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 3,
       });
       assert.equal(fakeChromeBrowserAction.badgeText, '3');
@@ -190,7 +180,7 @@ describe('BrowserAction', function () {
 
     it('sets the background color', function () {
       action.update(1, {
-        state: TabState.states.INACTIVE,
+        state: 'inactive',
         annotationCount: 0,
       });
       assert.equal(fakeChromeBrowserAction.badgeColor, '#EDA061');
