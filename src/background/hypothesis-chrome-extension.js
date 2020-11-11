@@ -113,8 +113,9 @@ export default function HypothesisChromeExtension({
     state.load(store.all());
     chromeTabs.query({}, function (tabs) {
       tabs.forEach(function (tab) {
-        const id = /** @type {number} */ (tab.id);
-        onTabStateChange(id, state.getState(id));
+        if (tab.id) {
+          onTabStateChange(tab.id, state.getState(tab.id));
+        }
       });
     });
   }
