@@ -10,7 +10,8 @@ import TabStore from './tab-store';
 const TAB_STATUS_LOADING = 'loading';
 const TAB_STATUS_COMPLETE = 'complete';
 
-/* The main extension application. This wires together all the smaller
+/**
+ * The main extension application. This wires together all the smaller
  * modules. The app listens to all new created/updated/removed tab events
  * and uses the TabState object to keep track of whether the sidebar is
  * active or inactive in the tab. The app also listens to click events on
@@ -31,24 +32,29 @@ const TAB_STATUS_COMPLETE = 'complete';
  * - https://developer.chrome.com/extensions/tabs
  * - https://developer.chrome.com/extensions/extension
  *
- * dependencies - An object to set up the application.
- *   chromeTabs: An instance of chrome.tabs.
- *   chromeBrowserAction: An instance of chrome.browserAction.
- *   extensionURL: chrome.extension.getURL.
- *   isAllowedFileSchemeAccess: chrome.extension.isAllowedFileSchemeAccess.
+ * @param {Object} services
+ * @param {chrome.tabs} services.chromeTabs
+ * @param {chrome.extension} services.chromeExtension
+ * @param {chrome.storage} services.chromeStorage
+ * @param {chrome.browserAction} services.chromeBrowserAction
+ * @param {(path: string) => string} services.extensionURL
+ * @param {(cb: (allowed: boolean) => void) => void} services.isAllowedFileSchemeAccess
  */
-export default function HypothesisChromeExtension(dependencies) {
-  const chromeTabs = dependencies.chromeTabs;
-  const chromeExtension = dependencies.chromeExtension;
-  const chromeStorage = dependencies.chromeStorage;
-  const chromeBrowserAction = dependencies.chromeBrowserAction;
-  const help = new HelpPage(chromeTabs, dependencies.extensionURL);
+export default function HypothesisChromeExtension({
+  chromeTabs,
+  chromeExtension,
+  chromeStorage,
+  chromeBrowserAction,
+  extensionURL,
+  isAllowedFileSchemeAccess,
+}) {
+  const help = new HelpPage(chromeTabs, extensionURL);
   const store = new TabStore(localStorage);
   const state = new TabState(store.all(), onTabStateChange);
   const browserAction = new BrowserAction(chromeBrowserAction);
   const sidebar = new SidebarInjector(chromeTabs, {
-    extensionURL: dependencies.extensionURL,
-    isAllowedFileSchemeAccess: dependencies.isAllowedFileSchemeAccess,
+    extensionURL,
+    isAllowedFileSchemeAccess,
   });
 
   restoreSavedTabState();
@@ -98,7 +104,7 @@ export default function HypothesisChromeExtension(dependencies) {
     }
 
     chromeTabs.create({ url: settings.serviceUrl + 'welcome' }, function (tab) {
-      state.activateTab(tab.id);
+      state.activateTab(/** @type {number} */ (tab.id));
     });
   };
 
@@ -107,7 +113,8 @@ export default function HypothesisChromeExtension(dependencies) {
     state.load(store.all());
     chromeTabs.query({}, function (tabs) {
       tabs.forEach(function (tab) {
-        onTabStateChange(tab.id, state.getState(tab.id));
+        const id = /** @type {number} */ (tab.id);
+        onTabStateChange(id, state.getState(id));
       });
     });
   }
@@ -145,10 +152,10 @@ export default function HypothesisChromeExtension(dependencies) {
    */
   function activeStateForNavigatedTab(tabId) {
     let activeState = state.getState(tabId).state;
-    if (activeState === TabState.states.ERRORED) {
+    if (activeState === 'errored') {
       // user had tried to activate H on the previous page but it failed,
       // retry on the new page
-      activeState = TabState.states.ACTIVE;
+      activeState = 'active';
     }
     return activeState;
   }
@@ -181,7 +188,7 @@ export default function HypothesisChromeExtension(dependencies) {
       const tabState = state.getState(tabId);
       let newActiveState = tabState.state;
       if (tabState.directLinkQuery) {
-        newActiveState = TabState.states.ACTIVE;
+        newActiveState = 'active';
       }
       state.setState(tabId, {
         ready: true,
@@ -254,7 +261,7 @@ export default function HypothesisChromeExtension(dependencies) {
         .catch(function (err) {
           if (err instanceof errors.AlreadyInjectedError) {
             state.setState(tab.id, {
-              state: TabState.states.INACTIVE,
+              state: 'inactive',
               extensionSidebarInstalled: false,
             });
             return;
