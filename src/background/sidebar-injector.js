@@ -48,24 +48,25 @@ function extractContentScriptResult(result) {
   }
 }
 
-/* The SidebarInjector is used to deploy and remove the Hypothesis sidebar
+/**
+ * The SidebarInjector is used to deploy and remove the Hypothesis sidebar
  * from tabs. It also deals with loading PDF documents into the PDF.js viewer
  * when applicable.
  *
- * chromeTabs - An instance of chrome.tabs.
- * dependencies - An object with additional helper methods.
- *   isAllowedFileSchemeAccess: A function that returns true if the user
+ * @param {chrome.tabs} chromeTabs
+ * @param {Object} services
+ * @param {(cb: (allowed: boolean) => void) => void} services.isAllowedFileSchemeAccess -
+ *   A function that returns true if the user
  *   can access resources over the file:// protocol. See:
  *   https://developer.chrome.com/extensions/extension#method-isAllowedFileSchemeAccess
- *   extensionURL: A function that receives a path and returns an absolute
+ * @param {(path: string) => string} services.extensionURL -
+ *   A function that receives a path and returns an absolute
  *   url. See: https://developer.chrome.com/extensions/extension#method-getURL
  */
-export default function SidebarInjector(chromeTabs, dependencies) {
-  dependencies = dependencies || {};
-
-  const isAllowedFileSchemeAccess = dependencies.isAllowedFileSchemeAccess;
-  const extensionURL = dependencies.extensionURL;
-
+export default function SidebarInjector(
+  chromeTabs,
+  { isAllowedFileSchemeAccess, extensionURL }
+) {
   const executeScriptFn = util.promisify(chromeTabs.executeScript);
 
   const PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
