@@ -9,10 +9,10 @@
  * In future this could also be extended to support extraction of the URLs
  * of content in embedded viewers where that differs from the tab's
  * main URL.
+ *
+ * @param {Document} document_ - Test seam
  */
-export default function detectContentType(document_) {
-  document_ = document_ || document;
-
+export default function detectContentType(document_ = document) {
   function detectChromePDFViewer() {
     // When viewing a PDF in Chrome, the viewer consists of a top-level
     // document with an <embed> tag, which in turn instantiates an inner HTML
