@@ -78,11 +78,12 @@ export default function BrowserAction(chromeBrowserAction) {
 
     // display the annotation count on the badge
     if (state.state !== 'errored' && state.annotationCount) {
-      let countLabel;
       let totalString = state.annotationCount.toString();
       if (state.annotationCount > 999) {
         totalString = '999+';
       }
+
+      let countLabel;
       if (state.annotationCount === 1) {
         countLabel = _("There's 1 annotation on this page");
       } else {
@@ -90,6 +91,7 @@ export default function BrowserAction(chromeBrowserAction) {
           'There are ' + totalString + ' annotations on this page'
         );
       }
+
       title = countLabel;
       badgeText = totalString;
     }
