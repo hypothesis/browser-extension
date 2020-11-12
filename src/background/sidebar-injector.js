@@ -71,14 +71,6 @@ export default function SidebarInjector(
 
   const PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
 
-  if (typeof extensionURL !== 'function') {
-    throw new TypeError('extensionURL must be a function');
-  }
-
-  if (typeof isAllowedFileSchemeAccess !== 'function') {
-    throw new TypeError('isAllowedFileSchemeAccess must be a function');
-  }
-
   /**
    * Injects the Hypothesis sidebar into the tab provided.
    *
