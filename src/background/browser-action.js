@@ -1,5 +1,9 @@
 import settings from './settings';
 
+/**
+ * @typedef {import('./tab-state').State} TabState
+ */
+
 // Each button state has two icons one for normal resolution (19) and one
 // for hi-res screens (38).
 const icons = {
@@ -48,23 +52,28 @@ export default function BrowserAction(chromeBrowserAction) {
    * Updates the state of the browser action to reflect the logical
    * H state of a tab.
    *
-   * @param state - The H state of a tab. See the 'tab-state' module.
+   * @param {number} tabId
+   * @param {TabState} state
    */
   this.update = function (tabId, state) {
-    let activeIcon = icons.inactive;
-    let title = '';
+    let activeIcon;
+    let title;
     let badgeText = '';
 
-    if (state.state === 'active') {
-      activeIcon = icons.active;
-      title = 'Hypothesis is active';
-    } else if (state.state === 'inactive') {
-      title = 'Hypothesis is inactive';
-    } else if (state.state === 'errored') {
-      title = 'Hypothesis failed to load';
-      badgeText = '!';
-    } else {
-      throw new Error('Unknown tab state');
+    switch (state.state) {
+      case 'active':
+        activeIcon = icons.active;
+        title = 'Hypothesis is active';
+        break;
+      case 'inactive':
+        activeIcon = icons.inactive;
+        title = 'Hypothesis is inactive';
+        break;
+      case 'errored':
+        activeIcon = icons.inactive;
+        title = 'Hypothesis failed to load';
+        badgeText = '!';
+        break;
     }
 
     // display the annotation count on the badge
