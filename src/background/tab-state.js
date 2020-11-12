@@ -47,12 +47,10 @@ const DEFAULT_STATE = {
  *
  * @param {TabStateMap} initialState - Initial state information for tabs, eg.
  *   from a persistent store.
- * @param {(tabId: number, current: undefined|State) => any} onchange -
+ * @param {(tabId: number, current: undefined|State) => any} [onchange] -
  *   Callback invoked when state for a tab changes
  */
 export default function TabState(initialState, onchange) {
-  const self = this;
-
   /**
    * Current Hypothesis-related state for each tab.
    *
@@ -74,7 +72,7 @@ export default function TabState(initialState, onchange) {
   /** @type {Map<string, number>} */
   const annotationCountCache = new Map();
 
-  this.onchange = onchange || null;
+  this.onchange = onchange;
 
   /**
    * Replaces the H state for all tabs.
@@ -212,8 +210,8 @@ export default function TabState(initialState, onchange) {
       delete currentState[tabId];
     }
 
-    if (self.onchange) {
-      self.onchange(tabId, newState);
+    if (this.onchange) {
+      this.onchange(tabId, newState);
     }
   };
 
