@@ -272,11 +272,56 @@ describe('HypothesisChromeExtension', function () {
       it('resets the tab state when loading', function () {
         const tab = createTab({
           state: 'active',
+          annotationCount: 8,
           ready: true,
           extensionSidebarInstalled: true,
         });
         fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
         assert.equal(tabState[tab.id].ready, false);
+        assert.equal(tabState[tab.id].annotationCount, 0);
+        assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
+      });
+
+      it('ignores consecutive `loading` events for the same URL and tab until the loading is completed', function () {
+        const tab = createTab({
+          state: 'active',
+          annotationCount: 8,
+          ready: true,
+          extensionSidebarInstalled: true,
+        });
+        fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
+        assert.equal(tabState[tab.id].ready, false);
+        assert.equal(tabState[tab.id].annotationCount, 0);
+        assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
+
+        tabState[tab.id].annotationCount = 5;
+        fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab); // ignored
+        assert.equal(tabState[tab.id].annotationCount, 5);
+
+        fakeChromeTabs.onUpdated.listener(tab.id, { status: 'complete' }, tab);
+        fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
+        assert.equal(tabState[tab.id].ready, false);
+        assert.equal(tabState[tab.id].annotationCount, 0);
+        assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
+      });
+
+      it('resets the tab state when loading a different URL (even when previous loading event did not complete)', function () {
+        const tab = createTab({
+          state: 'active',
+          annotationCount: 8,
+          ready: true,
+          extensionSidebarInstalled: true,
+        });
+        fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab);
+        assert.equal(tabState[tab.id].ready, false);
+        assert.equal(tabState[tab.id].annotationCount, 0);
+        assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
+
+        tabState[tab.id].annotationCount = 5;
+        tab.url += '#new-fragment';
+        fakeChromeTabs.onUpdated.listener(tab.id, { status: 'loading' }, tab); // not ignored, because url changed
+        assert.equal(tabState[tab.id].ready, false);
+        assert.equal(tabState[tab.id].annotationCount, 0);
         assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
       });
 
