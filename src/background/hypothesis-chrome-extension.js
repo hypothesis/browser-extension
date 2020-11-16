@@ -7,9 +7,6 @@ import SidebarInjector from './sidebar-injector';
 import TabState from './tab-state';
 import TabStore from './tab-store';
 
-const TAB_STATUS_LOADING = 'loading';
-const TAB_STATUS_COMPLETE = 'complete';
-
 /**
  * The main extension application. This wires together all the smaller
  * modules. The app listens to all new created/updated/removed tab events
@@ -56,6 +53,9 @@ export default function HypothesisChromeExtension({
     extensionURL,
     isAllowedFileSchemeAccess,
   });
+
+  /** @type {Map<number, string>} */
+  const currentlyLoadingUrl = new Map(); // keeps tracks of what URL each tab is loading
 
   restoreSavedTabState();
 
@@ -175,6 +175,10 @@ export default function HypothesisChromeExtension({
     return activeState;
   }
 
+  /**
+   * @param {number} tabId
+   * @param {string} url
+   */
   function resetTabState(tabId, url) {
     state.setState(tabId, {
       state: activeStateForNavigatedTab(tabId),
@@ -185,21 +189,32 @@ export default function HypothesisChromeExtension({
     updateAnnotationCountIfEnabled(tabId, url);
   }
 
-  // This function will be called multiple times as the tab reloads.
-  // https://developer.chrome.com/extensions/tabs#event-onUpdated
-  //
-  // 'changeInfo' contains details of what changed about the tab's status.
-  // Two important events are when the tab's `status` changes to `loading`
-  // when the user begins a new navigation and when the tab's status changes
-  // to `complete` after the user completes a navigation
-  function onTabUpdated(tabId, changeInfo, tab) {
-    if (changeInfo.status === TAB_STATUS_LOADING) {
-      resetTabState(tabId, tab.url);
-      const query = directLinkQuery(tab.url);
+  /**
+   * This function will be called multiple times as the tab reloads.
+   * https://developer.chrome.com/extensions/tabs#event-onUpdated
+   *
+   * 'changeInfo' contains details of what changed about the tab's status.
+   * Two important events are when the tab's `status` changes to `loading`
+   * when the user begins a new navigation and when the tab's status changes
+   * to `complete` after the user completes a navigation
+   *
+   * @param {number} tabId
+   * @param {chrome.tabs.TabChangeInfo} changeInfo
+   * @param {chrome.tabs.Tab} tab
+   */
+  function onTabUpdated(tabId, { status }, tab) {
+    // `url` property is included because manifest has the `tabs` permission
+    const url = /** @type {string} */ (tab.url);
+    const loadingUrl = currentlyLoadingUrl.get(tabId);
+    if (status === 'loading' && url !== loadingUrl) {
+      currentlyLoadingUrl.set(tabId, url);
+      resetTabState(tabId, url);
+      const query = directLinkQuery(url);
       if (query) {
-        state.setState(tab.id, { directLinkQuery: query });
+        state.setState(tabId, { directLinkQuery: query });
       }
-    } else if (changeInfo.status === TAB_STATUS_COMPLETE) {
+    } else if (status === 'complete') {
+      currentlyLoadingUrl.delete(tabId);
       const tabState = state.getState(tabId);
       let newActiveState = tabState.state;
       if (tabState.directLinkQuery) {
@@ -224,12 +239,20 @@ export default function HypothesisChromeExtension({
     });
   }
 
+  /** @param {chrome.tabs.Tab} tab */
   function onTabCreated(tab) {
     // Clear the state in case there is old, conflicting data in storage.
-    state.clearTab(tab.id);
+    if (tab.id) {
+      onTabRemoved(tab.id);
+    }
   }
 
+  /**
+   *
+   * @param {number} tabId
+   */
   function onTabRemoved(tabId) {
+    currentlyLoadingUrl.delete(tabId);
     state.clearTab(tabId);
   }
 
