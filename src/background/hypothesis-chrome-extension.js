@@ -120,14 +120,28 @@ export default function HypothesisChromeExtension({
     });
   }
 
+  /**
+   *
+   * @param {number} tabId
+   * @param {import('./tab-state').State|undefined} current
+   */
   function onTabStateChange(tabId, current) {
     if (current) {
-      browserAction.update(tabId, current);
-      chromeTabs.get(tabId, updateTabDocument);
+      chromeTabs.get(tabId, tab => {
+        // This error is raised if the tab doesn't exist.
+        if (chrome.runtime.lastError) {
+          state.clearTab(tabId);
+          return;
+        }
 
-      if (!state.isTabErrored(tabId)) {
-        store.set(tabId, current);
-      }
+        browserAction.update(tabId, current);
+
+        updateTabDocument(tab);
+
+        if (!state.isTabErrored(tabId)) {
+          store.set(tabId, current);
+        }
+      });
     } else {
       store.unset(tabId);
     }
@@ -219,23 +233,29 @@ export default function HypothesisChromeExtension({
     state.clearTab(tabId);
   }
 
-  // installs or uninstalls the sidebar from a tab when the H
-  // state for a tab changes
+  /**
+   * Installs or uninstalls the sidebar from a tab when the H
+   * state for a tab changes
+   *
+   * @param {chrome.tabs.Tab} tab
+   */
   function updateTabDocument(tab) {
+    const tabId = /** @type {number} */ (tab.id);
+
     // If the tab has not yet finished loading then just quietly return.
-    if (!state.getState(tab.id).ready) {
-      return Promise.resolve();
+    if (!state.getState(tabId).ready) {
+      return;
     }
 
-    const isInstalled = state.getState(tab.id).extensionSidebarInstalled;
-    if (state.isTabActive(tab.id) && !isInstalled) {
+    const isInstalled = state.getState(tabId).extensionSidebarInstalled;
+    if (state.isTabActive(tabId) && !isInstalled) {
       // optimistically set the state flag indicating that the sidebar
       // has been installed
-      state.setState(tab.id, {
+      state.setState(tabId, {
         extensionSidebarInstalled: true,
       });
 
-      const { directLinkQuery } = state.getState(tab.id);
+      const { directLinkQuery } = state.getState(tabId);
 
       const config = {
         // Configure client to load assets and sidebar app from extension.
@@ -253,15 +273,15 @@ export default function HypothesisChromeExtension({
       // that modify the URL fragment as they load. See commit 3143ca27e05d.
       Object.assign(config, directLinkQuery);
 
-      return sidebar
+      sidebar
         .injectIntoTab(tab, config)
         .then(function () {
           // Clear the direct link once H has been successfully injected
-          state.setState(tab.id, { directLinkQuery: undefined });
+          state.setState(tabId, { directLinkQuery: undefined });
         })
         .catch(function (err) {
           if (err instanceof errors.AlreadyInjectedError) {
-            state.setState(tab.id, {
+            state.setState(tabId, {
               state: 'inactive',
               extensionSidebarInstalled: false,
             });
@@ -272,16 +292,14 @@ export default function HypothesisChromeExtension({
               url: tab.url,
             });
           }
-          state.errorTab(tab.id, err);
+          state.errorTab(tabId, err);
         });
-    } else if (state.isTabInactive(tab.id) && isInstalled) {
-      return sidebar.removeFromTab(tab).then(function () {
-        state.setState(tab.id, {
+    } else if (state.isTabInactive(tabId) && isInstalled) {
+      sidebar.removeFromTab(tab).then(function () {
+        state.setState(tabId, {
           extensionSidebarInstalled: false,
         });
       });
-    } else {
-      return Promise.resolve();
     }
   }
 
@@ -292,12 +310,14 @@ export default function HypothesisChromeExtension({
       return;
     }
 
+    // If user disabled the badge count, this call to `sync.get` will
+    // return `{ badge: false}`
     chromeStorage.sync.get(
       {
-        badge: true,
+        badge: true, // the default value `true` is returned only if `badge` is not yet set.
       },
-      function (items) {
-        if (items.badge) {
+      ({ badge }) => {
+        if (badge) {
           state.updateAnnotationCount(tabId, url);
         }
       }
