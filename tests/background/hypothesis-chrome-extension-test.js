@@ -42,6 +42,7 @@ describe('HypothesisChromeExtension', function () {
   let fakeTabState;
   let fakeBrowserAction;
   let fakeSidebarInjector;
+  let chromeRuntime = { lastError: false };
 
   function createExt() {
     return new HypothesisChromeExtension({
@@ -55,6 +56,7 @@ describe('HypothesisChromeExtension', function () {
   }
 
   beforeEach(function () {
+    global.chrome = { runtime: chromeRuntime };
     fakeChromeStorage = {
       sync: {
         get: sandbox.stub().callsArgWith(1, { badge: true }),
@@ -140,6 +142,7 @@ describe('HypothesisChromeExtension', function () {
   afterEach(function () {
     sandbox.restore();
     $imports.$restore();
+    global.chrome = undefined;
   });
 
   describe('.install', function () {
@@ -166,6 +169,7 @@ describe('HypothesisChromeExtension', function () {
 
     it('applies the saved state to open tabs', function () {
       fakeTabState.getState = sandbox.stub().returns(savedState[1]);
+      fakeChromeTabs.get = sandbox.stub().yields({ id: 1 });
       ext.install();
       assert.calledWith(fakeBrowserAction.update, 1, savedState[1]);
     });
@@ -640,6 +644,17 @@ describe('HypothesisChromeExtension', function () {
       });
       onTabStateChange('active', 'inactive');
       assert.notCalled(fakeSidebarInjector.injectIntoTab);
+    });
+
+    it('clears the tab if there is a `chrome.runtime.lastError`', () => {
+      chromeRuntime.lastError = true;
+      fakeTabState.getState = sandbox.stub().returns({
+        state: 'active',
+        extensionSidebarInstalled: false,
+        ready: false,
+      });
+      onTabStateChange('active', 'inactive');
+      assert.called(fakeTabState.clearTab);
     });
 
     it('removes the tab from the store if the tab was closed', function () {
