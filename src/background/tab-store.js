@@ -36,16 +36,19 @@ export default function TabStore(storage) {
     return local;
   };
 
-  this.reload = function () {
+  /** @param {number[]} tabIds */
+  this.reload = tabIds => {
     try {
       local = {};
       const loaded = JSON.parse(storage.getItem(key));
-      Object.keys(loaded).forEach(key => (local[key] = loaded[key]));
-    } catch (e) {
-      local = null;
+      tabIds.forEach(tabId => {
+        const state = loaded[tabId];
+        if (state) {
+          local[tabId] = state;
+        }
+      });
+    } catch {
+      local = {};
     }
-    local = local || {};
   };
-
-  this.reload();
 }

@@ -14,16 +14,34 @@ describe('TabStore', function () {
       data: {},
     };
     store = new TabStore(fakeLocalStorage);
+
+    fakeLocalStorage.data.state = JSON.stringify({
+      1: { state: 'active' },
+    });
+    store.reload([1]);
+  });
+
+  describe('.reload', () => {
+    it('ignores tab information that are present in the storage but is not requested at reload', () => {
+      fakeLocalStorage.data.state = JSON.stringify({
+        1: { state: 'active', annotationCount: 3 },
+        3: { state: 'inactive', annotationCount: 3 },
+      });
+      store.reload([1, 10]);
+
+      assert.deepEqual(store.all(), {
+        1: { state: 'active', annotationCount: 3 },
+      });
+    });
+
+    it('returns empty object if an error is encountered while loading', () => {
+      fakeLocalStorage.data.state = 'not valid JSON';
+      store.reload([1]);
+      assert.deepEqual(store.all(), {});
+    });
   });
 
   describe('.get', function () {
-    beforeEach(function () {
-      fakeLocalStorage.data.state = JSON.stringify({
-        1: { state: 'active' },
-      });
-      store.reload();
-    });
-
     it('retrieves a key from the cache', function () {
       const value = store.get(1);
       assert.equal(value.state, 'active');
@@ -66,11 +84,6 @@ describe('TabStore', function () {
   });
 
   describe('.unset', function () {
-    beforeEach(function () {
-      fakeLocalStorage.data.state = JSON.stringify({ 1: 'active' });
-      store.reload();
-    });
-
     it('removes a property from the serialized object', function () {
       store.unset(1);
       assert.calledWith(fakeLocalStorage.setItem, 'state', '{}');
@@ -78,11 +91,6 @@ describe('TabStore', function () {
   });
 
   describe('.all', function () {
-    beforeEach(function () {
-      fakeLocalStorage.data.state = JSON.stringify({ 1: { state: 'active' } });
-      store.reload();
-    });
-
     it('returns all items as an Object', function () {
       const all = store.all();
       assert.deepEqual(all, { 1: { state: 'active' } });

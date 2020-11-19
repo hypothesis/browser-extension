@@ -109,21 +109,21 @@ export default function HypothesisChromeExtension({
   };
 
   function restoreSavedTabState() {
-    store.reload();
-    state.load(store.all());
     chromeTabs.query({}, function (tabs) {
-      tabs.forEach(function (tab) {
-        if (tab.id) {
-          onTabStateChange(tab.id, state.getState(tab.id));
-        }
+      const tabIds = tabs
+        .filter(tab => tab.id !== undefined)
+        .map(({ id }) => /** @type {number} */ (id));
+      store.reload(tabIds);
+      state.load(store.all());
+      tabIds.forEach(tabId => {
+        onTabStateChange(tabId, state.getState(tabId));
       });
     });
   }
 
   /**
-   *
    * @param {number} tabId
-   * @param {import('./tab-state').State|undefined} current
+   * @param {import('./tab-state').State | undefined} current
    */
   function onTabStateChange(tabId, current) {
     if (current) {
