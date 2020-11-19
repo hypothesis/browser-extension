@@ -632,6 +632,7 @@ describe('HypothesisChromeExtension', function () {
       onTabStateChange('active', 'inactive');
       assert.calledWith(fakeSidebarInjector.injectIntoTab, tab, {
         assetRoot: 'chrome://1234/client/',
+        notebookAppUrl: 'chrome://1234/client/notebook.html',
         sidebarAppUrl: 'chrome://1234/client/app.html',
       });
     });

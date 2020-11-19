@@ -287,6 +287,7 @@ export default function HypothesisChromeExtension({
         // load. See https://bugs.chromium.org/p/chromium/issues/detail?id=667533
         assetRoot: chromeExtension.getURL('/client/'),
         sidebarAppUrl: chromeExtension.getURL('/client/app.html'),
+        notebookAppUrl: chromeExtension.getURL('/client/notebook.html'),
       };
 
       // Pass the direct-link query as configuration into the client.
