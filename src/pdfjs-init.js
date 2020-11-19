@@ -5,6 +5,7 @@
 const clientConfig = {
   assetRoot: '/client/',
   sidebarAppUrl: '/client/app.html',
+  notebookAppUrl: '/client/notebook.html',
 };
 
 const configScript = document.createElement('script');
