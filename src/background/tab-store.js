@@ -5,56 +5,66 @@
  * for that to work however the storage key would need to be changed.
  * The tab ID is currently used but this is valid only for a browser session.
  */
-export default function TabStore(storage) {
-  const key = 'state';
-  let local;
 
-  this.get = function (tabId) {
-    const value = local[tabId];
+export default class TabStore {
+  static key = 'state';
+
+  /** @param {Storage} storage */
+  constructor(storage) {
+    /** @type{Record<number, any>} */
+    this.local = {};
+    this.storage = storage;
+    this.reload();
+  }
+
+  /** @param {number} tabId */
+  get(tabId) {
+    const value = this.local[tabId];
     if (!value) {
       throw new Error('TabStateStore could not find entry for tab: ' + tabId);
     }
-    return value;
-  };
+  }
 
-  this.set = function (tabId, value) {
+  /**
+   * @param {number} tabId
+   * @param {any} value
+   */
+  set(tabId, value) {
     // copy across only the parts of the tab state that should
     // be preserved
-    local[tabId] = {
+    this.local[tabId] = {
       state: value.state,
       annotationCount: value.annotationCount,
     };
-    storage.setItem(key, JSON.stringify(local));
-  };
+    this.storage.setItem(TabStore.key, JSON.stringify(this.local));
+  }
 
-  this.unset = function (tabId) {
-    delete local[tabId];
-    storage.setItem(key, JSON.stringify(local));
-  };
+  /** @param {number} tabId */
+  unset(tabId) {
+    delete this.local[tabId];
+    this.storage.setItem(TabStore.key, JSON.stringify(this.local));
+  }
 
-  this.all = function () {
-    return local;
-  };
+  all() {
+    return this.local;
+  }
 
-  this.reload = function () {
+  reload() {
     try {
-      local = {};
-      const loaded = JSON.parse(storage.getItem(key));
-      Object.keys(loaded).forEach(function (key) {
+      this.local = {};
+      const loaded = JSON.parse(this.storage.getItem(TabStore.key) || '{}');
+      Object.keys(loaded).forEach(key => {
         // ignore tab state saved by earlier versions of
         // the extension which saved the state as a {key: <state string>}
         // dict rather than {key: <state object>}
         if (typeof loaded[key] === 'string') {
-          local[key] = { state: loaded[key] };
+          this.local[key] = { state: loaded[key] };
         } else {
-          local[key] = loaded[key];
+          this.local[key] = loaded[key];
         }
       });
-    } catch (e) {
-      local = null;
+    } catch {
+      this.local = {};
     }
-    local = local || {};
-  };
-
-  this.reload();
+  }
 }
