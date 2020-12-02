@@ -6,7 +6,7 @@
  * version to be provided via the app's settings object.
  */
 
-import * as Raven from 'raven-js';
+import Raven from 'raven-js';
 
 /**
  * Returns the input URL if it is an HTTP URL or the filename part of the URL
