@@ -40,16 +40,7 @@ export default function TabStore(storage) {
     try {
       local = {};
       const loaded = JSON.parse(storage.getItem(key));
-      Object.keys(loaded).forEach(function (key) {
-        // ignore tab state saved by earlier versions of
-        // the extension which saved the state as a {key: <state string>}
-        // dict rather than {key: <state object>}
-        if (typeof loaded[key] === 'string') {
-          local[key] = { state: loaded[key] };
-        } else {
-          local[key] = loaded[key];
-        }
-      });
+      Object.keys(loaded).forEach(key => (local[key] = loaded[key]));
     } catch (e) {
       local = null;
     }
