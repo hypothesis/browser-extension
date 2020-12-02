@@ -34,14 +34,6 @@ describe('TabStore', function () {
         store.get(100);
       });
     });
-
-    it('converts state-string keys to objects', function () {
-      fakeLocalStorage.data.state = JSON.stringify({
-        1: 'active',
-      });
-      store.reload();
-      assert.deepEqual(store.get(1), { state: 'active' });
-    });
   });
 
   describe('.set', function () {
