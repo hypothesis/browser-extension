@@ -1,4 +1,8 @@
-import * as errors from '../../src/background/errors';
+import {
+  LocalFileError,
+  NoFileAccessError,
+  RestrictedProtocolError,
+} from '../../src/background/errors';
 import HypothesisChromeExtension, {
   $imports,
 } from '../../src/background/hypothesis-chrome-extension';
@@ -36,7 +40,6 @@ describe('HypothesisChromeExtension', function () {
   let fakeChromeStorage;
   let fakeChromeTabs;
   let fakeChromeBrowserAction;
-  let fakeErrors;
   let fakeHelpPage;
   let fakeTabStore;
   let fakeTabState;
@@ -109,13 +112,6 @@ describe('HypothesisChromeExtension', function () {
       injectIntoTab: sandbox.stub().returns(Promise.resolve()),
       removeFromTab: sandbox.stub().returns(Promise.resolve()),
     };
-    fakeErrors = {
-      AlreadyInjectedError: function AlreadyInjectedError() {},
-      shouldIgnoreInjectionError: function () {
-        return false;
-      },
-      report: sandbox.spy(),
-    };
 
     function FakeTabState(initialState, onchange) {
       fakeTabState.onChangeHandler = onchange;
@@ -128,7 +124,6 @@ describe('HypothesisChromeExtension', function () {
       './help-page': createConstructor(fakeHelpPage),
       './browser-action': createConstructor(fakeBrowserAction),
       './sidebar-injector': createConstructor(fakeSidebarInjector),
-      './errors': fakeErrors,
       './settings': {
         default: {
           serviceUrl: 'https://hypothes.is/',
@@ -488,9 +483,9 @@ describe('HypothesisChromeExtension', function () {
     });
 
     const injectErrorCases = [
-      errors.LocalFileError,
-      errors.NoFileAccessError,
-      errors.RestrictedProtocolError,
+      LocalFileError,
+      NoFileAccessError,
+      RestrictedProtocolError,
     ];
 
     injectErrorCases.forEach(function (ErrorType) {
@@ -523,38 +518,6 @@ describe('HypothesisChromeExtension', function () {
             tab,
             sinon.match.instanceOf(ErrorType)
           );
-        });
-
-        it('does not log known errors', function () {
-          const error = new Error('Some error');
-          fakeErrors.shouldIgnoreInjectionError = function () {
-            return true;
-          };
-          const injectError = Promise.reject(error);
-          fakeSidebarInjector.injectIntoTab.returns(injectError);
-
-          triggerInstall();
-
-          return toResult(injectError).then(function () {
-            assert.notCalled(fakeErrors.report);
-          });
-        });
-
-        it('logs unexpected errors', function () {
-          const error = new ErrorType('msg');
-          const injectError = Promise.reject(error);
-          fakeSidebarInjector.injectIntoTab.returns(injectError);
-
-          triggerInstall();
-
-          return toResult(injectError).then(function () {
-            assert.calledWith(
-              fakeErrors.report,
-              error,
-              'Injecting Hypothesis sidebar',
-              { url: 'file://foo.html' }
-            );
-          });
         });
       });
     });

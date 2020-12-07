@@ -48,5 +48,8 @@
     "test": "karma start tests/karma.config.js --single-run",
     "typecheck": "tsc --build src/tsconfig.json"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@sentry/browser": "^5.29.0",
+    "@sentry/tracing": "^5.29.0"
+  }
 }

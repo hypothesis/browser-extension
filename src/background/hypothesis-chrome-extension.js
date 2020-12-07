@@ -1,6 +1,6 @@
 import BrowserAction from './browser-action';
 import directLinkQuery from './direct-link-query';
-import * as errors from './errors';
+import { AlreadyInjectedError } from './errors';
 import HelpPage from './help-page';
 import settings from './settings';
 import SidebarInjector from './sidebar-injector';
@@ -302,18 +302,13 @@ export default function HypothesisChromeExtension({
           // Clear the direct link once H has been successfully injected
           state.setState(tabId, { directLinkQuery: undefined });
         })
-        .catch(function (err) {
-          if (err instanceof errors.AlreadyInjectedError) {
+        .catch(err => {
+          if (err instanceof AlreadyInjectedError) {
             state.setState(tabId, {
               state: 'inactive',
               extensionSidebarInstalled: false,
             });
             return;
-          }
-          if (!errors.shouldIgnoreInjectionError(err)) {
-            errors.report(err, 'Injecting Hypothesis sidebar', {
-              url: tab.url,
-            });
           }
           state.errorTab(tabId, err);
         });
