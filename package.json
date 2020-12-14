@@ -9,7 +9,7 @@
   "repository": "hypothesis/browser-extension",
   "devDependencies": {
     "@babel/core": "^7.12.10",
-    "@babel/preset-env": "^7.12.7",
+    "@babel/preset-env": "^7.12.10",
     "@types/chrome": "^0.0.127",
     "babel-plugin-mockable-imports": "^1.7.0",
     "babelify": "^10.0.0",
