@@ -13,7 +13,7 @@
     "@types/chrome": "^0.0.127",
     "babel-plugin-mockable-imports": "^1.7.0",
     "babelify": "^10.0.0",
-    "browserify": "^16.5.2",
+    "browserify": "^17.0.0",
     "chai": "^4.2.0",
     "chrome-webstore-upload-cli": "^1.2.0",
     "diff": "^5.0.0",
