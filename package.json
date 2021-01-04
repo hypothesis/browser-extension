@@ -20,7 +20,7 @@
     "eslint": "^7.17.0",
     "eslint-config-hypothesis": "^2.4.0",
     "eslint-plugin-mocha": "^8.0.0",
-    "eslint-plugin-react": "^7.21.5",
+    "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "exorcist": "^1.0.1",
     "git-describe": "^4.0.4",
