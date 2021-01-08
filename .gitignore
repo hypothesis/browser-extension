@@ -1,6 +1,7 @@
 build/
 dist/
 node_modules/
+coverage/
 
 # The client uses yarn rather than npm to manage the lockfile.
 package-lock.json

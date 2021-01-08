@@ -2,6 +2,8 @@
 
 /* global __dirname, process */
 
+const path = require('path');
+
 let chromeFlags = [];
 
 if (process.version.startsWith('v14.')) {
@@ -68,7 +70,20 @@ module.exports = function (config) {
           'babelify',
           {
             extensions: ['.js'],
-            plugins: [['mockable-imports', { excludeDirs: ['tests'] }]],
+            plugins: [
+              [
+                'mockable-imports',
+                {
+                  excludeDirs: ['tests'],
+                },
+              ],
+              [
+                'babel-plugin-istanbul',
+                {
+                  exclude: ['tests/**'],
+                },
+              ],
+            ],
 
             // Enable Babel to load configuration from the `.babelrc` file when
             // processing source files outside of the `tests/` directory.
@@ -86,9 +101,17 @@ module.exports = function (config) {
       output: 'minimal',
     },
 
+    coverageIstanbulReporter: {
+      dir: path.join(__dirname, '../coverage'),
+      reports: ['json', 'html'],
+      'report-config': {
+        json: { subdir: './' },
+      },
+    },
+
     // Use https://www.npmjs.com/package/karma-mocha-reporter
     // for more helpful rendering of test failures
-    reporters: ['mocha'],
+    reporters: ['mocha', 'coverage-istanbul'],
 
     // web server port
     port: 9877,
