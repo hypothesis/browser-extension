@@ -17,6 +17,7 @@ function toIIFEString(fn) {
  * Note that this function is stringified and injected into the page via a
  * content script, so it cannot reference any external variables.
  */
+/* istanbul ignore next */
 function addJSONScriptTagFn(name, content) {
   const scriptTag = document.createElement('script');
   scriptTag.className = name;
