@@ -12,6 +12,7 @@
  *
  * @param {Document} document_ - Test seam
  */
+/* istanbul ignore next */
 export default function detectContentType(document_ = document) {
   function detectChromePDFViewer() {
     // When viewing a PDF in Chrome, the viewer consists of a top-level
