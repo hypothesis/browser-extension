@@ -18,14 +18,14 @@ at the root of the repository:
 
 The extension build is configured by a JSON settings file, some examples of
 which are supplied in the `settings/` directory. To build the extension using
-the default settings file (`settings/chrome-dev.json`), run `make`:
+the default settings file (`settings/chrome-dev.json`), run `make build`:
 
-    $ make
+    $ make build
 
 To build the extension from a different settings file, provide a
-`SETTINGS_FILE` path to `make`:
+`SETTINGS_FILE` path to `make build`:
 
-    $ make SETTINGS_FILE=settings/chrome-prod.json
+    $ make build SETTINGS_FILE=settings/chrome-prod.json
 
 This, for example, will build a production extension: one that talks to the main
 <https://hypothes.is> web service.
@@ -37,7 +37,7 @@ This, for example, will build a production extension: one that talks to the main
 > based on `chrome-dev.json` to maintain your settings
 > (here called `custom.json`):
 >
->       $ make SETTINGS_FILE=settings/custom.json
+>       $ make build SETTINGS_FILE=settings/custom.json
 
 > These instructions assume you have the `h` service running locally already.
 > For instructions how to set up a client with your `h` server, see
@@ -57,7 +57,7 @@ This, for example, will build a production extension: one that talks to the main
 
 1. Set an `oauthClientId` property in your settings JSON. Its value should
    be the 32-character ID of this newly-created OAuthClient.
-1. Use `make` to build the extension against these settings.
+1. Use `make build` to build the extension against these settings.
 1. Load the built extension into Chrome and find its extension ID
    (see "Loading an extension..." below).
 1. Return to the OAuthClient you created above in `h` and update the Redirect

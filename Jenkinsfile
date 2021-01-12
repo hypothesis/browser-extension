@@ -91,16 +91,16 @@ node {
 
     stage('Test') {
         nodeEnv.inside("-e HOME=${workspace}") {
-          sh "make checkformatting lint test"
+          sh "make sure"
         }
     }
 
     stage('Build Packages') {
         nodeEnv.inside("-e HOME=${workspace}") {
-          sh "make SETTINGS_FILE=settings/chrome-qa.json dist/${gitVersion}-chrome-qa.zip"
-          sh "make SETTINGS_FILE=settings/chrome-prod.json dist/${gitVersion}-chrome-prod.zip"
-          sh "make SETTINGS_FILE=settings/firefox-qa.json dist/${gitVersion}-firefox-qa.xpi"
-          sh "make SETTINGS_FILE=settings/firefox-prod.json dist/${gitVersion}-firefox-prod.xpi"
+          sh "make build SETTINGS_FILE=settings/chrome-qa.json dist/${gitVersion}-chrome-qa.zip"
+          sh "make build SETTINGS_FILE=settings/chrome-prod.json dist/${gitVersion}-chrome-prod.zip"
+          sh "make build SETTINGS_FILE=settings/firefox-qa.json dist/${gitVersion}-firefox-qa.xpi"
+          sh "make build SETTINGS_FILE=settings/firefox-prod.json dist/${gitVersion}-firefox-prod.xpi"
         }
     }
 
