@@ -1,6 +1,5 @@
 # Hypothesis browser extension(s)
 
-[![Build status](https://img.shields.io/travis/hypothesis/browser-extension/master.svg)][travis]
 [![BSD licensed](https://img.shields.io/badge/license-BSD-blue.svg)][license]
 
 [travis]: https://travis-ci.org/hypothesis/browser-extension
