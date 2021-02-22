@@ -8,7 +8,7 @@
   "bugs": "https://github.com/hypothesis/browser-extension/issues",
   "repository": "hypothesis/browser-extension",
   "devDependencies": {
-    "@babel/core": "^7.12.16",
+    "@babel/core": "^7.12.17",
     "@babel/preset-env": "^7.12.16",
     "@types/chrome": "^0.0.130",
     "babel-plugin-istanbul": "^6.0.0",
