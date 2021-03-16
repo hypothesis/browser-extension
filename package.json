@@ -45,7 +45,7 @@
     "sinon": "^9.2.4",
     "typescript": "^4.2.3",
     "watchify": "^3.11.1",
-    "web-ext": "^5.5.0"
+    "web-ext": "^6.0.0"
   },
   "scripts": {
     "test": "karma start tests/karma.config.js --single-run",
