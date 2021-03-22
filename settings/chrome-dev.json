@@ -1,13 +1,18 @@
 {
   "buildType": "dev",
+  "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCq7XsXE/uakq4aKMG5Smz2nc8VSaandriziGorxX08py3mTkab79GpWYu7j/hA3Yf7fkCLQnX8QoZGj7WdaMX6+b+eHxF7vYpOhEW/Bam7TOlb+5AVmL1KReG9PPTLz4dp+xA4WfK2dqFM+XN40FTbm2G/SNk3GRP3gQOxgy3ZKwIDAQAB",
 
-  "apiUrl": "http://localhost:5000/api/",
-  "authDomain": "localhost",
-  "bouncerUrl": "http://localhost:8000/",
-  "serviceUrl": "http://localhost:5000/",
-  "websocketUrl": "ws://localhost:5001/ws",
 
-  "googleAnalytics": "UA-26026798-6",
+  "apiUrl": "https://hypothes.is/api/",
+  "authDomain": "hypothes.is",
+  "bouncerUrl": "https://hyp.is/",
+  "serviceUrl": "https://hypothes.is/",
+  "websocketUrl": "wss://hypothes.is/ws",
+
+  "oauthClientId": "fd23fe2e-7792-11e7-8e16-23e47a1799d4",
+
+  "sentryPublicDSN": "https://934d4f62912b47d8bb03c28ae6670cf8@app.getsentry.com/69811",
+  "googleAnalytics": "UA-26026798-5",
 
   "browserIsChrome": true,
   "appType": "chrome-extension"
