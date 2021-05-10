@@ -38,8 +38,8 @@ document.addEventListener('webviewerloaded', () => {
   // PDF itself will still be loading, and the client will wait for that to
   // complete before fetching annotations.
   //
-  const pdfjsInitialized = /** @type {Promise<void>} */ (new Promise(
-    resolve => {
+  const pdfjsInitialized = /** @type {Promise<void>} */ (
+    new Promise(resolve => {
       // Poll `app.initialized` as there doesn't appear to be an event that
       // we can listen to.
       const timer = setInterval(() => {
@@ -48,8 +48,8 @@ document.addEventListener('webviewerloaded', () => {
           resolve();
         }
       }, 20);
-    }
-  ));
+    })
+  );
 
   pdfjsInitialized.then(() => {
     const embedScript = document.createElement('script');

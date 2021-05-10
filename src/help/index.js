@@ -16,9 +16,9 @@ function parseQuery(query) {
 
 // Detect the current OS and show approprite help.
 chrome.runtime.getPlatformInfo(function (info) {
-  const opts = /** @type {NodeListOf<HTMLElement>} */ (document.querySelectorAll(
-    '[data-extension-path]'
-  ));
+  const opts = /** @type {NodeListOf<HTMLElement>} */ (
+    document.querySelectorAll('[data-extension-path]')
+  );
   opts.forEach(opt => {
     if (opt.dataset.extensionPath !== info.os) {
       opt.hidden = true;
@@ -28,8 +28,8 @@ chrome.runtime.getPlatformInfo(function (info) {
 
 const query = parseQuery(window.location.search);
 if (query.message) {
-  const errorTextEl = /** @type {HTMLElement} */ (document.querySelector(
-    '.js-error-message'
-  ));
+  const errorTextEl = /** @type {HTMLElement} */ (
+    document.querySelector('.js-error-message')
+  );
   errorTextEl.textContent = query.message;
 }
