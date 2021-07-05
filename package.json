@@ -43,7 +43,7 @@
     "query-string": "^3.0.1",
     "raven-js": "^3.27.2",
     "sinon": "^11.1.1",
-    "typescript": "^4.3.4",
+    "typescript": "^4.3.5",
     "watchify": "^3.11.1",
     "web-ext": "^6.2.0"
   },
