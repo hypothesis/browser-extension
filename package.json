@@ -1,6 +1,6 @@
 {
   "name": "hypothesis-browser-extension",
-  "version": "1.811.0",
+  "version": "1.812.0",
   "private": true,
   "description": "Annotate with anyone, anywhere.",
   "license": "BSD-2-Clause",
@@ -26,7 +26,7 @@
     "exorcist": "^2.0.0",
     "git-describe": "^4.0.4",
     "gulp": "^4.0.2",
-    "hypothesis": "^1.811.0",
+    "hypothesis": "^1.812.0",
     "is-equal-shallow": "^0.1.3",
     "karma": "^6.3.4",
     "karma-browserify": "^8.0.0",
