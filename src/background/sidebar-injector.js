@@ -1,5 +1,3 @@
-import * as queryString from 'query-string';
-
 import detectContentType from './detect-content-type';
 import * as errors from './errors';
 import * as util from './util';
@@ -284,7 +282,7 @@ export default function SidebarInjector(
   function removeFromPDF(tab) {
     return new Promise(function (resolve) {
       const parsedURL = new URL(tab.url);
-      const originalURL = queryString.parse(parsedURL.search).file;
+      const originalURL = parsedURL.searchParams.get('file');
       if (!originalURL) {
         throw new Error('Failed to extract original URL from ' + tab.url);
       }
