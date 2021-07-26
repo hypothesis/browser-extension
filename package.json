@@ -10,7 +10,7 @@
   "devDependencies": {
     "@babel/core": "^7.14.8",
     "@babel/preset-env": "^7.14.7",
-    "@types/chrome": "^0.0.147",
+    "@types/chrome": "^0.0.148",
     "babel-plugin-istanbul": "^6.0.0",
     "babel-plugin-mockable-imports": "^1.7.0",
     "babelify": "^10.0.0",
