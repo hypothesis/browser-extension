@@ -11,7 +11,6 @@
   "oauthClientId": "da545114-7792-11e7-90b4-b35c52774c7d",
 
   "sentryPublicDSN": "https://934d4f62912b47d8bb03c28ae6670cf8@app.getsentry.com/69811",
-  "googleAnalytics": "UA-26026798-6",
 
   "browserIsChrome": true,
   "appType": "chrome-extension"
