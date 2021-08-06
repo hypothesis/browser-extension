@@ -26,9 +26,6 @@ function appSettings(settings) {
       release: settings.version,
     };
   }
-  if (settings.googleAnalytics) {
-    result.googleAnalytics = settings.googleAnalytics;
-  }
   if (settings.oauthClientId) {
     result.oauthClientId = settings.oauthClientId;
   }
