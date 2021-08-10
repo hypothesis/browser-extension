@@ -88,11 +88,7 @@ build/settings-data.js: src/settings-data.js.mustache build/client build/.settin
 	tools/template-context-settings.js build/.settings.json | $(MUSTACHE) - $< >$@
 build/unload-client.js: src/unload-client.js
 	cp $< $@
-build/pdfjs-init.js: src/pdfjs-init.js
-	cp $< $@
-build/pdfjs-setup-env.js: src/pdfjs-setup-env.js
-	cp $< $@
-build/pdfjs-worker-init.js: src/pdfjs-worker-init.js
+build/pdfjs-%.js: src/pdfjs-%.js
 	cp $< $@
 build/pdfjs: src/vendor/pdfjs
 	cp -R $< $@
