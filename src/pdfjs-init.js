@@ -1,5 +1,8 @@
 'use strict';
 
+// This script is run once PDF.js has loaded and it configures the viewer
+// and injects the Hypothesis client.
+
 // Configure Hypothesis client to load assets from the extension instead of
 // the CDN.
 const clientConfig = {
@@ -21,6 +24,9 @@ document.addEventListener('webviewerloaded', () => {
   const appOptions = window.PDFViewerApplicationOptions;
   // @ts-expect-error - PDFViewerApplication is missing from types.
   const app = window.PDFViewerApplication;
+
+  // Configure PDF.js to use custom entry point for worker.
+  appOptions.set('workerSrc', '/pdfjs-worker-init.js');
 
   // Ensure that PDF.js viewer events such as "documentloaded" are dispatched
   // to the DOM. The client relies on this.
