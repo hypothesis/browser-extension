@@ -57,8 +57,6 @@ extension: build/client/notebook.html
 extension: build/settings-data.js
 extension: build/unload-client.js
 extension: build/pdfjs-init.js
-extension: build/pdfjs-setup-env.js
-extension: build/pdfjs-worker-init.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
 
 build/extension.bundle.js: src/background/index.js
