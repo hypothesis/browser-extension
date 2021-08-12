@@ -1055,10 +1055,10 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
-"@types/chrome@^0.0.150":
-  version "0.0.150"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.150.tgz#84fe4023e78bbca660af070bd531340efe8af44e"
-  integrity sha512-StzZ2lnnj9FtikyV4s0AVdOIl9/iuOYLtR2FJFoQi7tVZkPL+mBwW4P4Pq5fdn9yiXmcNPu0mKKNvRFp8EHQOQ==
+"@types/chrome@^0.0.154":
+  version "0.0.154"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.154.tgz#7992e97364f4447e961028ad07ac843d0b052c2d"
+  integrity sha512-6QmP744MeMUZUIUHED4d4L2la5dIF1e6bcrkGF4yGQTyO94ER+r++Ss165wkzA5cAGUYt8kToDa6L9xtNqVMxg==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
