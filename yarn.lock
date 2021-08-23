@@ -1124,6 +1124,11 @@
   dependencies:
     "@types/node" "*"
 
+"@types/semver@^7.3.8":
+  version "7.3.8"
+  resolved "https://registry.yarnpkg.com/@types/semver/-/semver-7.3.8.tgz#508a27995498d7586dcecd77c25e289bfaf90c59"
+  integrity sha512-D/2EJvAlCEtYFEYmmlGwbGXuK886HzyCc3nZX/tkFTQdEU8jZDAgiv08P162yB17y4ZXZoq7yFAnW4GDBb9Now==
+
 "@types/yauzl@2.9.1", "@types/yauzl@^2.9.1":
   version "2.9.1"
   resolved "https://registry.yarnpkg.com/@types/yauzl/-/yauzl-2.9.1.tgz#d10f69f9f522eef3cf98e30afb684a1e1ec923af"
@@ -4104,12 +4109,13 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
-git-describe@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/git-describe/-/git-describe-4.0.4.tgz#f3d55bce309becf6dc27fed535d380a621967e8c"
-  integrity sha512-L1X9OO1e4MusB4PzG9LXeXCQifRvyuoHTpuuZ521Qyxn/B0kWHWEOtsT4LsSfSNacZz0h4ZdYDsDG7f+SrA3hg==
+git-describe@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/git-describe/-/git-describe-4.1.0.tgz#0c50fa1ec5ead55932b6e875b2299b17ce5e07d3"
+  integrity sha512-NM7JSseVK4Z0r505+2TIrgPQKPvqbOowHP73IY5y69v/t/PmoMleJdij1vTO3qVm1qSvqb6342p1MYSxsnV8QA==
   dependencies:
-    lodash "^4.17.11"
+    "@types/semver" "^7.3.8"
+    lodash "^4.17.21"
   optionalDependencies:
     semver "^5.6.0"
 
@@ -5670,7 +5676,7 @@ lodash.truncate@^4.4.2:
   resolved "https://registry.yarnpkg.com/lodash.truncate/-/lodash.truncate-4.4.2.tgz#5a350da0b1113b837ecfffd5812cbe58d6eae193"
   integrity sha1-WjUNoLERO4N+z//VgSy+WNbq4ZM=
 
-lodash@^4.17.11, lodash@^4.17.21:
+lodash@^4.17.21:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
