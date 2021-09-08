@@ -100,20 +100,20 @@ dist/%.zip dist/%.xpi: extension
 	cd build && find . -not -path '*/\.*' -type f | zip -q -@ $(abspath $@)
 
 .PHONY: lint
-lint:
+lint: node_modules/.uptodate
 	$(ESLINT) .
 	yarn typecheck
 
 .PHONY: checkformatting
-checkformatting:
+checkformatting: node_modules/.uptodate
 	$(PRETTIER) --check 'src/**/*.js' 'tests/**/*.js'
 
 .PHONY: format
-format:
+format: node_modules/.uptodate
 	$(PRETTIER) --list-different --write 'src/**/*.js' 'tests/**/*.js'
 
 .PHONY: test
-test:
+test: node_modules/.uptodate
 	yarn test
 
 .PHONY: sure
