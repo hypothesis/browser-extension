@@ -186,10 +186,7 @@ export default class SidebarInjector {
       // Injection of content scripts is limited to a small number of protocols,
       // see https://developer.chrome.com/extensions/match_patterns
       const parsedURL = new URL(url);
-      const SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
-      return SUPPORTED_PROTOCOLS.some(function (protocol) {
-        return parsedURL.protocol === protocol;
-      });
+      return ['http:', 'https:', 'ftp:'].includes(parsedURL.protocol);
     }
 
     async function injectIntoLocalDocument(tab) {
