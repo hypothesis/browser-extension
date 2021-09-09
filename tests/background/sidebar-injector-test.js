@@ -25,6 +25,25 @@ function createTestFrame() {
   return frame;
 }
 
+// Example of real VitalSource URLs for: 1) The top level frame, 2) The ebook reader frame, where we need
+// to inject the client and 3) the ebook chapter content frame.
+const vitalSourceFrames = {
+  main: {
+    frameId: 1,
+    url: 'https://bookshelf.vitalsource.com/reader/books/9781400847402/epubcfi/6/22[%3Bvnd.vst.idref%3Dch2]!/4',
+  },
+
+  reader: {
+    frameId: 2,
+    url: 'https://jigsaw.vitalsource.com/mosaic/wrapper.html?uuid=789115e7-e6ae-46cb-edcd-b9e68609e590&type=book',
+  },
+
+  content: {
+    frameId: 3,
+    url: 'https://jigsaw.vitalsource.com/books/9781400847402/epub/OEBPS/10.chaptertwo.xhtml?favre=brett',
+  },
+};
+
 describe('SidebarInjector', function () {
   let injector;
   let fakeChromeAPI;
@@ -42,6 +61,9 @@ describe('SidebarInjector', function () {
 
   // Mock return value from embed.js when injected into page
   let embedScriptReturnValue;
+
+  // Set of optional permissions that the extension currently has
+  let permissions;
 
   beforeEach(function () {
     contentType = 'HTML';
@@ -67,6 +89,10 @@ describe('SidebarInjector', function () {
       }
     });
 
+    // Optional permissions that the extension is allowed to request.
+    const allowedPermissions = ['webNavigation'];
+    permissions = new Set();
+
     fakeChromeAPI = {
       extension: {
         isAllowedFileSchemeAccess: sinon.stub().resolves(true),
@@ -76,9 +102,30 @@ describe('SidebarInjector', function () {
         getURL: sinon.spy(path => EXTENSION_BASE_URL + path),
       },
 
+      permissions: {
+        request: sinon.stub().callsFake(async request => {
+          const allowed = request.permissions.every(perm =>
+            allowedPermissions.includes(perm)
+          );
+          if (allowed) {
+            request.permissions.forEach(perm => permissions.add(perm));
+          }
+          return allowed;
+        }),
+      },
+
       tabs: {
         update: sinon.stub(),
         executeScript: executeScriptSpy,
+      },
+
+      webNavigation: {
+        getAllFrames: sinon.stub().callsFake(async () => {
+          if (!permissions.has('webNavigation')) {
+            throw new Error('Invalid permissions');
+          }
+          return Object.values(vitalSourceFrames);
+        }),
       },
     };
 
@@ -208,6 +255,70 @@ describe('SidebarInjector', function () {
       });
     });
 
+    describe('when viewing a VitalSource book', () => {
+      const injectClient = () =>
+        injector.injectIntoTab({ id: 1, url: vitalSourceFrames.main.url });
+
+      it('injects client into book viewer frame', async () => {
+        await injectClient();
+
+        assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
+          code: sinon.match(/hypothesisConfig/),
+          frameId: vitalSourceFrames.reader.frameId,
+        });
+
+        assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
+          file: '/client/build/boot.js',
+          frameId: vitalSourceFrames.reader.frameId,
+        });
+      });
+
+      it('rejects if "webNavigation" permission is denied', async () => {
+        fakeChromeAPI.permissions.request.resolves(false);
+
+        let error;
+        try {
+          await injectClient();
+        } catch (e) {
+          error = e;
+        }
+
+        assert.instanceOf(error, Error);
+        assert.equal(
+          error.message,
+          'The extension was not granted required permissions'
+        );
+      });
+
+      it('rejects if frames cannot be enumerated', async () => {
+        fakeChromeAPI.webNavigation.getAllFrames.returns(null);
+
+        let error;
+        try {
+          await injectClient();
+        } catch (e) {
+          error = e;
+        }
+
+        assert.instanceOf(error, Error);
+        assert.equal(error.message, 'Could not list frames in tab');
+      });
+
+      it('rejects if book reader frame cannot be found', async () => {
+        fakeChromeAPI.webNavigation.getAllFrames.resolves([]);
+
+        let error;
+        try {
+          await injectClient();
+        } catch (e) {
+          error = e;
+        }
+
+        assert.instanceOf(error, Error);
+        assert.equal(error.message, 'Book viewer frame not found');
+      });
+    });
+
     describe('when viewing a local PDF', function () {
       describe('when file access is enabled', function () {
         it('loads the PDFjs viewer', function () {
@@ -316,6 +427,45 @@ describe('SidebarInjector', function () {
               file: sinon.match('/unload-client.js'),
             });
           });
+      });
+    });
+
+    describe('when viewing a VitalSource book', () => {
+      const removeClient = () =>
+        injector.removeFromTab({ id: 1, url: vitalSourceFrames.main.url });
+
+      it('injects a destroy script into the correct frame', async () => {
+        await removeClient();
+
+        assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
+          file: '/unload-client.js',
+          frameId: vitalSourceFrames.reader.frameId,
+        });
+      });
+
+      it('does nothing if the book viewer frame is not found', async () => {
+        fakeChromeAPI.webNavigation.getAllFrames.returns([]);
+
+        await removeClient();
+
+        assert.notCalled(fakeChromeAPI.tabs.executeScript);
+      });
+
+      it('rejects if permission to list frames was denied', async () => {
+        fakeChromeAPI.permissions.request.resolves(false);
+
+        let error;
+        try {
+          await removeClient();
+        } catch (e) {
+          error = e;
+        }
+
+        assert.instanceOf(error, Error);
+        assert.equal(
+          error.message,
+          'The extension was not granted required permissions'
+        );
       });
     });
   });
