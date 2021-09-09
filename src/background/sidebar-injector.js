@@ -60,7 +60,7 @@ function extractContentScriptResult(result) {
  * SidebarInjector is used to deploy and remove the Hypothesis sidebar
  * from tabs. It also handles loading PDF documents into the PDF.js viewer.
  */
-export default class SidebarInjector {
+export class SidebarInjector {
   /**
    * @param {chrome.tabs} chromeTabs
    * @param {object} services

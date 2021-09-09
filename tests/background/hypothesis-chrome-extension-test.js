@@ -127,7 +127,9 @@ describe('HypothesisChromeExtension', function () {
       './tab-store': createConstructor(fakeTabStore),
       './help-page': createConstructor(fakeHelpPage),
       './browser-action': createConstructor(fakeBrowserAction),
-      './sidebar-injector': createConstructor(fakeSidebarInjector),
+      './sidebar-injector': {
+        SidebarInjector: createConstructor(fakeSidebarInjector),
+      },
       './errors': fakeErrors,
       './settings': {
         default: {

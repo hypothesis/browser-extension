@@ -3,7 +3,7 @@ import directLinkQuery from './direct-link-query';
 import * as errors from './errors';
 import HelpPage from './help-page';
 import settings from './settings';
-import SidebarInjector from './sidebar-injector';
+import { SidebarInjector } from './sidebar-injector';
 import TabState from './tab-state';
 import TabStore from './tab-store';
 
