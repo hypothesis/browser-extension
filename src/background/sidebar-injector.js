@@ -9,6 +9,7 @@ import {
 
 const CONTENT_TYPE_HTML = 'HTML';
 const CONTENT_TYPE_PDF = 'PDF';
+const CONTENT_TYPE_VITALSOURCE = 'VITALSOURCE';
 
 /** @param {Function} fn */
 function toIIFEString(fn) {
@@ -120,6 +121,8 @@ export function SidebarInjector() {
     const tab_ = checkTab(tab);
     if (isPDFViewerURL(tab_.url)) {
       return removeFromPDF(tab_);
+    } else if (isVitalSourceURL(tab_.url)) {
+      return removeFromVitalSource(tab_);
     } else {
       return removeFromHTML(tab_);
     }
@@ -171,10 +174,19 @@ export function SidebarInjector() {
     }
   }
 
+  /** @param {string} url */
+  function isVitalSourceURL(url) {
+    return url.startsWith('https://bookshelf.vitalsource.com/');
+  }
+
   /** @param {Tab} tab */
   function detectTabContentType(tab) {
     if (isPDFViewerURL(tab.url)) {
       return Promise.resolve(CONTENT_TYPE_PDF);
+    }
+
+    if (isVitalSourceURL(tab.url)) {
+      return Promise.resolve(CONTENT_TYPE_VITALSOURCE);
     }
 
     return canInjectScript(tab.url).then(function (canInject) {
@@ -267,6 +279,8 @@ export function SidebarInjector() {
 
     if (type === CONTENT_TYPE_PDF) {
       await injectIntoPDF(tab);
+    } else if (type === CONTENT_TYPE_VITALSOURCE) {
+      await injectIntoVitalSourceReader(tab, config);
     } else {
       await injectConfig(tab.id, config);
       const results = await injectIntoHTML(tab);
@@ -337,6 +351,81 @@ export function SidebarInjector() {
   }
 
   /**
+   * Find the frame within the VitalSource Bookshelf reader into which the
+   * Hypothesis client should be loaded.
+   *
+   * The frame hierarchy will look like:
+   *
+   * bookshelf.vitalsource.com (Main frame)
+   * |- jigsaw.vitalsource.com (Ebook reader. This is where we want to inject the client)
+   *     |- jigsaw.vitalsource.com (Content of current chapter)
+   *
+   * @param {Tab} tab
+   */
+  async function getVitalSourceViewerFrame(tab) {
+    // Using `chrome.webNavigation.getAllFrames` requires asking for the
+    // `webNavigation` permission which results in a scary prompt about reading
+    // browser history, even though we only want to get frames for the current
+    // tab :(
+    //
+    // A more roundabout way to solve this might be to use `executeScript({ allFrames: true, ... })`
+    // to discover frame IDs and URLs of each frame in the tab.
+    const canUseWebNavigation = await chromeAPI.permissions.request({
+      permissions: ['webNavigation'],
+    });
+    if (!canUseWebNavigation) {
+      throw new Error('The extension was not granted required permissions');
+    }
+
+    const frames = await chromeAPI.webNavigation.getAllFrames({
+      tabId: tab.id,
+    });
+    if (!frames) {
+      throw new Error('Could not list frames in tab');
+    }
+
+    return frames.find(frame => {
+      const frameURL = new URL(frame.url);
+      if (
+        frameURL.hostname !== 'jigsaw.vitalsource.com' ||
+        !frameURL.pathname.startsWith('/mosaic/wrapper.html')
+      ) {
+        return null;
+      }
+
+      return frame;
+    });
+  }
+
+  /**
+   * @param {Tab} tab
+   * @param {object} config
+   */
+  async function injectIntoVitalSourceReader(tab, config) {
+    const frame = await getVitalSourceViewerFrame(tab);
+    if (!frame) {
+      throw new Error('Book viewer frame not found');
+    }
+    await injectConfig(tab.id, config, { frameId: frame.frameId });
+    await chromeAPI.tabs.executeScript(tab.id, {
+      file: '/client/build/boot.js',
+      frameId: frame.frameId,
+    });
+  }
+
+  /** @param {Tab} tab */
+  async function removeFromVitalSource(tab) {
+    const frame = await getVitalSourceViewerFrame(tab);
+    if (!frame) {
+      return;
+    }
+    await chromeAPI.tabs.executeScript(tab.id, {
+      file: '/unload-client.js',
+      frameId: frame.frameId,
+    });
+  }
+
+  /**
    * Inject configuration information for the Hypothesis application
    * into the page as JSON data via a <meta> tag.
    *
@@ -344,11 +433,15 @@ export function SidebarInjector() {
    * running in isolated worlds.
    *
    * @param {number} tabId
-   * @param {object} config
+   * @param {object} clientConfig
+   * @param {chrome.tabs.InjectDetails} options
    */
-  function injectConfig(tabId, config) {
-    const configStr = JSON.stringify(config).replace(/"/g, '\\"');
+  function injectConfig(tabId, clientConfig, options = {}) {
+    const configStr = JSON.stringify(clientConfig).replace(/"/g, '\\"');
     const configCode = `var hypothesisConfig="${configStr}";\n(${addJSONScriptTag})("js-hypothesis-config", hypothesisConfig);\n`;
-    return chromeAPI.tabs.executeScript(tabId, { code: configCode });
+    return chromeAPI.tabs.executeScript(tabId, {
+      code: configCode,
+      ...options,
+    });
   }
 }
