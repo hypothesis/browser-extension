@@ -166,9 +166,12 @@ export default class SidebarInjector {
 
       const canInject = await canInjectScript(url);
       if (canInject) {
-        const frameResults = await executeScript(tab.id, {
-          code: toIIFEString(detectContentType),
-        });
+        const frameResults = await executeScript(
+          /** @type {number} */ (tab.id),
+          {
+            code: toIIFEString(detectContentType),
+          }
+        );
         const result = extractContentScriptResult(frameResults);
         if (result) {
           return result.type;
@@ -221,9 +224,9 @@ export default class SidebarInjector {
     }
 
     /**
-      * @param {chrome.tabs.Tab} tab
-      * @param {object} config
-      */
+     * @param {chrome.tabs.Tab} tab
+     * @param {object} config
+     */
     async function injectIntoRemoteDocument(tab, config) {
       const url = /** @type {string} */ (tab.url);
       if (isPDFViewerURL(url)) {
@@ -270,7 +273,9 @@ export default class SidebarInjector {
         return Promise.resolve();
       }
       const update = promisify(chromeTabs.update);
-      return update(tab.id, { url: getPDFViewerURL(url) });
+      return update(/** @type {number} */ (tab.id), {
+        url: getPDFViewerURL(url),
+      });
     }
 
     /** @param {chrome.tabs.Tab} tab */
@@ -288,7 +293,10 @@ export default class SidebarInjector {
 
     /** @param {chrome.tabs.Tab} tab */
     function injectIntoHTML(tab) {
-      return injectScript(/** @type {number} */ (tab.id), '/client/build/boot.js');
+      return injectScript(
+        /** @type {number} */ (tab.id),
+        '/client/build/boot.js'
+      );
     }
 
     /** @param {chrome.tabs.Tab} tab */
