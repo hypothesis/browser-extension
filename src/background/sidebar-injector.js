@@ -116,14 +116,14 @@ export default class SidebarInjector {
 
     // returns true if the extension is permitted to inject
     // a content script into a tab with a given URL.
-    function canInjectScript(url) {
+    async function canInjectScript(url) {
       let canInject;
       if (isSupportedURL(url)) {
-        canInject = Promise.resolve(true);
+        canInject = true;
       } else if (isFileURL(url)) {
-        canInject = util.promisify(isAllowedFileSchemeAccess)();
+        canInject = await util.promisify(isAllowedFileSchemeAccess)();
       } else {
-        canInject = Promise.resolve(false);
+        canInject = false;
       }
       return canInject;
     }
@@ -142,34 +142,32 @@ export default class SidebarInjector {
       }
     }
 
-    function detectTabContentType(tab) {
+    async function detectTabContentType(tab) {
       if (isPDFViewerURL(tab.url)) {
-        return Promise.resolve(CONTENT_TYPE_PDF);
+        return CONTENT_TYPE_PDF;
       }
 
-      return canInjectScript(tab.url).then(function (canInject) {
-        if (canInject) {
-          return executeScriptFn(tab.id, {
-            code: toIIFEString(detectContentType),
-          }).then(function (frameResults) {
-            const result = extractContentScriptResult(frameResults);
-            if (result) {
-              return result.type;
-            } else {
-              // If the content script threw an exception,
-              // frameResults may be null or undefined.
-              //
-              // In that case, fall back to guessing based on the
-              // tab URL
-              return guessContentTypeFromURL(tab.url);
-            }
-          });
+      const canInject = await canInjectScript(tab.url);
+      if (canInject) {
+        const frameResults = await executeScriptFn(tab.id, {
+          code: toIIFEString(detectContentType),
+        });
+        const result = extractContentScriptResult(frameResults);
+        if (result) {
+          return result.type;
         } else {
-          // We cannot inject a content script in order to determine the
-          // file type, so fall back to a URL-based mechanism
-          return Promise.resolve(guessContentTypeFromURL(tab.url));
+          // If the content script threw an exception,
+          // frameResults may be null or undefined.
+          //
+          // In that case, fall back to guessing based on the
+          // tab URL
+          return guessContentTypeFromURL(tab.url);
         }
-      });
+      } else {
+        // We cannot inject a content script in order to determine the
+        // file type, so fall back to a URL-based mechanism
+        return guessContentTypeFromURL(tab.url);
+      }
     }
 
     /**
@@ -194,21 +192,20 @@ export default class SidebarInjector {
       });
     }
 
-    function injectIntoLocalDocument(tab) {
-      return detectTabContentType(tab).then(function (type) {
-        if (type === CONTENT_TYPE_PDF) {
-          return injectIntoLocalPDF(tab);
-        } else {
-          return Promise.reject(
-            new errors.LocalFileError('Local non-PDF files are not supported')
-          );
-        }
-      });
+    async function injectIntoLocalDocument(tab) {
+      const type = await detectTabContentType(tab);
+      if (type === CONTENT_TYPE_PDF) {
+        return injectIntoLocalPDF(tab);
+      } else {
+        throw new errors.LocalFileError(
+          'Local non-PDF files are not supported'
+        );
+      }
     }
 
-    function injectIntoRemoteDocument(tab, config) {
+    async function injectIntoRemoteDocument(tab, config) {
       if (isPDFViewerURL(tab.url)) {
-        return Promise.resolve();
+        return;
       }
 
       if (!isSupportedURL(tab.url)) {
@@ -220,35 +217,28 @@ export default class SidebarInjector {
         // (or some other format). In some cases we could extract the original
         // URL and open that in the Hypothesis viewer instead.
         const protocol = tab.url.split(':')[0];
-        return Promise.reject(
-          new errors.RestrictedProtocolError(
-            'Cannot load Hypothesis into ' + protocol + ' pages'
-          )
+        throw new errors.RestrictedProtocolError(
+          'Cannot load Hypothesis into ' + protocol + ' pages'
         );
       }
 
-      return detectTabContentType(tab).then(function (type) {
-        if (type === CONTENT_TYPE_PDF) {
-          return injectIntoPDF(tab);
-        } else {
-          return injectConfig(tab.id, config)
-            .then(function () {
-              return injectIntoHTML(tab);
-            })
-            .then(function (results) {
-              const result = extractContentScriptResult(results);
-              if (
-                result &&
-                typeof result.installedURL === 'string' &&
-                result.installedURL.indexOf(extensionURL('/')) === -1
-              ) {
-                throw new errors.AlreadyInjectedError(
-                  'Hypothesis is already injected into this page'
-                );
-              }
-            });
+      const type = await detectTabContentType(tab);
+      if (type === CONTENT_TYPE_PDF) {
+        await injectIntoPDF(tab);
+      } else {
+        await injectConfig(tab.id, config);
+        const results = await injectIntoHTML(tab);
+        const result = extractContentScriptResult(results);
+        if (
+          result &&
+          typeof result.installedURL === 'string' &&
+          result.installedURL.indexOf(extensionURL('/')) === -1
+        ) {
+          throw new errors.AlreadyInjectedError(
+            'Hypothesis is already injected into this page'
+          );
         }
-      });
+      }
     }
 
     function injectIntoPDF(tab) {
