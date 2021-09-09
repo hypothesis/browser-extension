@@ -48,295 +48,294 @@ function extractContentScriptResult(result) {
 }
 
 /**
- * The SidebarInjector is used to deploy and remove the Hypothesis sidebar
- * from tabs. It also deals with loading PDF documents into the PDF.js viewer
- * when applicable.
- *
- * @param {chrome.tabs} chromeTabs
- * @param {Object} services
- * @param {(cb: (allowed: boolean) => void) => void} services.isAllowedFileSchemeAccess -
- *   A function that returns true if the user
- *   can access resources over the file:// protocol. See:
- *   https://developer.chrome.com/extensions/extension#method-isAllowedFileSchemeAccess
- * @param {(path: string) => string} services.extensionURL -
- *   A function that receives a path and returns an absolute
- *   url. See: https://developer.chrome.com/extensions/extension#method-getURL
+ * SidebarInjector is used to deploy and remove the Hypothesis sidebar
+ * from tabs. It also handles loading PDF documents into the PDF.js viewer.
  */
-export default function SidebarInjector(
-  chromeTabs,
-  { isAllowedFileSchemeAccess, extensionURL }
-) {
-  const executeScriptFn = util.promisify(chromeTabs.executeScript);
-
-  const PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
-
+export default class SidebarInjector {
   /**
-   * Injects the Hypothesis sidebar into the tab provided.
-   *
-   * @param {chrome.tabs.Tab} tab - A tab object representing the tab to insert the sidebar
-   *        into.
-   * @param {Object?} config - An object containing configuration info that
-   *        is passed to the app when it loads.
-   *
-   * Returns a promise that will be resolved if the injection succeeded
-   * otherwise it will be rejected with an error.
+   * @param {chrome.tabs} chromeTabs
+   * @param {Object} services
+   *   @param {(cb: (allowed: boolean) => void) => void} services.isAllowedFileSchemeAccess -
+   *     A function that returns true if the user
+   *     can access resources over the file:// protocol. See:
+   *     https://developer.chrome.com/extensions/extension#method-isAllowedFileSchemeAccess
+   *   @param {(path: string) => string} services.extensionURL -
+   *     A function that receives a path and returns an absolute
+   *     url. See: https://developer.chrome.com/extensions/extension#method-getURL
    */
-  this.injectIntoTab = function (tab, config) {
-    config = config || {};
-    if (isFileURL(tab.url)) {
-      return injectIntoLocalDocument(tab);
-    } else {
-      return injectIntoRemoteDocument(tab, config);
-    }
-  };
+  constructor(chromeTabs, { isAllowedFileSchemeAccess, extensionURL }) {
+    const executeScriptFn = util.promisify(chromeTabs.executeScript);
 
-  /* Removes the Hypothesis sidebar from the tab provided.
-   *
-   * tab - A tab object representing the tab to remove the sidebar from.
-   *
-   * Returns a promise that will be resolved if the removal succeeded
-   * otherwise it will be rejected with an error.
-   */
-  this.removeFromTab = function (tab) {
-    if (isPDFViewerURL(tab.url)) {
-      return removeFromPDF(tab);
-    } else {
-      return removeFromHTML(tab);
-    }
-  };
+    const PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
 
-  function getPDFViewerURL(url) {
-    // Encode the original URL but preserve the fragment, so that a
-    // '#annotations' fragment in the original URL will persist and trigger the
-    // sidebar to focus and scroll to that annotation when the PDF viewer loads.
-    const parsedURL = new URL(url);
-    const hash = parsedURL.hash;
-    parsedURL.hash = '';
-    const encodedURL = encodeURIComponent(parsedURL.href);
-    return PDFViewerBaseURL + '?file=' + encodedURL + hash;
-  }
-
-  // returns true if the extension is permitted to inject
-  // a content script into a tab with a given URL.
-  function canInjectScript(url) {
-    let canInject;
-    if (isSupportedURL(url)) {
-      canInject = Promise.resolve(true);
-    } else if (isFileURL(url)) {
-      canInject = util.promisify(isAllowedFileSchemeAccess)();
-    } else {
-      canInject = Promise.resolve(false);
-    }
-    return canInject;
-  }
-
-  /**
-   * Guess the content type of a page from the URL alone.
-   *
-   * This is a fallback for when it is not possible to inject
-   * a content script to determine the type of content in the page.
-   */
-  function guessContentTypeFromURL(url) {
-    if (url.indexOf('.pdf') !== -1) {
-      return CONTENT_TYPE_PDF;
-    } else {
-      return CONTENT_TYPE_HTML;
-    }
-  }
-
-  function detectTabContentType(tab) {
-    if (isPDFViewerURL(tab.url)) {
-      return Promise.resolve(CONTENT_TYPE_PDF);
-    }
-
-    return canInjectScript(tab.url).then(function (canInject) {
-      if (canInject) {
-        return executeScriptFn(tab.id, {
-          code: toIIFEString(detectContentType),
-        }).then(function (frameResults) {
-          const result = extractContentScriptResult(frameResults);
-          if (result) {
-            return result.type;
-          } else {
-            // If the content script threw an exception,
-            // frameResults may be null or undefined.
-            //
-            // In that case, fall back to guessing based on the
-            // tab URL
-            return guessContentTypeFromURL(tab.url);
-          }
-        });
+    /**
+     * Injects the Hypothesis sidebar into the tab provided.
+     *
+     * @param {chrome.tabs.Tab} tab - A tab object representing the tab to insert the sidebar
+     *        into.
+     * @param {Object?} config - An object containing configuration info that
+     *        is passed to the app when it loads.
+     *
+     * Returns a promise that will be resolved if the injection succeeded
+     * otherwise it will be rejected with an error.
+     */
+    this.injectIntoTab = function (tab, config) {
+      config = config || {};
+      if (isFileURL(tab.url)) {
+        return injectIntoLocalDocument(tab);
       } else {
-        // We cannot inject a content script in order to determine the
-        // file type, so fall back to a URL-based mechanism
-        return Promise.resolve(guessContentTypeFromURL(tab.url));
+        return injectIntoRemoteDocument(tab, config);
       }
-    });
-  }
+    };
 
-  /**
-   * Returns true if a tab is displaying a PDF using the PDF.js-based
-   * viewer bundled with the extension.
-   */
-  function isPDFViewerURL(url) {
-    return url.indexOf(PDFViewerBaseURL) === 0;
-  }
-
-  function isFileURL(url) {
-    return url.indexOf('file:') === 0;
-  }
-
-  function isSupportedURL(url) {
-    // Injection of content scripts is limited to a small number of protocols,
-    // see https://developer.chrome.com/extensions/match_patterns
-    const parsedURL = new URL(url);
-    const SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
-    return SUPPORTED_PROTOCOLS.some(function (protocol) {
-      return parsedURL.protocol === protocol;
-    });
-  }
-
-  function injectIntoLocalDocument(tab) {
-    return detectTabContentType(tab).then(function (type) {
-      if (type === CONTENT_TYPE_PDF) {
-        return injectIntoLocalPDF(tab);
+    /* Removes the Hypothesis sidebar from the tab provided.
+     *
+     * tab - A tab object representing the tab to remove the sidebar from.
+     *
+     * Returns a promise that will be resolved if the removal succeeded
+     * otherwise it will be rejected with an error.
+     */
+    this.removeFromTab = function (tab) {
+      if (isPDFViewerURL(tab.url)) {
+        return removeFromPDF(tab);
       } else {
-        return Promise.reject(
-          new errors.LocalFileError('Local non-PDF files are not supported')
-        );
+        return removeFromHTML(tab);
       }
-    });
-  }
+    };
 
-  function injectIntoRemoteDocument(tab, config) {
-    if (isPDFViewerURL(tab.url)) {
-      return Promise.resolve();
+    function getPDFViewerURL(url) {
+      // Encode the original URL but preserve the fragment, so that a
+      // '#annotations' fragment in the original URL will persist and trigger the
+      // sidebar to focus and scroll to that annotation when the PDF viewer loads.
+      const parsedURL = new URL(url);
+      const hash = parsedURL.hash;
+      parsedURL.hash = '';
+      const encodedURL = encodeURIComponent(parsedURL.href);
+      return PDFViewerBaseURL + '?file=' + encodedURL + hash;
     }
 
-    if (!isSupportedURL(tab.url)) {
-      // Chrome does not permit extensions to inject content scripts
-      // into (chrome*):// URLs and other custom schemes.
-      //
-      // A common case where this happens is when the user has an
-      // extension installed that provides a custom viewer for PDFs
-      // (or some other format). In some cases we could extract the original
-      // URL and open that in the Hypothesis viewer instead.
-      const protocol = tab.url.split(':')[0];
-      return Promise.reject(
-        new errors.RestrictedProtocolError(
-          'Cannot load Hypothesis into ' + protocol + ' pages'
-        )
-      );
-    }
-
-    return detectTabContentType(tab).then(function (type) {
-      if (type === CONTENT_TYPE_PDF) {
-        return injectIntoPDF(tab);
+    // returns true if the extension is permitted to inject
+    // a content script into a tab with a given URL.
+    function canInjectScript(url) {
+      let canInject;
+      if (isSupportedURL(url)) {
+        canInject = Promise.resolve(true);
+      } else if (isFileURL(url)) {
+        canInject = util.promisify(isAllowedFileSchemeAccess)();
       } else {
-        return injectConfig(tab.id, config)
-          .then(function () {
-            return injectIntoHTML(tab);
-          })
-          .then(function (results) {
-            const result = extractContentScriptResult(results);
-            if (
-              result &&
-              typeof result.installedURL === 'string' &&
-              result.installedURL.indexOf(extensionURL('/')) === -1
-            ) {
-              throw new errors.AlreadyInjectedError(
-                'Hypothesis is already injected into this page'
-              );
+        canInject = Promise.resolve(false);
+      }
+      return canInject;
+    }
+
+    /**
+     * Guess the content type of a page from the URL alone.
+     *
+     * This is a fallback for when it is not possible to inject
+     * a content script to determine the type of content in the page.
+     */
+    function guessContentTypeFromURL(url) {
+      if (url.indexOf('.pdf') !== -1) {
+        return CONTENT_TYPE_PDF;
+      } else {
+        return CONTENT_TYPE_HTML;
+      }
+    }
+
+    function detectTabContentType(tab) {
+      if (isPDFViewerURL(tab.url)) {
+        return Promise.resolve(CONTENT_TYPE_PDF);
+      }
+
+      return canInjectScript(tab.url).then(function (canInject) {
+        if (canInject) {
+          return executeScriptFn(tab.id, {
+            code: toIIFEString(detectContentType),
+          }).then(function (frameResults) {
+            const result = extractContentScriptResult(frameResults);
+            if (result) {
+              return result.type;
+            } else {
+              // If the content script threw an exception,
+              // frameResults may be null or undefined.
+              //
+              // In that case, fall back to guessing based on the
+              // tab URL
+              return guessContentTypeFromURL(tab.url);
             }
           });
-      }
-    });
-  }
-
-  function injectIntoPDF(tab) {
-    if (isPDFViewerURL(tab.url)) {
-      return Promise.resolve();
-    }
-    const updateFn = util.promisify(chromeTabs.update);
-    return updateFn(tab.id, { url: getPDFViewerURL(tab.url) });
-  }
-
-  function injectIntoLocalPDF(tab) {
-    return new Promise(function (resolve, reject) {
-      isAllowedFileSchemeAccess(function (isAllowed) {
-        if (isAllowed) {
-          resolve(injectIntoPDF(tab));
         } else {
-          reject(
-            new errors.NoFileAccessError('Local file scheme access denied')
+          // We cannot inject a content script in order to determine the
+          // file type, so fall back to a URL-based mechanism
+          return Promise.resolve(guessContentTypeFromURL(tab.url));
+        }
+      });
+    }
+
+    /**
+     * Returns true if a tab is displaying a PDF using the PDF.js-based
+     * viewer bundled with the extension.
+     */
+    function isPDFViewerURL(url) {
+      return url.indexOf(PDFViewerBaseURL) === 0;
+    }
+
+    function isFileURL(url) {
+      return url.indexOf('file:') === 0;
+    }
+
+    function isSupportedURL(url) {
+      // Injection of content scripts is limited to a small number of protocols,
+      // see https://developer.chrome.com/extensions/match_patterns
+      const parsedURL = new URL(url);
+      const SUPPORTED_PROTOCOLS = ['http:', 'https:', 'ftp:'];
+      return SUPPORTED_PROTOCOLS.some(function (protocol) {
+        return parsedURL.protocol === protocol;
+      });
+    }
+
+    function injectIntoLocalDocument(tab) {
+      return detectTabContentType(tab).then(function (type) {
+        if (type === CONTENT_TYPE_PDF) {
+          return injectIntoLocalPDF(tab);
+        } else {
+          return Promise.reject(
+            new errors.LocalFileError('Local non-PDF files are not supported')
           );
         }
       });
-    });
-  }
-
-  function injectIntoHTML(tab) {
-    return injectScript(tab.id, '/client/build/boot.js');
-  }
-
-  function removeFromPDF(tab) {
-    return new Promise(function (resolve) {
-      const parsedURL = new URL(tab.url);
-      const originalURL = parsedURL.searchParams.get('file');
-      if (!originalURL) {
-        throw new Error('Failed to extract original URL from ' + tab.url);
-      }
-      let hash = parsedURL.hash;
-
-      // If the original URL was a direct link, drop the #annotations fragment
-      // as otherwise the Chrome extension will re-activate itself on this tab
-      // when the original URL loads.
-      if (hash.indexOf('#annotations:') === 0) {
-        hash = '';
-      }
-
-      chromeTabs.update(
-        tab.id,
-        {
-          url: decodeURIComponent(originalURL) + hash,
-        },
-        resolve
-      );
-    });
-  }
-
-  function removeFromHTML(tab) {
-    if (!isSupportedURL(tab.url)) {
-      return Promise.resolve();
     }
-    return injectScript(tab.id, '/unload-client.js');
-  }
 
-  /**
-   * Inject the script from the source file at `path` into the
-   * page currently loaded in the tab at the given ID.
-   */
-  function injectScript(tabId, path) {
-    return executeScriptFn(tabId, { file: path });
-  }
+    function injectIntoRemoteDocument(tab, config) {
+      if (isPDFViewerURL(tab.url)) {
+        return Promise.resolve();
+      }
 
-  /**
-   * Inject configuration information for the Hypothesis application
-   * into the page as JSON data via a <meta> tag.
-   *
-   * A <meta> tag is used because that makes it available to JS content
-   * running in isolated worlds.
-   */
-  function injectConfig(tabId, config) {
-    const configStr = JSON.stringify(config).replace(/"/g, '\\"');
-    const configCode =
-      'var hypothesisConfig = "' +
-      configStr +
-      '";\n' +
-      '(' +
-      addJSONScriptTagFn.toString() +
-      ')' +
-      '("js-hypothesis-config", hypothesisConfig);\n';
-    return executeScriptFn(tabId, { code: configCode });
+      if (!isSupportedURL(tab.url)) {
+        // Chrome does not permit extensions to inject content scripts
+        // into (chrome*):// URLs and other custom schemes.
+        //
+        // A common case where this happens is when the user has an
+        // extension installed that provides a custom viewer for PDFs
+        // (or some other format). In some cases we could extract the original
+        // URL and open that in the Hypothesis viewer instead.
+        const protocol = tab.url.split(':')[0];
+        return Promise.reject(
+          new errors.RestrictedProtocolError(
+            'Cannot load Hypothesis into ' + protocol + ' pages'
+          )
+        );
+      }
+
+      return detectTabContentType(tab).then(function (type) {
+        if (type === CONTENT_TYPE_PDF) {
+          return injectIntoPDF(tab);
+        } else {
+          return injectConfig(tab.id, config)
+            .then(function () {
+              return injectIntoHTML(tab);
+            })
+            .then(function (results) {
+              const result = extractContentScriptResult(results);
+              if (
+                result &&
+                typeof result.installedURL === 'string' &&
+                result.installedURL.indexOf(extensionURL('/')) === -1
+              ) {
+                throw new errors.AlreadyInjectedError(
+                  'Hypothesis is already injected into this page'
+                );
+              }
+            });
+        }
+      });
+    }
+
+    function injectIntoPDF(tab) {
+      if (isPDFViewerURL(tab.url)) {
+        return Promise.resolve();
+      }
+      const updateFn = util.promisify(chromeTabs.update);
+      return updateFn(tab.id, { url: getPDFViewerURL(tab.url) });
+    }
+
+    function injectIntoLocalPDF(tab) {
+      return new Promise(function (resolve, reject) {
+        isAllowedFileSchemeAccess(function (isAllowed) {
+          if (isAllowed) {
+            resolve(injectIntoPDF(tab));
+          } else {
+            reject(
+              new errors.NoFileAccessError('Local file scheme access denied')
+            );
+          }
+        });
+      });
+    }
+
+    function injectIntoHTML(tab) {
+      return injectScript(tab.id, '/client/build/boot.js');
+    }
+
+    function removeFromPDF(tab) {
+      return new Promise(function (resolve) {
+        const parsedURL = new URL(tab.url);
+        const originalURL = parsedURL.searchParams.get('file');
+        if (!originalURL) {
+          throw new Error('Failed to extract original URL from ' + tab.url);
+        }
+        let hash = parsedURL.hash;
+
+        // If the original URL was a direct link, drop the #annotations fragment
+        // as otherwise the Chrome extension will re-activate itself on this tab
+        // when the original URL loads.
+        if (hash.indexOf('#annotations:') === 0) {
+          hash = '';
+        }
+
+        chromeTabs.update(
+          tab.id,
+          {
+            url: decodeURIComponent(originalURL) + hash,
+          },
+          resolve
+        );
+      });
+    }
+
+    function removeFromHTML(tab) {
+      if (!isSupportedURL(tab.url)) {
+        return Promise.resolve();
+      }
+      return injectScript(tab.id, '/unload-client.js');
+    }
+
+    /**
+     * Inject the script from the source file at `path` into the
+     * page currently loaded in the tab at the given ID.
+     */
+    function injectScript(tabId, path) {
+      return executeScriptFn(tabId, { file: path });
+    }
+
+    /**
+     * Inject configuration information for the Hypothesis application
+     * into the page as JSON data via a <meta> tag.
+     *
+     * A <meta> tag is used because that makes it available to JS content
+     * running in isolated worlds.
+     */
+    function injectConfig(tabId, config) {
+      const configStr = JSON.stringify(config).replace(/"/g, '\\"');
+      const configCode =
+        'var hypothesisConfig = "' +
+        configStr +
+        '";\n' +
+        '(' +
+        addJSONScriptTagFn.toString() +
+        ')' +
+        '("js-hypothesis-config", hypothesisConfig);\n';
+      return executeScriptFn(tabId, { code: configCode });
+    }
   }
 }
