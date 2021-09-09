@@ -7,38 +7,40 @@ function getLastError() {
 }
 
 /**
- * Converts an async Chrome API into a function
- * which returns a promise.
+ * @template T
+ * @typedef {(result: T) => void} Callback
+ */
+
+/**
+ * Converts an async Chrome API which accepts a callback into a Promise-returning
+ * version.
  *
- * Usage:
- *   var apiFn = promisify(chrome.someModule.aFunction);
+ * @example
+ *   const apiFn = promisify(chrome.someModule.aFunction);
  *   apiFn(arg1, arg2)
- *     .then(function (result) { ...handle success  })
- *     .catch(function (err) { ...handle error })
+ *     .then(result => { ... })
+ *     .catch(err => { ... })
  *
- *
- * @param fn A Chrome API function whose last argument is a callback
- *           which is invoked with the result of the query. When this callback
- *           is invoked, the promise is rejected if chrome.extension.lastError
- *           is set or resolved with the first argument to the callback otherwise.
+ * @template {any[]} Args
+ * @template Result
+ * @param {(...args: [...Args, Callback<Result>]) => void} fn -
+ *   Chrome API function that takes a result callback as the last argument.
+ *   When the callback is invoked, `chrome.extension.lastError` is used to
+ *   check if the call succeeded and resolve or reject the promise.
+ * @return {(...args: Args) => Promise<Result>}
  */
 export function promisify(fn) {
-  return function () {
-    const args = [].slice.call(arguments);
-    const result = new Promise(function (resolve, reject) {
-      fn.apply(
-        // @ts-ignore - `this` is implicitly `any`
-        this,
-        args.concat(function (result) {
-          const lastError = getLastError();
-          if (lastError) {
-            reject(lastError);
-          } else {
-            resolve(result);
-          }
-        })
-      );
+  /** @param {Args} args */
+  return (...args) => {
+    return new Promise((resolve, reject) => {
+      fn(...args, result => {
+        const lastError = getLastError();
+        if (lastError) {
+          reject(lastError);
+        } else {
+          resolve(result);
+        }
+      });
     });
-    return result;
   };
 }

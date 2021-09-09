@@ -208,9 +208,9 @@ export default function SidebarInjector(
     });
   }
 
-  function injectIntoRemoteDocument(tab, config) {
+  async function injectIntoRemoteDocument(tab, config) {
     if (isPDFViewerURL(tab.url)) {
-      return Promise.resolve();
+      return;
     }
 
     if (!isSupportedURL(tab.url)) {
@@ -222,35 +222,29 @@ export default function SidebarInjector(
       // (or some other format). In some cases we could extract the original
       // URL and open that in the Hypothesis viewer instead.
       const protocol = tab.url.split(':')[0];
-      return Promise.reject(
-        new errors.RestrictedProtocolError(
-          'Cannot load Hypothesis into ' + protocol + ' pages'
-        )
+      throw new errors.RestrictedProtocolError(
+        'Cannot load Hypothesis into ' + protocol + ' pages'
       );
     }
 
-    return detectTabContentType(tab).then(function (type) {
-      if (type === CONTENT_TYPE_PDF) {
-        return injectIntoPDF(tab);
-      } else {
-        return injectConfig(tab.id, config)
-          .then(function () {
-            return injectIntoHTML(tab);
-          })
-          .then(function (results) {
-            const result = extractContentScriptResult(results);
-            if (
-              result &&
-              typeof result.installedURL === 'string' &&
-              result.installedURL.indexOf(extensionURL('/')) === -1
-            ) {
-              throw new errors.AlreadyInjectedError(
-                'Hypothesis is already injected into this page'
-              );
-            }
-          });
+    const type = await detectTabContentType(tab);
+
+    if (type === CONTENT_TYPE_PDF) {
+      await injectIntoPDF(tab);
+    } else {
+      await injectConfig(tab.id, config);
+      const results = await injectIntoHTML(tab);
+      const result = extractContentScriptResult(results);
+      if (
+        result &&
+        typeof result.installedURL === 'string' &&
+        result.installedURL.indexOf(extensionURL('/')) === -1
+      ) {
+        throw new errors.AlreadyInjectedError(
+          'Hypothesis is already injected into this page'
+        );
       }
-    });
+    }
   }
 
   function injectIntoPDF(tab) {
