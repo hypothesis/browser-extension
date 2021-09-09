@@ -21,7 +21,7 @@ function toIIFEString(fn) {
  * content script, so it cannot reference any external variables.
  */
 /* istanbul ignore next */
-function addJSONScriptTagFn(name, content) {
+function addJSONScriptTag(name, content) {
   const scriptTag = document.createElement('script');
   scriptTag.className = name;
   scriptTag.textContent = content;
@@ -69,7 +69,7 @@ export default class SidebarInjector {
    *     url. See: https://developer.chrome.com/extensions/extension#method-getURL
    */
   constructor(chromeTabs, { isAllowedFileSchemeAccess, extensionURL }) {
-    const executeScriptFn = promisify(chromeTabs.executeScript);
+    const executeScript = promisify(chromeTabs.executeScript);
 
     const pdfViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
 
@@ -154,7 +154,7 @@ export default class SidebarInjector {
 
       const canInject = await canInjectScript(tab.url);
       if (canInject) {
-        const frameResults = await executeScriptFn(tab.id, {
+        const frameResults = await executeScript(tab.id, {
           code: toIIFEString(detectContentType),
         });
         const result = extractContentScriptResult(frameResults);
@@ -245,8 +245,8 @@ export default class SidebarInjector {
       if (isPDFViewerURL(tab.url)) {
         return Promise.resolve();
       }
-      const updateFn = promisify(chromeTabs.update);
-      return updateFn(tab.id, { url: getPDFViewerURL(tab.url) });
+      const update = promisify(chromeTabs.update);
+      return update(tab.id, { url: getPDFViewerURL(tab.url) });
     }
 
     function injectIntoLocalPDF(tab) {
@@ -303,7 +303,7 @@ export default class SidebarInjector {
      * page currently loaded in the tab at the given ID.
      */
     function injectScript(tabId, path) {
-      return executeScriptFn(tabId, { file: path });
+      return executeScript(tabId, { file: path });
     }
 
     /**
@@ -315,8 +315,8 @@ export default class SidebarInjector {
      */
     function injectConfig(tabId, config) {
       const configStr = JSON.stringify(config).replace(/"/g, '\\"');
-      const configCode = `var hypothesisConfig="${configStr}";\n(${addJSONScriptTagFn})("js-hypothesis-config", hypothesisConfig);\n`;
-      return executeScriptFn(tabId, { code: configCode });
+      const configCode = `var hypothesisConfig="${configStr}";\n(${addJSONScriptTag})("js-hypothesis-config", hypothesisConfig);\n`;
+      return executeScript(tabId, { code: configCode });
     }
   }
 }
