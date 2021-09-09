@@ -293,10 +293,9 @@ export default class SidebarInjector {
 
     /** @param {chrome.tabs.Tab} tab */
     function injectIntoHTML(tab) {
-      return injectScript(
-        /** @type {number} */ (tab.id),
-        '/client/build/boot.js'
-      );
+      return executeScript(/** @type {number} */ (tab.id), {
+        file: '/client/build/boot.js',
+      });
     }
 
     /** @param {chrome.tabs.Tab} tab */
@@ -331,18 +330,9 @@ export default class SidebarInjector {
       if (!isSupportedURL(/** @type {string} */ (tab.url))) {
         return Promise.resolve();
       }
-      return injectScript(/** @type {number} */ (tab.id), '/unload-client.js');
-    }
-
-    /**
-     * Inject the script from the source file at `path` into the
-     * page currently loaded in the tab at the given ID.
-     *
-     * @param {number} tabId
-     * @param {string} path
-     */
-    function injectScript(tabId, path) {
-      return executeScript(tabId, { file: path });
+      return executeScript(/** @type {number} */ (tab.id), {
+        file: '/unload-client.js',
+      });
     }
 
     /**
