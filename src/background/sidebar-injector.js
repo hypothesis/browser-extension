@@ -86,7 +86,7 @@ export default class SidebarInjector {
      *        is passed to the app when it loads.
      * @return {Promise<void>}
      */
-    this.injectIntoTab = function (tab, config) {
+    this.injectIntoTab = (tab, config) => {
       config = config || {};
       if (isFileURL(/** @type {string} */ (tab.url))) {
         return injectIntoLocalDocument(tab);
@@ -100,7 +100,7 @@ export default class SidebarInjector {
      * @param {chrome.tabs.Tab} tab - Tab to remove the sidebar from.
      * @return {Promise<void>}
      */
-    this.removeFromTab = function (tab) {
+    this.removeFromTab = tab => {
       if (isPDFViewerURL(tab.url)) {
         return removeFromPDF(tab);
       } else {
@@ -280,8 +280,8 @@ export default class SidebarInjector {
 
     /** @param {chrome.tabs.Tab} tab */
     function injectIntoLocalPDF(tab) {
-      return new Promise(function (resolve, reject) {
-        isAllowedFileSchemeAccess(function (isAllowed) {
+      return new Promise((resolve, reject) => {
+        isAllowedFileSchemeAccess(isAllowed => {
           if (isAllowed) {
             resolve(injectIntoPDF(tab));
           } else {
@@ -301,7 +301,7 @@ export default class SidebarInjector {
 
     /** @param {chrome.tabs.Tab} tab */
     function removeFromPDF(tab) {
-      return new Promise(function (resolve) {
+      return new Promise(resolve => {
         const parsedURL = new URL(/** @type {string} */ (tab.url));
         const originalURL = parsedURL.searchParams.get('file');
         if (!originalURL) {
