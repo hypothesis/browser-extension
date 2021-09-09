@@ -317,14 +317,7 @@ export default class SidebarInjector {
      */
     function injectConfig(tabId, config) {
       const configStr = JSON.stringify(config).replace(/"/g, '\\"');
-      const configCode =
-        'var hypothesisConfig = "' +
-        configStr +
-        '";\n' +
-        '(' +
-        addJSONScriptTagFn.toString() +
-        ')' +
-        '("js-hypothesis-config", hypothesisConfig);\n';
+      const configCode = `var hypothesisConfig="${configStr}";\n(${addJSONScriptTagFn})("js-hypothesis-config", hypothesisConfig);\n`;
       return executeScriptFn(tabId, { code: configCode });
     }
   }
