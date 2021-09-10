@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 /* eslint-env node */
+// @ts-nocheck
 
 'use strict';
 

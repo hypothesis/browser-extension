@@ -34,10 +34,12 @@ describe('TabStore', function () {
       });
     });
 
-    it('returns empty object if an error is encountered while loading', () => {
-      fakeLocalStorage.data.state = 'not valid JSON';
-      store.reload([1]);
-      assert.deepEqual(store.all(), {});
+    ['not valid JSON', null].forEach(state => {
+      it('returns empty object if an error is encountered while loading', () => {
+        fakeLocalStorage.data.state = state;
+        store.reload([1]);
+        assert.deepEqual(store.all(), {});
+      });
     });
   });
 

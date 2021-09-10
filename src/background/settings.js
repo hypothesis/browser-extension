@@ -1,7 +1,16 @@
 /**
+ * Incomplete type for settings in the `settings.json` file.
+ *
+ * @typedef Settings
+ * @prop {string} apiUrl
+ * @prop {string} buildType
+ * @prop {string} serviceUrl
+ */
+
+/**
  * Validate and normalize the given settings data.
  *
- * @param {object} settings The settings from the settings.json file.
+ * @param {Settings} settings
  */
 function normalizeSettings(settings) {
   // Make sure that apiUrl does not end with a /.

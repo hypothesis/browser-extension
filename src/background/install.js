@@ -1,5 +1,6 @@
 import HypothesisChromeExtension from './hypothesis-chrome-extension';
 
+/** @type {HypothesisChromeExtension} */
 let browserExtension;
 
 export function init() {
@@ -48,6 +49,7 @@ if (chrome.runtime.requestUpdateCheck) {
   });
 }
 
+/** @param {chrome.runtime.InstalledDetails} installDetails */
 function onInstalled(installDetails) {
   // The install reason can be "install", "update", "chrome_update", or
   // "shared_module_update", see:

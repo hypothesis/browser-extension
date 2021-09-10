@@ -33,7 +33,7 @@ export function promisify(fn) {
   /** @param {Args} args */
   return (...args) => {
     return new Promise((resolve, reject) => {
-      fn(...args, result => {
+      fn(...args, (/** @type {Result} */ result) => {
         const lastError = getLastError();
         if (lastError) {
           reject(lastError);

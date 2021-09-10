@@ -18,6 +18,8 @@ export class BadgeUriError extends Error {}
 
 /**
  * Returns true if `err` is a recognized 'expected' error.
+ *
+ * @param {unknown} err
  */
 function isKnownError(err) {
   return err instanceof ExtensionError;
