@@ -44,9 +44,12 @@ function convertLocalURLsToFilenames(url) {
  * Using just the filename allows us to upload a single set of source files
  * and sourcemaps for a release though a given release of H might be served
  * from multiple actual URLs (eg. different browser extensions).
+ *
+ * @param {any} data
  */
 function translateSourceURLs(data) {
   try {
+    /** @type {Array<{ filename: string }>} */
     const frames = data.exception.values[0].stacktrace.frames;
     frames.forEach(function (frame) {
       frame.filename = convertLocalURLsToFilenames(frame.filename);
@@ -58,6 +61,9 @@ function translateSourceURLs(data) {
   return data;
 }
 
+/**
+ * @param {{ dsn: string, release: string }} config
+ */
 export function init(config) {
   Raven.config(config.dsn, {
     release: config.release,
@@ -69,7 +75,7 @@ export function init(config) {
 /**
  * Report an error to Sentry.
  *
- * @param {object} error - An error object describing what went wrong
+ * @param {{ message: string } | string} error - An error object describing what went wrong
  * @param {string} when - A string describing the context in which
  *                        the error occurred.
  * @param {object} [context] - A JSON-serializable object containing additional

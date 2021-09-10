@@ -6,7 +6,6 @@
     "module": "commonjs",
     "noEmit": true,
     "strict": true,
-    "noImplicitAny": false,
     "target": "ES2020",
     "allowSyntheticDefaultImports": true
   },

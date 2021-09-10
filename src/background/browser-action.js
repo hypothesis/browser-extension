@@ -17,8 +17,12 @@ const icons = {
   },
 };
 
-// themes to apply to the toolbar icon badge depending on the type of
-// build. Production builds use the default color and no text
+/**
+ * Themes to apply to the toolbar icon badge depending on the type of
+ * build. Production builds use the default color and no text
+ *
+ * @type {Record<string, { defaultText: string, color: string }>}
+ */
 const badgeThemes = {
   dev: {
     defaultText: 'DEV',
@@ -29,11 +33,6 @@ const badgeThemes = {
     color: '#EDA061', // Porche orange-pink
   },
 };
-
-// Fake localization function.
-function _(str) {
-  return str;
-}
 
 /**
  * Controls the display of the browser action button setting the icon, title
@@ -85,11 +84,9 @@ export function BrowserAction(chromeBrowserAction) {
 
       let countLabel;
       if (state.annotationCount === 1) {
-        countLabel = _("There's 1 annotation on this page");
+        countLabel = "There's 1 annotation on this page";
       } else {
-        countLabel = _(
-          'There are ' + totalString + ' annotations on this page'
-        );
+        countLabel = `There are ${totalString} annotations on this page`;
       }
 
       title = countLabel;

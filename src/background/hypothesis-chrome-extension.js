@@ -86,7 +86,11 @@ export default function HypothesisChromeExtension({
     restoreSavedTabState();
   };
 
-  /* Opens the onboarding page */
+  /**
+   * Opens the onboarding page.
+   *
+   * @param {chrome.management.ExtensionInfo} extensionInfo
+   */
   this.firstRun = function (extensionInfo) {
     // If we've been installed because of an administrative policy, then don't
     // open the welcome page in a new tab.
@@ -150,20 +154,24 @@ export default function HypothesisChromeExtension({
   // exposed for use by tests
   this._onTabStateChange = onTabStateChange;
 
+  /** @param {chrome.tabs.Tab} tab */
   function onBrowserActionClicked(tab) {
-    const tabError = state.getState(tab.id).error;
+    const tabId = /** @type {number} */ (tab.id);
+    const tabError = state.getState(tabId).error;
     if (tabError) {
       help.showHelpForError(tab, tabError);
-    } else if (state.isTabActive(tab.id)) {
-      state.deactivateTab(tab.id);
+    } else if (state.isTabActive(tabId)) {
+      state.deactivateTab(tabId);
     } else {
-      state.activateTab(tab.id);
+      state.activateTab(tabId);
     }
   }
 
   /**
    * Returns the active state for a tab
    * which has just been navigated to.
+   *
+   * @param {number} tabId
    */
   function activeStateForNavigatedTab(tabId) {
     let activeState = state.getState(tabId).state;
@@ -227,6 +235,10 @@ export default function HypothesisChromeExtension({
     }
   }
 
+  /**
+   * @param {number} addedTabId
+   * @param {number} removedTabId
+   */
   function onTabReplaced(addedTabId, removedTabId) {
     state.setState(addedTabId, {
       state: activeStateForNavigatedTab(removedTabId),
@@ -235,7 +247,10 @@ export default function HypothesisChromeExtension({
     state.clearTab(removedTabId);
 
     chromeTabs.get(addedTabId, function (tab) {
-      updateAnnotationCountIfEnabled(addedTabId, tab.url);
+      updateAnnotationCountIfEnabled(
+        addedTabId,
+        /** @type {string} */ (tab.url)
+      );
     });
   }
 
@@ -327,6 +342,10 @@ export default function HypothesisChromeExtension({
     }
   }
 
+  /**
+   * @param {number} tabId
+   * @param {string} url
+   */
   function updateAnnotationCountIfEnabled(tabId, url) {
     if (!chromeStorage.sync) {
       // Firefox < 53 does not support `chrome.storage.sync`.

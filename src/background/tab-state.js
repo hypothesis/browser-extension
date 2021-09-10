@@ -1,4 +1,6 @@
+// @ts-ignore
 import isShallowEqual from 'is-equal-shallow';
+
 import { RequestCanceledError } from './errors';
 
 import * as uriInfo from './uri-info';
@@ -45,7 +47,7 @@ const DEFAULT_STATE = {
  * TabState stores the Hypothesis-related state for tabs in the current browser
  * session.
  *
- * @param {TabStateMap} initialState - Initial state information for tabs, eg.
+ * @param {Record<number, Partial<State>>} initialState - Initial state information for tabs, eg.
  *   from a persistent store.
  * @param {(tabId: number, current: undefined|State) => any} [onchange] -
  *   Callback invoked when state for a tab changes
@@ -77,14 +79,14 @@ export function TabState(initialState, onchange) {
   /**
    * Replaces the H state for all tabs.
    *
-   * @param {TabStateMap} newState - A dictionary mapping tab ID to tab state objects.
-   *                   The provided state will be merged with the default
-   *                   state for a tab.
+   * @param {Record<number, Partial<State>>} newState -
+   *   Map of tab ID to state. The state is merged with the default state for a tab.
    */
   this.load = function (newState) {
     /** @type {TabStateMap} */
     const newCurrentState = {};
-    Object.keys(newState).forEach(function (tabId) {
+    Object.keys(newState).forEach(function (tabIdStr) {
+      const tabId = parseInt(tabIdStr);
       newCurrentState[tabId] = Object.assign(
         {},
         DEFAULT_STATE,
@@ -229,6 +231,7 @@ export function TabState(initialState, onchange) {
 
     const pendingRequest = pendingAnnotationCountRequests.get(tabId);
 
+    /** @type {string} */
     let url;
     try {
       url = uriInfo.uriForBadgeRequest(tabUrl);

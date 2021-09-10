@@ -11,7 +11,11 @@ const BLOCKED_HOSTNAMES = new Set([
   'mail.google.com',
 ]);
 
-/** encodeUriQuery encodes a string for use in a query parameter */
+/**
+ * Encodes a string for use in a query parameter.
+ *
+ * @param {string} val
+ */
 function encodeUriQuery(val) {
   return encodeURIComponent(val).replace(/%20/g, '+');
 }
@@ -47,9 +51,10 @@ export function uriForBadgeRequest(uri) {
 }
 
 /**
- * Queries the Hypothesis service that provides
- * statistics about the annotations for a given URL.
+ * Queries the Hypothesis service that provides statistics about the annotations
+ * for a given URL.
  *
+ * @param {string} uri
  * @return {Promise<number>}
  * @throws Will throw a variety of errors: network, json parsing, or wrong format errors.
  */

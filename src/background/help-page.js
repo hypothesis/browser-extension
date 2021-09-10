@@ -1,21 +1,22 @@
 import browserName from './browser-name';
 import * as errors from './errors';
 
-/* A controller for displaying help pages. These are bound to extension
+/**
+ * A controller for displaying help pages. These are bound to extension
  * specific errors (found in errors.js) but can also be triggered manually.
  *
- * chromeTabs   - An instance of chrome.tabs.
- * extensionURL - A function that recieves a path and returns a full path
- *   to the file inside the chrome extension. See:
- *   https://developer.chrome.com/extensions/extension#method-getURL
+ * @param {chrome.tabs} chromeTabs - An instance of chrome.tabs.
+ * @param {(path: string) => string} extensionURL -
+ *   A function that recieves a path and returns a full path to the file inside
+ *   the chrome extension. See: https://developer.chrome.com/extensions/extension#method-getURL
+ * @param {() => string} [browserName_]
  */
-export function HelpPage(chromeTabs, extensionURL, browserName_) {
-  browserName_ = browserName_ || browserName;
-
-  /* Accepts an instance of errors.ExtensionError and displays an appropriate
+export function HelpPage(chromeTabs, extensionURL, browserName_ = browserName) {
+  /**
+   * Accepts an instance of errors.ExtensionError and displays an appropriate
    * help page if one exists.
    *
-   * @param {Tab} tab   - The tab to display the error message in.
+   * @param {chrome.tabs.Tab} tab - The tab to display the error message in.
    * @param {Error} error - The error to display, usually an instance of
    *                        errors.ExtensionError
    */
@@ -55,6 +56,7 @@ export function HelpPage(chromeTabs, extensionURL, browserName_) {
       params = '?message=' + encodeURIComponent(error.message);
     }
 
+    /** @type {chrome.tabs.CreateProperties} */
     const tabOpts = {
       index: tab.index + 1,
       url: extensionURL('/help/index.html' + params + '#' + helpSection),
