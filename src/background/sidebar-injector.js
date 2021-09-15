@@ -1,6 +1,11 @@
 import detectContentType from './detect-content-type';
-import * as errors from './errors';
-import * as util from './util';
+import {
+  AlreadyInjectedError,
+  LocalFileError,
+  NoFileAccessError,
+  RestrictedProtocolError,
+} from './errors';
+import { promisify } from './util';
 
 const CONTENT_TYPE_HTML = 'HTML';
 const CONTENT_TYPE_PDF = 'PDF';
@@ -66,7 +71,7 @@ export default function SidebarInjector(
   chromeTabs,
   { isAllowedFileSchemeAccess, extensionURL }
 ) {
-  const executeScriptFn = util.promisify(chromeTabs.executeScript);
+  const executeScriptFn = promisify(chromeTabs.executeScript);
 
   const PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
 
@@ -123,7 +128,7 @@ export default function SidebarInjector(
     if (isSupportedURL(url)) {
       canInject = Promise.resolve(true);
     } else if (isFileURL(url)) {
-      canInject = util.promisify(isAllowedFileSchemeAccess)();
+      canInject = promisify(isAllowedFileSchemeAccess)();
     } else {
       canInject = Promise.resolve(false);
     }
@@ -202,7 +207,7 @@ export default function SidebarInjector(
         return injectIntoLocalPDF(tab);
       } else {
         return Promise.reject(
-          new errors.LocalFileError('Local non-PDF files are not supported')
+          new LocalFileError('Local non-PDF files are not supported')
         );
       }
     });
@@ -222,7 +227,7 @@ export default function SidebarInjector(
       // (or some other format). In some cases we could extract the original
       // URL and open that in the Hypothesis viewer instead.
       const protocol = tab.url.split(':')[0];
-      throw new errors.RestrictedProtocolError(
+      throw new RestrictedProtocolError(
         'Cannot load Hypothesis into ' + protocol + ' pages'
       );
     }
@@ -240,7 +245,7 @@ export default function SidebarInjector(
         typeof result.installedURL === 'string' &&
         result.installedURL.indexOf(extensionURL('/')) === -1
       ) {
-        throw new errors.AlreadyInjectedError(
+        throw new AlreadyInjectedError(
           'Hypothesis is already injected into this page'
         );
       }
@@ -251,7 +256,7 @@ export default function SidebarInjector(
     if (isPDFViewerURL(tab.url)) {
       return Promise.resolve();
     }
-    const updateFn = util.promisify(chromeTabs.update);
+    const updateFn = promisify(chromeTabs.update);
     return updateFn(tab.id, { url: getPDFViewerURL(tab.url) });
   }
 
@@ -261,9 +266,7 @@ export default function SidebarInjector(
         if (isAllowed) {
           resolve(injectIntoPDF(tab));
         } else {
-          reject(
-            new errors.NoFileAccessError('Local file scheme access denied')
-          );
+          reject(new NoFileAccessError('Local file scheme access denied'));
         }
       });
     });
