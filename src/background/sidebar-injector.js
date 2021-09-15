@@ -143,7 +143,7 @@ export default function SidebarInjector(
    * a content script to determine the type of content in the page.
    */
   function guessContentTypeFromURL(url) {
-    if (url.indexOf('.pdf') !== -1) {
+    if (url.includes('.pdf')) {
       return CONTENT_TYPE_PDF;
     } else {
       return CONTENT_TYPE_HTML;
@@ -185,11 +185,11 @@ export default function SidebarInjector(
    * viewer bundled with the extension.
    */
   function isPDFViewerURL(url) {
-    return url.indexOf(pdfViewerBaseURL) === 0;
+    return url.startsWith(pdfViewerBaseURL);
   }
 
   function isFileURL(url) {
-    return url.indexOf('file:') === 0;
+    return url.startsWith('file:');
   }
 
   function isSupportedURL(url) {
@@ -242,9 +242,8 @@ export default function SidebarInjector(
       const results = await injectIntoHTML(tab);
       const result = extractContentScriptResult(results);
       if (
-        result &&
-        typeof result.installedURL === 'string' &&
-        result.installedURL.indexOf(extensionURL('/')) === -1
+        typeof result?.installedURL === 'string' &&
+        !result.installedURL.includes(extensionURL('/'))
       ) {
         throw new AlreadyInjectedError(
           'Hypothesis is already injected into this page'
@@ -289,7 +288,7 @@ export default function SidebarInjector(
       // If the original URL was a direct link, drop the #annotations fragment
       // as otherwise the Chrome extension will re-activate itself on this tab
       // when the original URL loads.
-      if (hash.indexOf('#annotations:') === 0) {
+      if (hash.startsWith('#annotations:')) {
         hash = '';
       }
 
