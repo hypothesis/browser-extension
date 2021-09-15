@@ -95,12 +95,13 @@ export default function SidebarInjector(
     }
   };
 
-  /* Removes the Hypothesis sidebar from the tab provided.
-   *
-   * tab - A tab object representing the tab to remove the sidebar from.
+  /**
+   * Removes the Hypothesis sidebar from the tab provided.
    *
    * Returns a promise that will be resolved if the removal succeeded
    * otherwise it will be rejected with an error.
+   *
+   * @param {chrome.tabs.Tab} tab
    */
   this.removeFromTab = function (tab) {
     if (isPDFViewerURL(tab.url)) {
