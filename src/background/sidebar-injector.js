@@ -73,7 +73,7 @@ export default function SidebarInjector(
 ) {
   const executeScript = promisify(chromeTabs.executeScript);
 
-  const PDFViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
+  const pdfViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
 
   /**
    * Injects the Hypothesis sidebar into the tab provided.
@@ -119,7 +119,7 @@ export default function SidebarInjector(
     const hash = parsedURL.hash;
     parsedURL.hash = '';
     const encodedURL = encodeURIComponent(parsedURL.href);
-    return PDFViewerBaseURL + '?file=' + encodedURL + hash;
+    return pdfViewerBaseURL + '?file=' + encodedURL + hash;
   }
 
   // returns true if the extension is permitted to inject
@@ -185,7 +185,7 @@ export default function SidebarInjector(
    * viewer bundled with the extension.
    */
   function isPDFViewerURL(url) {
-    return url.indexOf(PDFViewerBaseURL) === 0;
+    return url.indexOf(pdfViewerBaseURL) === 0;
   }
 
   function isFileURL(url) {
