@@ -270,7 +270,7 @@ export default function SidebarInjector(
   }
 
   function injectIntoHTML(tab) {
-    return injectScript(tab.id, '/client/build/boot.js');
+    return executeScript(tab.id, { file: '/client/build/boot.js' });
   }
 
   function removeFromPDF(tab) {
@@ -303,15 +303,7 @@ export default function SidebarInjector(
     if (!isSupportedURL(tab.url)) {
       return Promise.resolve();
     }
-    return injectScript(tab.id, '/unload-client.js');
-  }
-
-  /**
-   * Inject the script from the source file at `path` into the
-   * page currently loaded in the tab at the given ID.
-   */
-  function injectScript(tabId, path) {
-    return executeScript(tabId, { file: path });
+    return executeScript(tab.id, { file: '/unload-client.js' });
   }
 
   /**
