@@ -46,6 +46,7 @@
     "watchify": "^4.0.0",
     "web-ext": "^6.4.0"
   },
+  "browserslist": "chrome 85, firefox 75",
   "scripts": {
     "test": "karma start tests/karma.config.js --single-run",
     "typecheck": "tsc --build src/tsconfig.json"
