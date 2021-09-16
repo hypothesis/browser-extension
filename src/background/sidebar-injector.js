@@ -146,16 +146,14 @@ export function SidebarInjector() {
    *
    * @param {string} url
    */
-  function canInjectScript(url) {
-    let canInject;
+  async function canInjectScript(url) {
     if (isSupportedURL(url)) {
-      canInject = Promise.resolve(true);
+      return true;
     } else if (isFileURL(url)) {
-      canInject = chromeAPI.extension.isAllowedFileSchemeAccess();
+      return chromeAPI.extension.isAllowedFileSchemeAccess();
     } else {
-      canInject = Promise.resolve(false);
+      return false;
     }
-    return canInject;
   }
 
   /**
@@ -180,40 +178,36 @@ export function SidebarInjector() {
   }
 
   /** @param {Tab} tab */
-  function detectTabContentType(tab) {
+  async function detectTabContentType(tab) {
     if (isPDFViewerURL(tab.url)) {
-      return Promise.resolve(CONTENT_TYPE_PDF);
+      return CONTENT_TYPE_PDF;
     }
 
     if (isVitalSourceURL(tab.url)) {
-      return Promise.resolve(CONTENT_TYPE_VITALSOURCE);
+      return CONTENT_TYPE_VITALSOURCE;
     }
 
-    return canInjectScript(tab.url).then(function (canInject) {
-      if (canInject) {
-        return chromeAPI.tabs
-          .executeScript(tab.id, {
-            code: toIIFEString(detectContentType),
-          })
-          .then(function (frameResults) {
-            const result = extractContentScriptResult(frameResults);
-            if (result) {
-              return result.type;
-            } else {
-              // If the content script threw an exception,
-              // frameResults may be null or undefined.
-              //
-              // In that case, fall back to guessing based on the
-              // tab URL
-              return guessContentTypeFromURL(tab.url);
-            }
-          });
+    const canInject = await canInjectScript(tab.url);
+    if (canInject) {
+      const frameResults = await chromeAPI.tabs.executeScript(tab.id, {
+        code: toIIFEString(detectContentType),
+      });
+      const result = extractContentScriptResult(frameResults);
+      if (result) {
+        return result.type;
       } else {
-        // We cannot inject a content script in order to determine the
-        // file type, so fall back to a URL-based mechanism
-        return Promise.resolve(guessContentTypeFromURL(tab.url));
+        // If the content script threw an exception,
+        // frameResults may be null or undefined.
+        //
+        // In that case, fall back to guessing based on the
+        // tab URL
+        return guessContentTypeFromURL(tab.url);
       }
-    });
+    } else {
+      // We cannot inject a content script in order to determine the
+      // file type, so fall back to a URL-based mechanism
+      return guessContentTypeFromURL(tab.url);
+    }
   }
 
   /**
@@ -240,16 +234,13 @@ export function SidebarInjector() {
   }
 
   /** @param {Tab} tab */
-  function injectIntoLocalDocument(tab) {
-    return detectTabContentType(tab).then(function (type) {
-      if (type === CONTENT_TYPE_PDF) {
-        return injectIntoLocalPDF(tab);
-      } else {
-        return Promise.reject(
-          new LocalFileError('Local non-PDF files are not supported')
-        );
-      }
-    });
+  async function injectIntoLocalDocument(tab) {
+    const type = await detectTabContentType(tab);
+    if (type === CONTENT_TYPE_PDF) {
+      return injectIntoLocalPDF(tab);
+    } else {
+      throw new LocalFileError('Local non-PDF files are not supported');
+    }
   }
 
   /**
