@@ -50,7 +50,7 @@ const DEFAULT_STATE = {
  * @param {(tabId: number, current: undefined|State) => any} [onchange] -
  *   Callback invoked when state for a tab changes
  */
-export default function TabState(initialState, onchange) {
+export function TabState(initialState, onchange) {
   /**
    * Current Hypothesis-related state for each tab.
    *

@@ -123,11 +123,15 @@ describe('HypothesisChromeExtension', function () {
     FakeTabState.prototype = fakeTabState;
 
     $imports.$mock({
-      './tab-state': FakeTabState,
-      './tab-store': createConstructor(fakeTabStore),
-      './help-page': createConstructor(fakeHelpPage),
-      './browser-action': createConstructor(fakeBrowserAction),
-      './sidebar-injector': createConstructor(fakeSidebarInjector),
+      './tab-state': { TabState: FakeTabState },
+      './tab-store': { TabStore: createConstructor(fakeTabStore) },
+      './help-page': { HelpPage: createConstructor(fakeHelpPage) },
+      './browser-action': {
+        BrowserAction: createConstructor(fakeBrowserAction),
+      },
+      './sidebar-injector': {
+        SidebarInjector: createConstructor(fakeSidebarInjector),
+      },
       './errors': fakeErrors,
       './settings': {
         default: {

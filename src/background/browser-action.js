@@ -45,7 +45,7 @@ function _(str) {
  *
  * @param {chrome.browserAction} chromeBrowserAction
  */
-export default function BrowserAction(chromeBrowserAction) {
+export function BrowserAction(chromeBrowserAction) {
   const buildType = settings.buildType;
 
   /**

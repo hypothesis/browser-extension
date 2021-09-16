@@ -1,4 +1,4 @@
-import TabStore from '../../src/background/tab-store';
+import { TabStore } from '../../src/background/tab-store';
 
 describe('TabStore', function () {
   let store;

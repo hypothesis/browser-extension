@@ -1,4 +1,4 @@
-import TabState, { $imports } from '../../src/background/tab-state';
+import { TabState, $imports } from '../../src/background/tab-state';
 
 describe('TabState', () => {
   let state;

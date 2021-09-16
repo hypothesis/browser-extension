@@ -9,7 +9,7 @@ import * as errors from './errors';
  *   to the file inside the chrome extension. See:
  *   https://developer.chrome.com/extensions/extension#method-getURL
  */
-export default function HelpPage(chromeTabs, extensionURL, browserName_) {
+export function HelpPage(chromeTabs, extensionURL, browserName_) {
   browserName_ = browserName_ || browserName;
 
   /* Accepts an instance of errors.ExtensionError and displays an appropriate

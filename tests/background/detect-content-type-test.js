@@ -1,6 +1,6 @@
-import detectContentType from '../../src/background/detect-content-type';
+import { detectContentType } from '../../src/background/detect-content-type';
 
-describe('detectContentType()', function () {
+describe('detectContentType', function () {
   let el;
   beforeEach(function () {
     el = document.createElement('div');

@@ -1,11 +1,12 @@
-/** TabStore is used to persist the state of H browser tabs when
+/**
+ * TabStore is used to persist the state of H browser tabs when
  * the extension is re-installed or updated.
  *
  * Note: This could also be used to persist the state across browser sessions,
  * for that to work however the storage key would need to be changed.
  * The tab ID is currently used but this is valid only for a browser session.
  */
-export default function TabStore(storage) {
+export function TabStore(storage) {
   const key = 'state';
   let local;
 

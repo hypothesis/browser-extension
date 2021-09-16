@@ -1,4 +1,4 @@
-import detectContentType from './detect-content-type';
+import { detectContentType } from './detect-content-type';
 import {
   AlreadyInjectedError,
   LocalFileError,
@@ -95,7 +95,7 @@ function checkTab(tab) {
  *   A function that receives a path and returns an absolute
  *   url. See: https://developer.chrome.com/extensions/extension#method-getURL
  */
-export default function SidebarInjector(
+export function SidebarInjector(
   chromeTabs,
   { isAllowedFileSchemeAccess, extensionURL }
 ) {

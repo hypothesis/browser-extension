@@ -1,5 +1,5 @@
 import * as errors from '../../src/background/errors';
-import SidebarInjector from '../../src/background/sidebar-injector';
+import { SidebarInjector } from '../../src/background/sidebar-injector';
 import { toResult } from '../promise-util';
 
 // The root URL for the extension returned by the
