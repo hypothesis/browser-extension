@@ -1,5 +1,5 @@
 import * as errors from '../../src/background/errors';
-import HelpPage from '../../src/background/help-page';
+import { HelpPage } from '../../src/background/help-page';
 
 describe('HelpPage', function () {
   let fakeBrowserName;

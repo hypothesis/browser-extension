@@ -1,4 +1,4 @@
-import directLinkQuery from '../../src/background/direct-link-query';
+import { directLinkQuery } from '../../src/background/direct-link-query';
 
 describe('common.direct-link-query', () => {
   it('returns `null` if the URL contains no #annotations fragment', () => {

@@ -22,7 +22,7 @@
  * @return {Query|null}
  *   The direct link query translated into client configuration settings.
  */
-export default function directLinkQuery(url) {
+export function directLinkQuery(url) {
   // Annotation IDs are url-safe-base64 identifiers
   // See https://tools.ietf.org/html/rfc4648#page-7
   const idMatch = url.match(/#annotations:([A-Za-z0-9_-]+)$/);
