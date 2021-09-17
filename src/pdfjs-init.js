@@ -1,5 +1,7 @@
 'use strict';
 
+/* global PDFViewerApplication */
+
 // This script is run once PDF.js has loaded and it configures the viewer
 // and injects the Hypothesis client.
 
@@ -17,44 +19,13 @@ configScript.className = 'js-hypothesis-config';
 configScript.textContent = JSON.stringify(clientConfig);
 document.head.appendChild(configScript);
 
-// Listen for `webviewerloaded` event to configure the viewer after its files
-// have been loaded but before it is initialized.
+// See https://github.com/mozilla/pdf.js/wiki/Third-party-viewer-usage
 document.addEventListener('webviewerloaded', () => {
-  // @ts-expect-error - PDFViewerApplicationOptions is missing from types.
-  const appOptions = window.PDFViewerApplicationOptions;
+  // Wait for the PDF viewer to be fully initialized before loading the client.
+  // Note that the PDF may still be loading after initialization.
+
   // @ts-expect-error - PDFViewerApplication is missing from types.
-  const app = window.PDFViewerApplication;
-
-  // Ensure that PDF.js viewer events such as "documentloaded" are dispatched
-  // to the DOM. The client relies on this.
-  appOptions.set('eventBusDispatchToDOM', true);
-
-  // Disable preferences support, as otherwise this will result in `eventBusDispatchToDOM`
-  // being overridden with the default value of `false`.
-  appOptions.set('disablePreferences', true);
-
-  // Wait for the PDF viewer to be fully initialized and then load the Hypothesis client.
-  //
-  // This is required because the client currently assumes that `PDFViewerApplication`
-  // is fully initialized when it loads. Note that "fully initialized" only means
-  // that the PDF viewer application's components have been initialized. The
-  // PDF itself will still be loading, and the client will wait for that to
-  // complete before fetching annotations.
-  //
-  const pdfjsInitialized = /** @type {Promise<void>} */ (
-    new Promise(resolve => {
-      // Poll `app.initialized` as there doesn't appear to be an event that
-      // we can listen to.
-      const timer = setInterval(() => {
-        if (app.initialized) {
-          clearTimeout(timer);
-          resolve();
-        }
-      }, 20);
-    })
-  );
-
-  pdfjsInitialized.then(() => {
+  PDFViewerApplication.initializedPromise.then(() => {
     const embedScript = document.createElement('script');
     embedScript.src = '/client/build/boot.js';
     document.body.appendChild(embedScript);
