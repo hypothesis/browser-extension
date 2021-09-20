@@ -4,7 +4,7 @@
  *
  * See https://h-client.readthedocs.io/en/latest/publishers/config/#config-settings
  *
- * @typedef {Object} Query
+ * @typedef Query
  * @property {string} [annotations] - ID of the direct-linked annotation
  * @property {string} [query] - Filter query from the sidebar
  * @property {string} [group] - ID of the direct-linked group

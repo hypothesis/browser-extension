@@ -86,7 +86,7 @@ function checkTab(tab) {
  * when applicable.
  *
  * @param {chrome.tabs} chromeTabs
- * @param {Object} services
+ * @param {object} services
  * @param {(cb: (allowed: boolean) => void) => void} services.isAllowedFileSchemeAccess -
  *   A function that returns true if the user
  *   can access resources over the file:// protocol. See:

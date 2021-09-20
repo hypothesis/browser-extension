@@ -29,7 +29,7 @@ import TabStore from './tab-store';
  * - https://developer.chrome.com/extensions/tabs
  * - https://developer.chrome.com/extensions/extension
  *
- * @param {Object} services
+ * @param {object} services
  * @param {chrome.tabs} services.chromeTabs
  * @param {chrome.extension} services.chromeExtension
  * @param {chrome.storage} services.chromeStorage

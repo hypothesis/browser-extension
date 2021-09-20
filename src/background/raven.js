@@ -69,10 +69,10 @@ export function init(config) {
 /**
  * Report an error to Sentry.
  *
- * @param {Object} error - An error object describing what went wrong
+ * @param {object} error - An error object describing what went wrong
  * @param {string} when - A string describing the context in which
  *                        the error occurred.
- * @param {Object} [context] - A JSON-serializable object containing additional
+ * @param {object} [context] - A JSON-serializable object containing additional
  *                             information which may be useful when
  *                             investigating the error.
  */
