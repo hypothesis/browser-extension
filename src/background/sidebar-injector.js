@@ -317,7 +317,7 @@ export function SidebarInjector() {
     const parsedURL = new URL(tab.url);
     const originalURL = parsedURL.searchParams.get('file');
     if (!originalURL) {
-      throw new Error('Failed to extract original URL from ' + tab.url);
+      throw new Error(`Failed to extract original URL from ${tab.url}`);
     }
     let hash = parsedURL.hash;
 
