@@ -13,7 +13,7 @@ upload_and_publish_chrome_qa_ext() {
     exit 1
   fi
 
-./node_modules/.bin/webstore upload \
+./node_modules/.bin/chrome-webstore-upload upload \
   --source $CHROME_QA_EXT_ARCHIVE \
   --extension-id $CHROME_QA_EXT_ID \
   --client-id $CHROME_WEBSTORE_CLIENT_ID \
@@ -30,7 +30,7 @@ upload_chrome_prod_ext() {
     exit 1
   fi
 
-  ./node_modules/.bin/webstore upload \
+  ./node_modules/.bin/chrome-webstore-upload upload \
     --source $CHROME_PROD_EXT_ARCHIVE \
     --extension-id $CHROME_PROD_EXT_ID \
     --client-id $CHROME_WEBSTORE_CLIENT_ID \
