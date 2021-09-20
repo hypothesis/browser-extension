@@ -61,7 +61,7 @@ export function shouldIgnoreInjectionError(err) {
  *
  * @param {Error} error - The error which happened.
  * @param {string} when - Describes the context in which the error occurred.
- * @param {Object} context - Additional context for the error.
+ * @param {object} context - Additional context for the error.
  */
 export function report(error, when, context) {
   console.error(when, error);

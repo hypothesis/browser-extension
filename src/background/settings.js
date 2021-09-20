@@ -1,7 +1,7 @@
 /**
  * Validate and normalize the given settings data.
  *
- * @param {Object} settings The settings from the settings.json file.
+ * @param {object} settings The settings from the settings.json file.
  */
 function normalizeSettings(settings) {
   // Make sure that apiUrl does not end with a /.
