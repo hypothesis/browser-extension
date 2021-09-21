@@ -29,7 +29,6 @@ describe('install', function () {
       storage: {},
       extension: {
         getURL: sinon.stub(),
-        isAllowedFileSchemeAccess: sinon.stub(),
       },
       runtime: {
         requestUpdateCheck: sinon.stub(),

@@ -1,3 +1,4 @@
+import { chromeAPI } from './chrome-api';
 import { detectContentType } from './detect-content-type';
 import {
   AlreadyInjectedError,
@@ -5,7 +6,6 @@ import {
   NoFileAccessError,
   RestrictedProtocolError,
 } from './errors';
-import { promisify } from './util';
 
 const CONTENT_TYPE_HTML = 'HTML';
 const CONTENT_TYPE_PDF = 'PDF';
@@ -84,24 +84,9 @@ function checkTab(tab) {
  * The SidebarInjector is used to deploy and remove the Hypothesis sidebar
  * from tabs. It also deals with loading PDF documents into the PDF.js viewer
  * when applicable.
- *
- * @param {chrome.tabs} chromeTabs
- * @param {object} services
- * @param {(cb: (allowed: boolean) => void) => void} services.isAllowedFileSchemeAccess -
- *   A function that returns true if the user
- *   can access resources over the file:// protocol. See:
- *   https://developer.chrome.com/extensions/extension#method-isAllowedFileSchemeAccess
- * @param {(path: string) => string} services.extensionURL -
- *   A function that receives a path and returns an absolute
- *   url. See: https://developer.chrome.com/extensions/extension#method-getURL
  */
-export function SidebarInjector(
-  chromeTabs,
-  { isAllowedFileSchemeAccess, extensionURL }
-) {
-  const executeScript = promisify(chromeTabs.executeScript);
-
-  const pdfViewerBaseURL = extensionURL('/pdfjs/web/viewer.html');
+export function SidebarInjector() {
+  const pdfViewerBaseURL = chromeAPI.runtime.getURL('/pdfjs/web/viewer.html');
 
   /**
    * Injects the Hypothesis sidebar into the tab provided.
@@ -163,7 +148,7 @@ export function SidebarInjector(
     if (isSupportedURL(url)) {
       canInject = Promise.resolve(true);
     } else if (isFileURL(url)) {
-      canInject = promisify(isAllowedFileSchemeAccess)();
+      canInject = chromeAPI.extension.isAllowedFileSchemeAccess();
     } else {
       canInject = Promise.resolve(false);
     }
@@ -194,21 +179,23 @@ export function SidebarInjector(
 
     return canInjectScript(tab.url).then(function (canInject) {
       if (canInject) {
-        return executeScript(tab.id, {
-          code: toIIFEString(detectContentType),
-        }).then(function (frameResults) {
-          const result = extractContentScriptResult(frameResults);
-          if (result) {
-            return result.type;
-          } else {
-            // If the content script threw an exception,
-            // frameResults may be null or undefined.
-            //
-            // In that case, fall back to guessing based on the
-            // tab URL
-            return guessContentTypeFromURL(tab.url);
-          }
-        });
+        return chromeAPI.tabs
+          .executeScript(tab.id, {
+            code: toIIFEString(detectContentType),
+          })
+          .then(function (frameResults) {
+            const result = extractContentScriptResult(frameResults);
+            if (result) {
+              return result.type;
+            } else {
+              // If the content script threw an exception,
+              // frameResults may be null or undefined.
+              //
+              // In that case, fall back to guessing based on the
+              // tab URL
+              return guessContentTypeFromURL(tab.url);
+            }
+          });
       } else {
         // We cannot inject a content script in order to determine the
         // file type, so fall back to a URL-based mechanism
@@ -286,7 +273,7 @@ export function SidebarInjector(
       const result = extractContentScriptResult(results);
       if (
         typeof result?.installedURL === 'string' &&
-        !result.installedURL.includes(extensionURL('/'))
+        !result.installedURL.includes(chromeAPI.runtime.getURL('/'))
       ) {
         throw new AlreadyInjectedError(
           'Hypothesis is already injected into this page'
@@ -300,52 +287,44 @@ export function SidebarInjector(
     if (isPDFViewerURL(tab.url)) {
       return Promise.resolve();
     }
-    const update = promisify(chromeTabs.update);
-    return update(tab.id, { url: getPDFViewerURL(tab.url) });
+    return chromeAPI.tabs.update(tab.id, { url: getPDFViewerURL(tab.url) });
   }
 
   /** @param {Tab} tab */
-  function injectIntoLocalPDF(tab) {
-    return new Promise(function (resolve, reject) {
-      isAllowedFileSchemeAccess(function (isAllowed) {
-        if (isAllowed) {
-          resolve(injectIntoPDF(tab));
-        } else {
-          reject(new NoFileAccessError('Local file scheme access denied'));
-        }
-      });
-    });
+  async function injectIntoLocalPDF(tab) {
+    const isAllowed = await chromeAPI.extension.isAllowedFileSchemeAccess();
+    if (isAllowed) {
+      await injectIntoPDF(tab);
+    } else {
+      throw new NoFileAccessError('Local file scheme access denied');
+    }
   }
 
   /** @param {Tab} tab */
   function injectIntoHTML(tab) {
-    return executeScript(tab.id, { file: '/client/build/boot.js' });
+    return chromeAPI.tabs.executeScript(tab.id, {
+      file: '/client/build/boot.js',
+    });
   }
 
   /** @param {Tab} tab */
-  function removeFromPDF(tab) {
-    return new Promise(function (resolve) {
-      const parsedURL = new URL(tab.url);
-      const originalURL = parsedURL.searchParams.get('file');
-      if (!originalURL) {
-        throw new Error('Failed to extract original URL from ' + tab.url);
-      }
-      let hash = parsedURL.hash;
+  async function removeFromPDF(tab) {
+    const parsedURL = new URL(tab.url);
+    const originalURL = parsedURL.searchParams.get('file');
+    if (!originalURL) {
+      throw new Error('Failed to extract original URL from ' + tab.url);
+    }
+    let hash = parsedURL.hash;
 
-      // If the original URL was a direct link, drop the #annotations fragment
-      // as otherwise the Chrome extension will re-activate itself on this tab
-      // when the original URL loads.
-      if (hash.startsWith('#annotations:')) {
-        hash = '';
-      }
+    // If the original URL was a direct link, drop the #annotations fragment
+    // as otherwise the Chrome extension will re-activate itself on this tab
+    // when the original URL loads.
+    if (hash.startsWith('#annotations:')) {
+      hash = '';
+    }
 
-      chromeTabs.update(
-        tab.id,
-        {
-          url: decodeURIComponent(originalURL) + hash,
-        },
-        resolve
-      );
+    await chromeAPI.tabs.update(tab.id, {
+      url: decodeURIComponent(originalURL) + hash,
     });
   }
 
@@ -354,7 +333,7 @@ export function SidebarInjector(
     if (!isSupportedURL(tab.url)) {
       return Promise.resolve();
     }
-    return executeScript(tab.id, { file: '/unload-client.js' });
+    return chromeAPI.tabs.executeScript(tab.id, { file: '/unload-client.js' });
   }
 
   /**
@@ -370,6 +349,6 @@ export function SidebarInjector(
   function injectConfig(tabId, config) {
     const configStr = JSON.stringify(config).replace(/"/g, '\\"');
     const configCode = `var hypothesisConfig="${configStr}";\n(${addJSONScriptTag})("js-hypothesis-config", hypothesisConfig);\n`;
-    return executeScript(tabId, { code: configCode });
+    return chromeAPI.tabs.executeScript(tabId, { code: configCode });
   }
 }
