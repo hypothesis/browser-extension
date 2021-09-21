@@ -1,5 +1,8 @@
 import * as errors from '../../src/background/errors';
-import { SidebarInjector } from '../../src/background/sidebar-injector';
+import {
+  SidebarInjector,
+  $imports,
+} from '../../src/background/sidebar-injector';
 import { toResult } from '../promise-util';
 
 // The root URL for the extension returned by the
@@ -24,8 +27,7 @@ function createTestFrame() {
 
 describe('SidebarInjector', function () {
   let injector;
-  let fakeChromeTabs;
-  let fakeFileAccess;
+  let fakeChromeAPI;
 
   // The content type that the detection script injected into
   // the page should report ('HTML' or 'PDF')
@@ -49,40 +51,50 @@ describe('SidebarInjector', function () {
       installedURL: EXTENSION_BASE_URL + '/client/app.html',
     };
 
-    const executeScriptSpy = sinon.spy(function (tabId, details, callback) {
+    const executeScriptSpy = sinon.spy(async function (tabId, details) {
       if (contentFrame) {
         contentFrame.contentWindow.eval(details.code);
       }
 
       if (details.code && details.code.match(/detectContentType/)) {
-        callback([{ type: contentType }]);
+        return [{ type: contentType }];
       } else if (details.file && details.file.match(/boot/)) {
-        callback([embedScriptReturnValue]);
+        return [embedScriptReturnValue];
       } else if (details.file && details.file.match(/destroy/)) {
-        callback([isAlreadyInjected]);
+        return [isAlreadyInjected];
       } else {
-        callback([false]);
+        return [false];
       }
     });
 
-    fakeChromeTabs = {
-      update: sinon.stub(),
-      executeScript: executeScriptSpy,
-    };
-    fakeFileAccess = sinon.stub().yields(true);
+    fakeChromeAPI = {
+      extension: {
+        isAllowedFileSchemeAccess: sinon.stub().resolves(true),
+      },
 
-    injector = new SidebarInjector(fakeChromeTabs, {
-      isAllowedFileSchemeAccess: fakeFileAccess,
-      extensionURL: sinon.spy(function (path) {
-        return EXTENSION_BASE_URL + path;
-      }),
+      runtime: {
+        getURL: sinon.spy(path => EXTENSION_BASE_URL + path),
+      },
+
+      tabs: {
+        update: sinon.stub(),
+        executeScript: executeScriptSpy,
+      },
+    };
+
+    $imports.$mock({
+      './chrome-api': { chromeAPI: fakeChromeAPI },
     });
+
+    injector = new SidebarInjector();
   });
 
   afterEach(function () {
     if (contentFrame) {
       contentFrame.parentNode.removeChild(contentFrame);
     }
+
+    $imports.$restore();
   });
 
   describe('.injectIntoTab', function () {
@@ -96,7 +108,7 @@ describe('SidebarInjector', function () {
       it(
         'bails early when trying to load an unsupported url: ' + url,
         function () {
-          const spy = fakeChromeTabs.executeScript;
+          const spy = fakeChromeAPI.tabs.executeScript;
           return toResult(injector.injectIntoTab({ id: 1, url: url })).then(
             function (result) {
               assert.ok(result.error);
@@ -132,7 +144,7 @@ describe('SidebarInjector', function () {
 
       it('injects hypothesis into the page', function () {
         contentType = 'PDF';
-        const spy = fakeChromeTabs.update.yields({ tab: 1 });
+        const spy = fakeChromeAPI.tabs.update.resolves({ tab: 1 });
         return injector.injectIntoTab({ id: 1, url: url }).then(function () {
           assert.calledWith(spy, 1, {
             url: PDF_VIEWER_BASE_URL + encodeURIComponent(url),
@@ -142,7 +154,7 @@ describe('SidebarInjector', function () {
 
       it('preserves #annotations fragments in the URL', function () {
         contentType = 'PDF';
-        const spy = fakeChromeTabs.update.yields({ tab: 1 });
+        const spy = fakeChromeAPI.tabs.update.resolves({ tab: 1 });
         const hash = '#annotations:456';
         return injector
           .injectIntoTab({ id: 1, url: url + hash })
@@ -156,7 +168,7 @@ describe('SidebarInjector', function () {
 
     describe('when viewing a remote HTML page', function () {
       it('injects hypothesis into the page', function () {
-        const spy = fakeChromeTabs.executeScript;
+        const spy = fakeChromeAPI.tabs.executeScript;
         const url = 'http://example.com/foo.html';
 
         return injector.injectIntoTab({ id: 1, url: url }).then(function () {
@@ -199,7 +211,7 @@ describe('SidebarInjector', function () {
     describe('when viewing a local PDF', function () {
       describe('when file access is enabled', function () {
         it('loads the PDFjs viewer', function () {
-          const spy = fakeChromeTabs.update.yields([]);
+          const spy = fakeChromeAPI.tabs.update.resolves([]);
           const url = 'file:///foo.pdf';
           contentType = 'PDF';
 
@@ -214,7 +226,7 @@ describe('SidebarInjector', function () {
 
       describe('when file access is disabled', function () {
         beforeEach(function () {
-          fakeFileAccess.yields(false);
+          fakeChromeAPI.extension.isAllowedFileSchemeAccess.resolves(false);
           contentType = 'PDF';
         });
 
@@ -224,7 +236,7 @@ describe('SidebarInjector', function () {
           const promise = injector.injectIntoTab({ id: 1, url: url });
           return toResult(promise).then(function (result) {
             assert.instanceOf(result.error, errors.NoFileAccessError);
-            assert.notCalled(fakeChromeTabs.executeScript);
+            assert.notCalled(fakeChromeAPI.tabs.executeScript);
           });
         });
       });
@@ -243,7 +255,7 @@ describe('SidebarInjector', function () {
 
   describe('.removeFromTab', function () {
     it('bails early when trying to unload a chrome url', function () {
-      const spy = fakeChromeTabs.executeScript;
+      const spy = fakeChromeAPI.tabs.executeScript;
       const url = 'chrome://extensions/';
 
       return injector.removeFromTab({ id: 1, url: url }).then(function () {
@@ -256,7 +268,7 @@ describe('SidebarInjector', function () {
       it(
         'bails early when trying to unload an unsupported ' + protocol + ' url',
         function () {
-          const spy = fakeChromeTabs.executeScript;
+          const spy = fakeChromeAPI.tabs.executeScript;
           const url = protocol + '//foobar/';
 
           return injector.removeFromTab({ id: 1, url: url }).then(function () {
@@ -268,7 +280,7 @@ describe('SidebarInjector', function () {
 
     describe('when viewing a PDF', function () {
       it('reverts the tab back to the original document', function () {
-        const spy = fakeChromeTabs.update.yields([]);
+        const spy = fakeChromeAPI.tabs.update.resolves([]);
         const url =
           PDF_VIEWER_BASE_URL +
           encodeURIComponent('http://example.com/foo.pdf') +
@@ -281,7 +293,7 @@ describe('SidebarInjector', function () {
       });
 
       it('drops #annotations fragments', function () {
-        const spy = fakeChromeTabs.update.yields([]);
+        const spy = fakeChromeAPI.tabs.update.resolves([]);
         const url =
           PDF_VIEWER_BASE_URL +
           encodeURIComponent('http://example.com/foo.pdf') +
@@ -300,7 +312,7 @@ describe('SidebarInjector', function () {
         return injector
           .removeFromTab({ id: 1, url: 'http://example.com/foo.html' })
           .then(function () {
-            assert.calledWith(fakeChromeTabs.executeScript, 1, {
+            assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
               file: sinon.match('/unload-client.js'),
             });
           });

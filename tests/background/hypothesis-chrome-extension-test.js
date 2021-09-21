@@ -51,7 +51,6 @@ describe('HypothesisChromeExtension', function () {
       chromeTabs: fakeChromeTabs,
       chromeBrowserAction: fakeChromeBrowserAction,
       extensionURL: sandbox.stub(),
-      isAllowedFileSchemeAccess: sandbox.stub().yields(true),
     });
   }
 

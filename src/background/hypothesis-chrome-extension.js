@@ -35,7 +35,6 @@ import { TabStore } from './tab-store';
  * @param {chrome.storage} services.chromeStorage
  * @param {chrome.browserAction} services.chromeBrowserAction
  * @param {(path: string) => string} services.extensionURL
- * @param {(cb: (allowed: boolean) => void) => void} services.isAllowedFileSchemeAccess
  */
 export default function HypothesisChromeExtension({
   chromeTabs,
@@ -43,16 +42,12 @@ export default function HypothesisChromeExtension({
   chromeStorage,
   chromeBrowserAction,
   extensionURL,
-  isAllowedFileSchemeAccess,
 }) {
   const help = new HelpPage(chromeTabs, extensionURL);
   const store = new TabStore(localStorage);
   const state = new TabState(store.all(), onTabStateChange);
   const browserAction = new BrowserAction(chromeBrowserAction);
-  const sidebar = new SidebarInjector(chromeTabs, {
-    extensionURL,
-    isAllowedFileSchemeAccess,
-  });
+  const sidebar = new SidebarInjector();
 
   /** @type {Map<number, string>} */
   const currentlyLoadingUrl = new Map(); // keeps tracks of what URL each tab is loading

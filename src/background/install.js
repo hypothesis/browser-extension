@@ -12,9 +12,6 @@ export function init() {
     extensionURL: function (path) {
       return chrome.extension.getURL(path);
     },
-    isAllowedFileSchemeAccess: function (fn) {
-      return chrome.extension.isAllowedFileSchemeAccess(fn);
-    },
   });
 
   browserExtension.listen();
