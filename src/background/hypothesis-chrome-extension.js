@@ -34,16 +34,14 @@ import { TabStore } from './tab-store';
  * @param {chrome.extension} services.chromeExtension
  * @param {chrome.storage} services.chromeStorage
  * @param {chrome.browserAction} services.chromeBrowserAction
- * @param {(path: string) => string} services.extensionURL
  */
 export default function HypothesisChromeExtension({
   chromeTabs,
   chromeExtension,
   chromeStorage,
   chromeBrowserAction,
-  extensionURL,
 }) {
-  const help = new HelpPage(chromeTabs, extensionURL);
+  const help = new HelpPage();
   const store = new TabStore(localStorage);
   const state = new TabState(store.all(), onTabStateChange);
   const browserAction = new BrowserAction(chromeBrowserAction);
