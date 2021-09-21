@@ -9,9 +9,6 @@ export function init() {
     chromeTabs: chrome.tabs,
     chromeBrowserAction: chrome.browserAction,
     chromeStorage: chrome.storage,
-    extensionURL: function (path) {
-      return chrome.extension.getURL(path);
-    },
   });
 
   browserExtension.listen();
