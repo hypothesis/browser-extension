@@ -26,6 +26,15 @@ export function getChromeAPI(chrome = globalThis.chrome) {
    */
 
   /**
+   * Cache of Promise-ified APIs. This is used so that APIs which are looked up
+   * on-demand, eg. because they are optional and may not exist when `getChromeAPI`
+   * is first called, are only created once.
+   *
+   * @type {Map<Function, any>}
+   */
+  const cache = new Map();
+
+  /**
    * Convert an async callback-accepting Chrome API to a Promise-returning version.
    *
    * TypeScript may complain if the API has a Manifest V3-only overload that
@@ -36,9 +45,13 @@ export function getChromeAPI(chrome = globalThis.chrome) {
    * @param {(...args: [...Args, Callback<Result>]) => void} fn
    * @return {(...args: Args) => Promise<Result>}
    */
-  const promisify =
-    fn =>
-    (...args) => {
+  const promisify = fn => {
+    const cached = cache.get(fn);
+    if (cached) {
+      return cached;
+    }
+
+    return (...args) => {
       return new Promise((resolve, reject) => {
         fn(...args, (/** @type {Result} */ result) => {
           const lastError = chrome.runtime.lastError;
@@ -50,6 +63,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
         });
       });
     };
+  };
 
   /**
    * @template {any[]} Args
@@ -83,6 +97,10 @@ export function getChromeAPI(chrome = globalThis.chrome) {
       getURL: chrome.runtime.getURL,
     },
 
+    permissions: {
+      request: promisify(chrome.permissions.request),
+    },
+
     tabs: {
       create: promisify(chrome.tabs.create),
       get: promisifyAlt(chrome.tabs.get),
@@ -101,6 +119,20 @@ export function getChromeAPI(chrome = globalThis.chrome) {
       sync: {
         get: promisify(chrome.storage.sync.get.bind(chrome.storage.sync)),
       },
+    },
+
+    // APIs that require optional permissions.
+    //
+    // These are resolved on-demand because the `chrome.<namespace>` properties
+    // will not exist unless the extension has the required permissions.
+    //
+    // If a permission is revoked, the property remains accessible until the
+    // page/worker is reloaded, but calling APIs may fail.
+
+    get webNavigation() {
+      return {
+        getAllFrames: promisify(chrome.webNavigation.getAllFrames),
+      };
     },
   };
 }
