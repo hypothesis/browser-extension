@@ -26,6 +26,10 @@ describe('getChromeAPI', () => {
         getURL: sinon.stub(),
       },
 
+      permissions: {
+        request: sinon.stub(),
+      },
+
       tabs: {
         create: sinon.stub(),
         get: sinon.stub(),
@@ -86,5 +90,33 @@ describe('getChromeAPI', () => {
     }
 
     assert.equal(error, fakeChrome.runtime.lastError);
+  });
+
+  describe('APIs that require optional permissions', () => {
+    it('rejects if permission has not been granted', async () => {
+      const chromeAPI = getChromeAPI(fakeChrome);
+
+      let error;
+      try {
+        await chromeAPI.webNavigation.getAllFrames();
+      } catch (e) {
+        error = e;
+      }
+
+      assert.ok(error);
+    });
+
+    it('succeeds if permission has been granted', async () => {
+      const chromeAPI = getChromeAPI(fakeChrome);
+
+      const frames = [];
+      fakeChrome.webNavigation = {
+        getAllFrames: sinon.stub().yields(frames),
+      };
+
+      const actualFrames = await chromeAPI.webNavigation.getAllFrames();
+
+      assert.equal(actualFrames, frames);
+    });
   });
 });
