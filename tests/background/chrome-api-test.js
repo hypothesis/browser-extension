@@ -110,6 +110,9 @@ describe('getChromeAPI', () => {
       const chromeAPI = getChromeAPI(fakeChrome);
 
       const frames = [];
+
+      // Simulate the "webNavigation" permission being granted, which will
+      // make the `chrome.webNavigation` property accessible.
       fakeChrome.webNavigation = {
         getAllFrames: sinon.stub().yields(frames),
       };
