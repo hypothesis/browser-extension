@@ -41,57 +41,13 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['browserify', 'mocha', 'chai', 'sinon'],
+    frameworks: ['mocha', 'chai', 'sinon'],
 
     // list of files / patterns to load in the browser
-    files: [
-      {
-        pattern: './settings.json',
-        included: false,
-      },
-      './bootstrap.js',
-      './background/*.js',
-    ],
+    files: ['../build/tests.bundle.js'],
 
     // list of files to exclude
     exclude: [],
-
-    // preprocess matching files before serving them to the browser
-    // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
-    preprocessors: {
-      '../src/background/*.js': ['browserify'],
-      './**/*.js': ['browserify'],
-    },
-
-    browserify: {
-      debug: true,
-      transform: [
-        [
-          'babelify',
-          {
-            extensions: ['.js'],
-            plugins: [
-              [
-                'mockable-imports',
-                {
-                  excludeDirs: ['tests'],
-                },
-              ],
-              [
-                'babel-plugin-istanbul',
-                {
-                  exclude: ['tests/**'],
-                },
-              ],
-            ],
-
-            // Enable Babel to load configuration from the `.babelrc` file when
-            // processing source files outside of the `tests/` directory.
-            root: `${__dirname}/../`,
-          },
-        ],
-      ],
-    },
 
     mochaReporter: {
       // Display a helpful diff when comparing complex objects
