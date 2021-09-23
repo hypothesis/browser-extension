@@ -55,7 +55,7 @@ describe('HypothesisChromeExtension', function () {
   }
 
   beforeEach(function () {
-    global.chrome = { runtime: chromeRuntime };
+    globalThis.chrome = { runtime: chromeRuntime };
     fakeChromeStorage = {
       sync: {
         get: sandbox.stub().callsArgWith(1, { badge: true }),
@@ -145,7 +145,7 @@ describe('HypothesisChromeExtension', function () {
   afterEach(function () {
     sandbox.restore();
     $imports.$restore();
-    global.chrome = undefined;
+    globalThis.chrome = undefined;
   });
 
   describe('.install', function () {
