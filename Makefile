@@ -1,8 +1,7 @@
 SETTINGS_FILE := settings/chrome-dev.json
 
-BROWSERIFY := node_modules/.bin/browserify
+ROLLUP := node_modules/.bin/rollup
 ESLINT := node_modules/.bin/eslint
-EXORCIST := node_modules/.bin/exorcist
 MUSTACHE := node_modules/.bin/mustache
 PRETTIER := node_modules/.bin/prettier
 
@@ -32,7 +31,7 @@ dev: node_modules/.uptodate
 .PHONY: clean
 clean:
 	rm -f node_modules/.uptodate
-	rm -rf build/* build/.settings.json build/.*.deps
+	rm -rf build/* build/.settings.json
 	rm -rf dist/*
 
 ################################################################################
@@ -59,17 +58,8 @@ extension: build/unload-client.js
 extension: build/pdfjs-init.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
 
-build/extension.bundle.js: src/background/index.js
-	$(BROWSERIFY) -t babelify -d $< > $@.tmp
-	cat $@.tmp | $(EXORCIST) $(addsuffix .map,$@) >$@
-	@# When building the extension bundle, we also write out a list of
-	@# depended-upon files to .extension.bundle.deps, which we then include to
-	@# ensure that the bundle is rebuilt if any of these change. We ignore
-	@# vendor dependencies.
-	@$(BROWSERIFY) -t babelify --list $< | \
-		grep -v node_modules | \
-		sed 's#^#$@: #' \
-		>build/.extension.bundle.deps
+build/extension.bundle.js: src/background/*.js rollup.config.js
+	$(ROLLUP) -c rollup.config.js
 build/manifest.json: src/manifest.json.mustache build/.settings.json
 	$(MUSTACHE) build/.settings.json $< > $@
 build/client/build: node_modules/hypothesis/build/manifest.json
@@ -108,7 +98,7 @@ checkformatting: node_modules/.uptodate
 
 .PHONY: format
 format: node_modules/.uptodate
-	$(PRETTIER) --list-different --write 'src/**/*.js' 'tests/**/*.js'
+	$(PRETTIER) --list-different --write '{src, tests}/**/*.js' '*.config.js'
 
 .PHONY: test
 test: node_modules/.uptodate
@@ -120,5 +110,3 @@ sure: checkformatting lint test
 node_modules/.uptodate: package.json yarn.lock
 	yarn install
 	@touch $@
-
--include build/.*.deps
