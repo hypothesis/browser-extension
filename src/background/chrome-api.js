@@ -52,15 +52,8 @@ export function getChromeAPI(chrome = globalThis.chrome) {
     }
 
     return (...args) => {
-      return new Promise((resolve, reject) => {
-        fn(...args, (/** @type {Result} */ result) => {
-          const lastError = chrome.runtime.lastError;
-          if (lastError) {
-            reject(lastError);
-          } else {
-            resolve(result);
-          }
-        });
+      return new Promise(resolve => {
+        fn(...args, (/** @type {Result} */ result) => resolve(result));
       });
     };
   };
