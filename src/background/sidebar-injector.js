@@ -39,22 +39,16 @@ function addJSONScriptTag(name, content) {
  * chrome.tabs.executeScript() into the main frame of a page.
  *
  * executeScript() returns an array of results, one per frame which the script
- * was injected into.
+ * was injected into. If a frame fails to execute the script the array entry will
+ * have a value of `null`.
  *
  * See https://developer.chrome.com/extensions/tabs#method-executeScript
  *
- * @param {Array<any>?} result
+ * @template T
+ * @param {Array<T>} result
  */
 function extractContentScriptResult(result) {
-  if (Array.isArray(result) && result.length > 0) {
-    return result[0];
-  } else if (typeof result === 'object') {
-    // Firefox currently returns an object instead of
-    // an array from executeScript()
-    return result;
-  } else {
-    return null;
-  }
+  return /** @type{T|null} */ (result[0]);
 }
 
 /**
@@ -189,6 +183,7 @@ export function SidebarInjector() {
 
     const canInject = await canInjectScript(tab.url);
     if (canInject) {
+      /** @type {Array<{ type: string }>} */
       const frameResults = await chromeAPI.tabs.executeScript(tab.id, {
         code: toIIFEString(detectContentType),
       });
