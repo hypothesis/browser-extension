@@ -21,7 +21,7 @@
     "eslint": "^7.32.0",
     "eslint-config-hypothesis": "^2.5.0",
     "eslint-plugin-mocha": "^9.0.0",
-    "eslint-plugin-react": "^7.25.3",
+    "eslint-plugin-react": "^7.26.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "exorcist": "^2.0.0",
     "git-describe": "^4.1.0",
