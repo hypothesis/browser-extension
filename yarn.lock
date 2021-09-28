@@ -4684,10 +4684,10 @@ human-signals@^1.1.1:
   resolved "https://registry.yarnpkg.com/human-signals/-/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
   integrity sha512-SEQu7vl8KjNL2eoGBLF3+wAjpsNfA9XMlXAYj/3EdaNfAlxKthD1xjEQfGOUhllCGGJVNY34bRr6lPINhNjyZw==
 
-hypothesis@^1.875.0:
-  version "1.875.0"
-  resolved "https://registry.yarnpkg.com/hypothesis/-/hypothesis-1.875.0.tgz#dcdf85a8ec0bb9fc693ac9a48c522b8ac36cb978"
-  integrity sha512-erDiRpyodYTVt/1DndY9BkwugluOxbwVLw81ZKBJMw72BpbWpywZUc0wLwefffDYYr98CKjERRrLPndcrXlwdQ==
+hypothesis@^1.876.0:
+  version "1.876.0"
+  resolved "https://registry.yarnpkg.com/hypothesis/-/hypothesis-1.876.0.tgz#9e28dfa4068088fe36917ed31a2d58b1d555281e"
+  integrity sha512-SQwhMAA6cd2w+/mZf5z2CR7vs53VteBjOnSvWJx5UyKzH0G8RzgtNo53wUsmWL/9YiQQF9R3T+gXbOr5dh3CDw==
 
 iconv-lite@0.4.24:
   version "0.4.24"
