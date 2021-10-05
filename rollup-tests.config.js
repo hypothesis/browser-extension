@@ -12,6 +12,7 @@ export default {
     format: 'iife',
     name: 'testsBundle', // This just exists to suppress a build warning.
   },
+  treeshake: false, // Disabled for build performance
   plugins: [
     babel({
       babelHelpers: 'bundled',
