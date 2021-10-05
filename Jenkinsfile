@@ -97,6 +97,7 @@ node {
 
     stage('Build Packages') {
         nodeEnv.inside("-e HOME=${workspace}") {
+          sh "make clean"  // Remove any assets from test step
           sh "make build SETTINGS_FILE=settings/chrome-qa.json dist/${gitVersion}-chrome-qa.zip"
           sh "make build SETTINGS_FILE=settings/chrome-prod.json dist/${gitVersion}-chrome-prod.zip"
           sh "make build SETTINGS_FILE=settings/firefox-qa.json dist/${gitVersion}-firefox-qa.xpi"
