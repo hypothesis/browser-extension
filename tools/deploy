@@ -112,5 +112,8 @@ upload_and_publish_chrome_qa_ext
 echo "Uploading Chrome (prod) extension..."
 upload_chrome_prod_ext
 
-echo "Signing Firefox extensions..."
-sign_firefox_exts
+# 2021-10-05: Disabled because Mozilla's web services are having problems and
+# timing out when signing the extension.
+#
+# echo "Signing Firefox extensions..."
+# sign_firefox_exts
