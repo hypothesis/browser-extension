@@ -10,6 +10,7 @@ RUN apk update && apk add --no-cache \
   git \
   make \
   nodejs \
+  rsync \
   yarn \
   zip
 

@@ -4,8 +4,12 @@
  * @typedef Settings
  * @prop {string} apiUrl
  * @prop {string} buildType
+ * @prop {{ dsn: string, release: string}} [raven]
  * @prop {string} serviceUrl
  */
+
+// @ts-ignore - Ignore missing module if file has not been generated.
+import settings from '../../build/settings.json';
 
 /**
  * Validate and normalize the given settings data.
@@ -23,4 +27,4 @@ function normalizeSettings(settings) {
 /**
  * Returns the configuration object for the Chrome extension
  */
-export default normalizeSettings(/** @type {any} */ (window).EXTENSION_CONFIG);
+export default normalizeSettings(settings);
