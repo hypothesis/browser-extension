@@ -31,19 +31,18 @@ dev: node_modules/.uptodate
 .PHONY: clean
 clean:
 	rm -f node_modules/.uptodate
-	rm -rf build/* build/.settings.json
+	rm -rf build/*
 	rm -rf dist/*
 
 ################################################################################
 
-# We write the settings found in SETTINGS_FILE to build/.settings.json (when the
-# contents change) in order to ensure that a different SETTINGS_FILE results in
-# the appropriate things being rebuilt.
+# The `build/settings.json` target is always rebuilt in case the value of
+# `SETTINGS_FILE` changed, but the output file is only updated if needed.
 .PHONY: force
-build/.settings.json: force
-	@tools/settings.js $(SETTINGS_FILE) | \
-	cmp -s - $@ || \
-	tools/settings.js $(SETTINGS_FILE) >$@
+build/settings.json: force
+	tools/settings.js $(SETTINGS_FILE) > $@.tmp
+	rsync --checksum $@.tmp $@
+	rm $@.tmp
 
 EXTENSION_SRC := pdfjs help images options
 
@@ -53,27 +52,24 @@ extension: build/manifest.json
 extension: build/client/build
 extension: build/client/app.html
 extension: build/client/notebook.html
-extension: build/settings-data.js
 extension: build/unload-client.js
 extension: build/pdfjs-init.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
 
-build/extension.bundle.js: src/background/*.js rollup.config.js
+build/extension.bundle.js: src/background/*.js rollup.config.js build/settings.json
 	$(ROLLUP) -c rollup.config.js
-build/manifest.json: src/manifest.json.mustache build/.settings.json
-	$(MUSTACHE) build/.settings.json $< > $@
+build/manifest.json: src/manifest.json.mustache build/settings.json
+	$(MUSTACHE) build/settings.json $< > $@
 build/client/build: node_modules/hypothesis/build/manifest.json
 	@mkdir -p $@
 	cp -R node_modules/hypothesis/build/* $@
 	@# We can't leave the client manifest in the build or the Chrome Web Store
 	@# will complain.
 	rm $@/manifest.json
-build/client/app.html: src/sidebar-app.html.mustache build/client build/.settings.json
-	tools/template-context-app.js build/.settings.json | $(MUSTACHE) - $< >$@
+build/client/app.html: src/sidebar-app.html.mustache build/client build/settings.json
+	tools/template-context-app.js build/settings.json | $(MUSTACHE) - $< >$@
 build/client/notebook.html: build/client/app.html
 	cp $< $@
-build/settings-data.js: src/settings-data.js.mustache build/client build/.settings.json
-	tools/template-context-settings.js build/.settings.json | $(MUSTACHE) - $< >$@
 build/unload-client.js: src/unload-client.js
 	cp $< $@
 build/pdfjs-%.js: src/pdfjs-%.js

@@ -1,4 +1,5 @@
 import * as glob from 'glob';
+import alias from '@rollup/plugin-alias';
 import { babel } from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
@@ -14,6 +15,14 @@ export default {
   },
   treeshake: false, // Disabled for build performance
   plugins: [
+    alias({
+      entries: [
+        {
+          find: '../../build/settings.json',
+          replacement: '../../tests/settings.json',
+        },
+      ],
+    }),
     babel({
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',

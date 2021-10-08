@@ -12,7 +12,9 @@ const gitDescribeSync = require('git-describe').gitDescribeSync;
 
 // Suppress (expected) EPIPE errors on STDOUT
 process.stdout.on('error', err => {
-  if (err.code === 'EPIPE') { process.exit(); }
+  if (err.code === 'EPIPE') {
+    process.exit();
+  }
 });
 
 /**
@@ -40,7 +42,7 @@ function getVersion(buildType) {
     versionName = `${gitInfo.hash}${gitInfo.dirty ? '.dirty' : ''}`;
   }
 
-  return {version, versionName};
+  return { version, versionName };
 }
 
 if (process.argv.length !== 3) {
@@ -49,6 +51,16 @@ if (process.argv.length !== 3) {
 }
 
 const settings = require(path.join(process.cwd(), process.argv[2]));
-const settingsOut = Object.assign({}, settings, getVersion(settings.buildType));
+const settingsOut = {
+  ...settings,
+  ...getVersion(settings.buildType),
+};
+
+if (settingsOut.sentryPublicDSN) {
+  settingsOut.raven = {
+    dsn: settingsOut.sentryPublicDSN,
+    release: settingsOut.version,
+  };
+}
 
 console.log(JSON.stringify(settingsOut));
