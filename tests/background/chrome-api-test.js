@@ -21,6 +21,10 @@ describe('getChromeAPI', () => {
         isAllowedFileSchemeAccess: sinon.stub(),
       },
 
+      management: {
+        getSelf: sinon.stub(),
+      },
+
       runtime: {
         lastError: null,
         getURL: sinon.stub(),

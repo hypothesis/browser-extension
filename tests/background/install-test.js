@@ -17,33 +17,27 @@ function eventListenerStub() {
 }
 
 describe('install', function () {
-  let fakeChrome;
+  let fakeChromeAPI;
 
   beforeEach(function () {
-    fakeChrome = {
-      tabs: {},
-      browserAction: {},
-      storage: {},
-      extension: {
-        getURL: sinon.stub(),
-      },
+    fakeChromeAPI = {
       runtime: {
-        requestUpdateCheck: sinon.stub(),
+        getURL: sinon.stub(),
+        requestUpdateCheck: sinon.stub().resolves(),
         onInstalled: eventListenerStub(),
         onMessageExternal: eventListenerStub(),
         onUpdateAvailable: eventListenerStub(),
       },
       management: {
-        getSelf: function (cb) {
-          cb({ installType: 'normal', id: '1234' });
-        },
+        getSelf: sinon.stub().resolves({ installType: 'normal', id: '1234' }),
       },
     };
 
     $imports.$mock({
+      './chrome-api': { chromeAPI: fakeChromeAPI },
       './hypothesis-chrome-extension': FakeHypothesisChromeExtension,
     });
-    init(fakeChrome);
+    init();
   });
 
   afterEach(function () {
@@ -52,12 +46,12 @@ describe('install', function () {
 
   context('when the extension is installed', function () {
     function triggerInstallEvent() {
-      const cb = fakeChrome.runtime.onInstalled.addListener.args[0][0];
-      cb({ reason: 'install' });
+      const cb = fakeChromeAPI.runtime.onInstalled.addListener.args[0][0];
+      return cb({ reason: 'install' });
     }
 
-    it("calls the extension's first run hook", function () {
-      triggerInstallEvent();
+    it("calls the extension's first run hook", async () => {
+      await triggerInstallEvent();
       assert.calledWith(extension.firstRun, {
         id: '1234',
         installType: 'normal',
