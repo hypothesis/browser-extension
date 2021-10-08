@@ -1,14 +1,8 @@
 import HypothesisChromeExtension from './hypothesis-chrome-extension';
 
 // TODO - Convert this module to use `chrome-api.js` to access the Chrome extension.
-// This will need to happen after `HypothesisChromeExtension` is converted.
 export function init(chrome = globalThis.chrome) {
-  const browserExtension = new HypothesisChromeExtension({
-    chromeExtension: chrome.extension,
-    chromeTabs: chrome.tabs,
-    chromeBrowserAction: chrome.browserAction,
-    chromeStorage: chrome.storage,
-  });
+  const browserExtension = new HypothesisChromeExtension();
 
   browserExtension.listen();
 

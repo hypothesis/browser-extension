@@ -1,4 +1,5 @@
 import { BrowserAction } from './browser-action';
+import { chromeAPI } from './chrome-api';
 import { directLinkQuery } from './direct-link-query';
 import * as errors from './errors';
 import { HelpPage } from './help-page';
@@ -23,24 +24,8 @@ import { TabStore } from './tab-store';
  * Lastly the TabStore listens to changes to the TabState module and persists
  * the current settings to localStorage. This is then loaded into the
  * application on startup.
- *
- * Relevant Chrome Extension documentation:
- * - https://developer.chrome.com/extensions/browserAction
- * - https://developer.chrome.com/extensions/tabs
- * - https://developer.chrome.com/extensions/extension
- *
- * @param {object} services
- * @param {chrome.tabs} services.chromeTabs
- * @param {chrome.extension} services.chromeExtension
- * @param {chrome.storage} services.chromeStorage
- * @param {chrome.browserAction} services.chromeBrowserAction
  */
-export default function HypothesisChromeExtension({
-  chromeTabs,
-  chromeExtension,
-  chromeStorage,
-  chromeBrowserAction,
-}) {
+export default function HypothesisChromeExtension() {
   const help = new HelpPage();
   const store = new TabStore(localStorage);
   const state = new TabState(store.all(), onTabStateChange);
@@ -56,27 +41,27 @@ export default function HypothesisChromeExtension({
    * object to be passed so that it can listen for localStorage events.
    */
   this.listen = function () {
-    chromeBrowserAction.onClicked.addListener(onBrowserActionClicked);
-    chromeTabs.onCreated.addListener(onTabCreated);
+    chromeAPI.browserAction.onClicked.addListener(onBrowserActionClicked);
+    chromeAPI.tabs.onCreated.addListener(onTabCreated);
 
     // when a user navigates within an existing tab,
     // onUpdated is fired in most cases
-    chromeTabs.onUpdated.addListener(onTabUpdated);
+    chromeAPI.tabs.onUpdated.addListener(onTabUpdated);
 
     // ... but when a user navigates to a page that is loaded
     // via prerendering or instant results, onTabReplaced is
     // fired instead. See https://developer.chrome.com/extensions/tabs#event-onReplaced
     // and https://code.google.com/p/chromium/issues/detail?id=109557
-    chromeTabs.onReplaced.addListener(onTabReplaced);
+    chromeAPI.tabs.onReplaced.addListener(onTabReplaced);
 
-    chromeTabs.onRemoved.addListener(onTabRemoved);
+    chromeAPI.tabs.onRemoved.addListener(onTabRemoved);
   };
 
   /* A method that can be used to setup the extension on existing tabs
    * when the extension is re-installed.
    */
-  this.install = function () {
-    restoreSavedTabState();
+  this.install = async () => {
+    await restoreSavedTabState();
   };
 
   /**
@@ -84,7 +69,7 @@ export default function HypothesisChromeExtension({
    *
    * @param {chrome.management.ExtensionInfo} extensionInfo
    */
-  this.firstRun = function (extensionInfo) {
+  this.firstRun = async extensionInfo => {
     // If we've been installed because of an administrative policy, then don't
     // open the welcome page in a new tab.
     //
@@ -100,21 +85,21 @@ export default function HypothesisChromeExtension({
       return;
     }
 
-    chromeTabs.create({ url: settings.serviceUrl + 'welcome' }, function (tab) {
-      state.activateTab(/** @type {number} */ (tab.id));
+    const tab = await chromeAPI.tabs.create({
+      url: settings.serviceUrl + 'welcome',
     });
+    state.activateTab(/** @type {number} */ (tab.id));
   };
 
-  function restoreSavedTabState() {
-    chromeTabs.query({}, function (tabs) {
-      const tabIds = tabs
-        .filter(tab => tab.id !== undefined)
-        .map(({ id }) => /** @type {number} */ (id));
-      store.reload(tabIds);
-      state.load(store.all());
-      tabIds.forEach(tabId => {
-        onTabStateChange(tabId, state.getState(tabId));
-      });
+  async function restoreSavedTabState() {
+    const tabs = await chromeAPI.tabs.query({});
+    const tabIds = tabs
+      .filter(tab => tab.id !== undefined)
+      .map(({ id }) => /** @type {number} */ (id));
+    store.reload(tabIds);
+    state.load(store.all());
+    tabIds.forEach(tabId => {
+      onTabStateChange(tabId, state.getState(tabId));
     });
   }
 
@@ -122,23 +107,23 @@ export default function HypothesisChromeExtension({
    * @param {number} tabId
    * @param {import('./tab-state').State | undefined} current
    */
-  function onTabStateChange(tabId, current) {
+  async function onTabStateChange(tabId, current) {
     if (current) {
-      chromeTabs.get(tabId, tab => {
-        // This error is raised if the tab doesn't exist.
-        if (chrome.runtime.lastError) {
-          state.clearTab(tabId);
-          return;
-        }
+      let tab;
+      try {
+        tab = await chromeAPI.tabs.get(tabId);
+      } catch {
+        state.clearTab(tabId);
+        return;
+      }
 
-        browserAction.update(tabId, current);
+      browserAction.update(tabId, current);
 
-        updateTabDocument(tab);
+      updateTabDocument(tab);
 
-        if (!state.isTabErrored(tabId)) {
-          store.set(tabId, current);
-        }
-      });
+      if (!state.isTabErrored(tabId)) {
+        store.set(tabId, current);
+      }
     } else {
       store.unset(tabId);
     }
@@ -232,19 +217,15 @@ export default function HypothesisChromeExtension({
    * @param {number} addedTabId
    * @param {number} removedTabId
    */
-  function onTabReplaced(addedTabId, removedTabId) {
+  async function onTabReplaced(addedTabId, removedTabId) {
     state.setState(addedTabId, {
       state: activeStateForNavigatedTab(removedTabId),
       ready: true,
     });
     state.clearTab(removedTabId);
 
-    chromeTabs.get(addedTabId, function (tab) {
-      updateAnnotationCountIfEnabled(
-        addedTabId,
-        /** @type {string} */ (tab.url)
-      );
-    });
+    const tab = await chromeAPI.tabs.get(addedTabId);
+    updateAnnotationCountIfEnabled(addedTabId, /** @type {string} */ (tab.url));
   }
 
   /** @param {chrome.tabs.Tab} tab */
@@ -293,9 +274,9 @@ export default function HypothesisChromeExtension({
         // Note: Even though the sidebar app URL is correct here and the page
         // does load, Chrome devtools may incorrectly report that it failed to
         // load. See https://bugs.chromium.org/p/chromium/issues/detail?id=667533
-        assetRoot: chromeExtension.getURL('/client/'),
-        sidebarAppUrl: chromeExtension.getURL('/client/app.html'),
-        notebookAppUrl: chromeExtension.getURL('/client/notebook.html'),
+        assetRoot: chromeAPI.runtime.getURL('/client/'),
+        sidebarAppUrl: chromeAPI.runtime.getURL('/client/app.html'),
+        notebookAppUrl: chromeAPI.runtime.getURL('/client/notebook.html'),
       };
 
       // Pass the direct-link query as configuration into the client.
@@ -339,24 +320,14 @@ export default function HypothesisChromeExtension({
    * @param {number} tabId
    * @param {string} url
    */
-  function updateAnnotationCountIfEnabled(tabId, url) {
-    if (!chromeStorage.sync) {
-      // Firefox < 53 does not support `chrome.storage.sync`.
-      state.updateAnnotationCount(tabId, url);
-      return;
-    }
-
+  async function updateAnnotationCountIfEnabled(tabId, url) {
     // If user disabled the badge count, this call to `sync.get` will
     // return `{ badge: false}`
-    chromeStorage.sync.get(
-      {
-        badge: true, // the default value `true` is returned only if `badge` is not yet set.
-      },
-      ({ badge }) => {
-        if (badge) {
-          state.updateAnnotationCount(tabId, url);
-        }
-      }
-    );
+    const { badge } = await chromeAPI.storage.sync.get({
+      badge: true, // the default value `true` is returned only if `badge` is not yet set.
+    });
+    if (badge) {
+      state.updateAnnotationCount(tabId, url);
+    }
   }
 }
