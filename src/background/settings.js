@@ -9,6 +9,7 @@
  * @prop {string} buildType
  * @prop {{ dsn: string, release: string }} [raven]
  * @prop {string} serviceUrl
+ * @prop {boolean} [manifestV3]
  */
 
 // nb. This will error if the build has not been run yet.
