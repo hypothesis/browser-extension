@@ -1,3 +1,4 @@
+import { chromeAPI } from './chrome-api';
 import settings from './settings';
 
 /**
@@ -41,10 +42,8 @@ const badgeThemes = {
  * BrowserAction is responsible for mapping the logical H state of
  * a tab (whether the extension is active, annotation count) to
  * the badge state.
- *
- * @param {chrome.browserAction} chromeBrowserAction
  */
-export function BrowserAction(chromeBrowserAction) {
+export function BrowserAction() {
   const buildType = settings.buildType;
 
   /**
@@ -96,7 +95,7 @@ export function BrowserAction(chromeBrowserAction) {
     // update the badge style to reflect the build type
     const badgeTheme = badgeThemes[buildType];
     if (badgeTheme) {
-      chromeBrowserAction.setBadgeBackgroundColor({
+      chromeAPI.browserAction.setBadgeBackgroundColor({
         tabId: tabId,
         color: badgeTheme.color,
       });
@@ -105,9 +104,9 @@ export function BrowserAction(chromeBrowserAction) {
       }
     }
 
-    chromeBrowserAction.setBadgeText({ tabId: tabId, text: badgeText });
-    chromeBrowserAction.setIcon({ tabId: tabId, path: activeIcon });
-    chromeBrowserAction.setTitle({ tabId: tabId, title: title });
+    chromeAPI.browserAction.setBadgeText({ tabId: tabId, text: badgeText });
+    chromeAPI.browserAction.setIcon({ tabId: tabId, path: activeIcon });
+    chromeAPI.browserAction.setTitle({ tabId: tabId, title: title });
   };
 }
 

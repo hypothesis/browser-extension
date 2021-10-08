@@ -44,7 +44,7 @@ export default function HypothesisChromeExtension({
   const help = new HelpPage();
   const store = new TabStore(localStorage);
   const state = new TabState(store.all(), onTabStateChange);
-  const browserAction = new BrowserAction(chromeBrowserAction);
+  const browserAction = new BrowserAction();
   const sidebar = new SidebarInjector();
 
   /** @type {Map<number, string>} */

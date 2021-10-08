@@ -24,7 +24,17 @@ describe('BrowserAction', function () {
         this.badgeColor = options.color;
       },
     };
+
+    const chromeAPI = { browserAction: fakeChromeBrowserAction };
+
+    $imports.$mock({
+      './chrome-api': { chromeAPI },
+    });
     action = new BrowserAction(fakeChromeBrowserAction);
+  });
+
+  afterEach(() => {
+    $imports.$restore();
   });
 
   describe('active state', function () {
