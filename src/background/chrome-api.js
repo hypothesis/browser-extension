@@ -8,6 +8,8 @@
  *  - Provide a seam that can be easily mocked in tests
  */
 
+import settings from './settings';
+
 /**
  * Wrap the browser APIs exposed via the `chrome` object to return promises.
  *
@@ -76,15 +78,18 @@ export function getChromeAPI(chrome = globalThis.chrome) {
     return promisify(fn);
   };
 
+  const browserAction = chrome.browserAction ?? chrome.action;
+
   return {
     browserAction: {
-      onClicked: chrome.browserAction.onClicked,
-      setBadgeBackgroundColor: promisify(
-        chrome.browserAction.setBadgeBackgroundColor
-      ),
-      setBadgeText: promisify(chrome.browserAction.setBadgeText),
-      setIcon: promisify(chrome.browserAction.setIcon),
-      setTitle: promisify(chrome.browserAction.setTitle),
+      onClicked: browserAction.onClicked,
+      setBadgeBackgroundColor: promisify(browserAction.setBadgeBackgroundColor),
+      setBadgeText: promisify(browserAction.setBadgeText),
+
+      // @ts-ignore - Ignore an incorrect typing error about setIcon's callback
+      setIcon: promisify(browserAction.setIcon),
+
+      setTitle: promisify(browserAction.setTitle),
     },
 
     extension: {
@@ -118,13 +123,20 @@ export function getChromeAPI(chrome = globalThis.chrome) {
     tabs: {
       create: promisify(chrome.tabs.create),
       get: promisifyAlt(chrome.tabs.get),
-      executeScript: promisify(chrome.tabs.executeScript),
       onCreated: chrome.tabs.onCreated,
       onReplaced: chrome.tabs.onReplaced,
       onRemoved: chrome.tabs.onRemoved,
       onUpdated: chrome.tabs.onUpdated,
       query: promisifyAlt(chrome.tabs.query),
       update: promisify(chrome.tabs.update),
+
+      // Manifest V2 only.
+      executeScript: promisifyAlt(chrome.tabs.executeScript),
+    },
+
+    // Manifest V3 only.
+    scripting: {
+      executeScript: chrome.scripting?.executeScript,
     },
 
     storage: {
@@ -158,6 +170,10 @@ export function getChromeAPI(chrome = globalThis.chrome) {
  */
 export const chromeAPI = getChromeAPI();
 
+// The functions below are wrappers around the extension APIs for scripting
+// which abstract over differences between browsers (eg. Manifest V2 vs Manifest V3)
+// and provide a simpler and more strongly typed interface.
+
 /**
  * Generate a string of code which can be eval-ed to produce the same result
  * as invoking `func` with `args`.
@@ -168,10 +184,6 @@ export const chromeAPI = getChromeAPI();
 function codeStringForFunctionCall(func, args) {
   return `(${func})(${args.map(arg => JSON.stringify(arg)).join(',')})`;
 }
-
-// The functions below are wrappers around the extension APIs for scripting
-// which abstract over differences between browsers (eg. Manifest V2 vs Manifest V3)
-// and provide a simpler and more strongly typed interface.
 
 /**
  * Execute a JavaScript file within a tab.
@@ -186,6 +198,19 @@ export async function executeScript(
   { tabId, frameId, file },
   chromeAPI_ = chromeAPI
 ) {
+  if (settings.manifestV3) {
+    /** @type {chrome.scripting.InjectionTarget} */
+    const target = { tabId };
+    if (frameId) {
+      target.frameIds = [frameId];
+    }
+    const results = await chromeAPI_.scripting.executeScript({
+      target,
+      files: [file],
+    });
+    return results[0].result;
+  }
+
   const result = await chromeAPI_.tabs.executeScript(tabId, { frameId, file });
   return result[0];
 }
@@ -209,6 +234,21 @@ export async function executeFunction(
   { tabId, frameId, func, args },
   chromeAPI_ = chromeAPI
 ) {
+  if (settings.manifestV3) {
+    /** @type {chrome.scripting.InjectionTarget} */
+    const target = { tabId };
+    if (frameId) {
+      target.frameIds = [frameId];
+    }
+    const results = await chromeAPI_.scripting.executeScript({
+      target,
+      // @ts-expect-error - Typechecking error needs debugging.
+      func,
+      args,
+    });
+    return results[0].result;
+  }
+
   const code = codeStringForFunctionCall(func, args);
   const result = await chromeAPI_.tabs.executeScript(tabId, { frameId, code });
   return result[0];
