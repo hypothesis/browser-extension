@@ -93,8 +93,21 @@ export function getChromeAPI(chrome = globalThis.chrome) {
       ),
     },
 
+    management: {
+      getSelf: promisify(chrome.management.getSelf),
+    },
+
     runtime: {
       getURL: chrome.runtime.getURL,
+      onMessageExternal: chrome.runtime.onMessageExternal,
+      onInstalled: chrome.runtime.onInstalled,
+      onUpdateAvailable: chrome.runtime.onUpdateAvailable,
+      reload: chrome.runtime.reload,
+
+      // Firefox (as of v92) does not support `requestUpdateCheck`.
+      requestUpdateCheck: chrome.runtime.requestUpdateCheck
+        ? promisify(chrome.runtime.requestUpdateCheck)
+        : null,
     },
 
     permissions: {

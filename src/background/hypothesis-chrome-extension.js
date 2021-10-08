@@ -37,7 +37,8 @@ export default function HypothesisChromeExtension() {
 
   restoreSavedTabState();
 
-  /* Sets up the extension and binds event listeners. Requires a window
+  /**
+   * Sets up the extension and binds event listeners. Requires a window
    * object to be passed so that it can listen for localStorage events.
    */
   this.listen = function () {
@@ -57,7 +58,8 @@ export default function HypothesisChromeExtension() {
     chromeAPI.tabs.onRemoved.addListener(onTabRemoved);
   };
 
-  /* A method that can be used to setup the extension on existing tabs
+  /**
+   * A method that can be used to setup the extension on existing tabs
    * when the extension is re-installed.
    */
   this.install = async () => {
