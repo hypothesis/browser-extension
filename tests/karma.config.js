@@ -41,10 +41,13 @@ module.exports = function (config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai', 'sinon'],
+    frameworks: ['mocha', 'chai', 'sinon', 'source-map-support'],
 
     // list of files / patterns to load in the browser
-    files: ['../build/tests.bundle.js'],
+    files: [
+      '../build/tests.bundle.js',
+      { pattern: '../build/*.js.map', included: false },
+    ],
 
     // list of files to exclude
     exclude: [],
