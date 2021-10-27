@@ -144,7 +144,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
 
     get webNavigation() {
       return {
-        getAllFrames: promisify(chrome.webNavigation.getAllFrames),
+        getAllFrames: promisifyAlt(chrome.webNavigation.getAllFrames),
       };
     },
   };
