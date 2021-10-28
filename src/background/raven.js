@@ -115,7 +115,7 @@ export function report(error, when, context) {
  * automatically, in which case this code can simply be removed.
  */
 function installUnhandledPromiseErrorHandler() {
-  window.addEventListener('unhandledrejection', function (event) {
+  globalThis.addEventListener('unhandledrejection', function (event) {
     if (event.reason) {
       report(event.reason, 'Unhandled Promise rejection');
     }
