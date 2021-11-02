@@ -6,22 +6,12 @@ const path = require('path');
 
 let chromeFlags = [];
 
-if (process.version.startsWith('v14.')) {
-  // See https://github.com/puppeteer/puppeteer/issues/5719
-  console.warn(
-    'Using system Chrome instead of Puppeteer due to issue with Node 14'
-  );
-} else {
-  process.env.CHROME_BIN = require('puppeteer').executablePath();
-}
-
-// On Travis and in Docker, the tests run as root, so the sandbox must be
-// disabled.
-if (process.env.TRAVIS || process.env.RUNNING_IN_DOCKER) {
-  chromeFlags = ['--no-sandbox'];
-}
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 if (process.env.RUNNING_IN_DOCKER) {
+  // In Docker, the tests run as root, so the sandbox must be disabled.
+  chromeFlags.push('--no-sandbox');
+
   // Disable `/dev/shm` usage as this can cause Chrome to fail to load large
   // HTML pages, such as the one Karma creates with all the tests loaded.
   //
@@ -45,12 +35,9 @@ module.exports = function (config) {
 
     // list of files / patterns to load in the browser
     files: [
-      '../build/tests.bundle.js',
+      { pattern: '../build/tests.bundle.js', type: 'module' },
       { pattern: '../build/*.js.map', included: false },
     ],
-
-    // list of files to exclude
-    exclude: [],
 
     mochaReporter: {
       // Display a helpful diff when comparing complex objects
