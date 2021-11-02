@@ -2,8 +2,6 @@
 
 [![BSD licensed](https://img.shields.io/badge/license-BSD-blue.svg)][license]
 
-[travis]: https://travis-ci.org/hypothesis/browser-extension
-[irc]: https://www.irccloud.com/invite?channel=%23hypothes.is&hostname=irc.freenode.net&port=6667&ssl=1
 [license]: https://github.com/hypothesis/browser-extension/blob/master/LICENSE
 
 The Hypothesis browser extensions allow you to annotate web documents using your

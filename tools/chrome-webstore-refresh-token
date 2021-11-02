@@ -17,7 +17,7 @@ set -eu
 #    ./tools/chrome-webstore-refresh-token $AUTH_CODE
 #
 # 3. Copy the 'refresh_token' value and update the corresponding credentials in
-#    Jenkins (see `Jenkinsfile`) and Travis.
+#    Jenkins (see `Jenkinsfile`).
 
 AUTH_CODE=$1
 

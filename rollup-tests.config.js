@@ -9,8 +9,7 @@ export default {
   input: ['tests/bootstrap.js', ...glob.sync('tests/**/*-test.js')],
   output: {
     file: 'build/tests.bundle.js',
-    format: 'iife',
-    name: 'testsBundle', // This just exists to suppress a build warning.
+    format: 'es',
     sourcemap: true,
   },
   treeshake: false, // Disabled for build performance
