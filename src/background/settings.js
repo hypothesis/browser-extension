@@ -4,11 +4,11 @@
  * @typedef Settings
  * @prop {string} apiUrl
  * @prop {string} buildType
- * @prop {{ dsn: string, release: string}} [raven]
+ * @prop {{ dsn: string, release: string }} [raven]
  * @prop {string} serviceUrl
  */
 
-// @ts-ignore - Ignore missing module if file has not been generated.
+// nb. This will error if the build has not been run yet.
 import settings from '../../build/settings.json';
 
 /**
