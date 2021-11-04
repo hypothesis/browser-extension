@@ -1,6 +1,9 @@
 /**
  * Incomplete type for settings in the `settings.json` file.
  *
+ * This contains only the settings that the background script uses. Other
+ * settings are used when generating the `manifest.json` file.
+ *
  * @typedef Settings
  * @prop {string} apiUrl
  * @prop {string} buildType
@@ -12,19 +15,11 @@
 import settings from '../../build/settings.json';
 
 /**
- * Validate and normalize the given settings data.
- *
- * @param {Settings} settings
+ * Configuration data for the extension.
  */
-function normalizeSettings(settings) {
-  // Make sure that apiUrl does not end with a /.
-  if (settings.apiUrl.charAt(settings.apiUrl.length - 1) === '/') {
-    settings.apiUrl = settings.apiUrl.slice(0, -1);
-  }
-  return settings;
-}
+export default /** @type {Settings} */ ({
+  ...settings,
 
-/**
- * Returns the configuration object for the Chrome extension
- */
-export default normalizeSettings(settings);
+  // Ensure API url does not end with '/'
+  apiUrl: settings.apiUrl.replace(/\/^/, ''),
+});
