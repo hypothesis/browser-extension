@@ -84,7 +84,7 @@ dist/%.zip dist/%.xpi: extension
 	cd build && find . -not -path '*/\.*' -type f | zip -q -@ $(abspath $@)
 
 .PHONY: lint
-lint: node_modules/.uptodate
+lint: node_modules/.uptodate build/settings.json
 	$(ESLINT) .
 	yarn typecheck
 
