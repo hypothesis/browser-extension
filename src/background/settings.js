@@ -21,5 +21,5 @@ export default /** @type {Settings} */ ({
   ...settings,
 
   // Ensure API url does not end with '/'
-  apiUrl: settings.apiUrl.replace(/\/^/, ''),
+  apiUrl: settings.apiUrl.replace(/\/$/, ''),
 });
