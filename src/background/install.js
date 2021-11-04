@@ -32,9 +32,3 @@ export async function init() {
     );
   });
 }
-
-// In tests the `chrome` global is not defined so `init` doesn't run until
-// the tests call it. In the extension it is so this runs on import.
-if (typeof chrome !== 'undefined') {
-  init();
-}
