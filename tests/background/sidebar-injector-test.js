@@ -48,6 +48,9 @@ describe('SidebarInjector', function () {
   let injector;
   let fakeChromeAPI;
 
+  let fakeExecuteFunction;
+  let fakeExecuteScript;
+
   // The content type that the detection script injected into
   // the page should report ('HTML' or 'PDF')
   let contentType;
@@ -73,19 +76,27 @@ describe('SidebarInjector', function () {
       installedURL: EXTENSION_BASE_URL + '/client/app.html',
     };
 
-    const executeScriptSpy = sinon.spy(async function (tabId, details) {
+    fakeExecuteFunction = sinon.spy(async ({ func, args }) => {
       if (contentFrame) {
-        contentFrame.contentWindow.eval(details.code);
+        const codeStr = `(${func})(${args
+          .map(a => JSON.stringify(a))
+          .join(',')})`;
+        contentFrame.contentWindow.eval(codeStr);
       }
-
-      if (details.code && details.code.match(/detectContentType/)) {
-        return [{ type: contentType }];
-      } else if (details.file && details.file.match(/boot/)) {
-        return [embedScriptReturnValue];
-      } else if (details.file && details.file.match(/destroy/)) {
-        return [isAlreadyInjected];
+      if (func.name.match(/detectContentType/)) {
+        return { type: contentType };
       } else {
-        return [false];
+        return null;
+      }
+    });
+
+    fakeExecuteScript = sinon.spy(async ({ file }) => {
+      if (file.match(/boot/)) {
+        return embedScriptReturnValue;
+      } else if (file.match(/destroy/)) {
+        return isAlreadyInjected;
+      } else {
+        return false;
       }
     });
 
@@ -121,7 +132,6 @@ describe('SidebarInjector', function () {
 
       tabs: {
         update: sinon.stub(),
-        executeScript: executeScriptSpy,
       },
 
       webNavigation: {
@@ -135,7 +145,11 @@ describe('SidebarInjector', function () {
     };
 
     $imports.$mock({
-      './chrome-api': { chromeAPI: fakeChromeAPI },
+      './chrome-api': {
+        chromeAPI: fakeChromeAPI,
+        executeFunction: fakeExecuteFunction,
+        executeScript: fakeExecuteScript,
+      },
     });
 
     injector = new SidebarInjector();
@@ -160,12 +174,11 @@ describe('SidebarInjector', function () {
       it(
         'bails early when trying to load an unsupported url: ' + url,
         function () {
-          const spy = fakeChromeAPI.tabs.executeScript;
           return toResult(injector.injectIntoTab({ id: 1, url: url })).then(
             function (result) {
               assert.ok(result.error);
               assert.instanceOf(result.error, errors.RestrictedProtocolError);
-              assert.notCalled(spy);
+              assert.notCalled(fakeExecuteScript);
             }
           );
         }
@@ -220,11 +233,11 @@ describe('SidebarInjector', function () {
 
     describe('when viewing a remote HTML page', function () {
       it('injects hypothesis into the page', function () {
-        const spy = fakeChromeAPI.tabs.executeScript;
         const url = 'http://example.com/foo.html';
 
         return injector.injectIntoTab({ id: 1, url: url }).then(function () {
-          assert.calledWith(spy, 1, {
+          assert.calledWith(fakeExecuteScript, {
+            tabId: 1,
             file: sinon.match('/client/build/boot.js'),
           });
         });
@@ -267,14 +280,19 @@ describe('SidebarInjector', function () {
       it('injects client into book viewer frame', async () => {
         await injectClient();
 
-        assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
-          code: sinon.match(/hypothesisConfig/),
-          frameId: vitalSourceFrames.reader.frameId,
-        });
+        assert.calledWith(
+          fakeExecuteFunction,
+          sinon.match({
+            tabId: 1,
+            frameId: vitalSourceFrames.reader.frameId,
+            func: { name: 'setClientConfig' },
+          })
+        );
 
-        assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
-          file: '/client/build/boot.js',
+        assert.calledWith(fakeExecuteScript, {
+          tabId: 1,
           frameId: vitalSourceFrames.reader.frameId,
+          file: '/client/build/boot.js',
         });
       });
 
@@ -365,7 +383,7 @@ describe('SidebarInjector', function () {
           const promise = injector.injectIntoTab({ id: 1, url: url });
           return toResult(promise).then(function (result) {
             assert.instanceOf(result.error, errors.NoFileAccessError);
-            assert.notCalled(fakeChromeAPI.tabs.executeScript);
+            assert.notCalled(fakeExecuteScript);
           });
         });
       });
@@ -384,11 +402,10 @@ describe('SidebarInjector', function () {
 
   describe('.removeFromTab', function () {
     it('bails early when trying to unload a chrome url', function () {
-      const spy = fakeChromeAPI.tabs.executeScript;
       const url = 'chrome://extensions/';
 
       return injector.removeFromTab({ id: 1, url: url }).then(function () {
-        assert.notCalled(spy);
+        assert.notCalled(fakeExecuteScript);
       });
     });
 
@@ -397,11 +414,10 @@ describe('SidebarInjector', function () {
       it(
         'bails early when trying to unload an unsupported ' + protocol + ' url',
         function () {
-          const spy = fakeChromeAPI.tabs.executeScript;
           const url = protocol + '//foobar/';
 
           return injector.removeFromTab({ id: 1, url: url }).then(function () {
-            assert.notCalled(spy);
+            assert.notCalled(fakeExecuteScript);
           });
         }
       );
@@ -441,7 +457,8 @@ describe('SidebarInjector', function () {
         return injector
           .removeFromTab({ id: 1, url: 'http://example.com/foo.html' })
           .then(function () {
-            assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
+            assert.calledWith(fakeExecuteScript, {
+              tabId: 1,
               file: sinon.match('/unload-client.js'),
             });
           });
@@ -455,9 +472,10 @@ describe('SidebarInjector', function () {
       it('injects a destroy script into the correct frame', async () => {
         await removeClient();
 
-        assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
-          file: '/unload-client.js',
+        assert.calledWith(fakeExecuteScript, {
+          tabId: 1,
           frameId: vitalSourceFrames.reader.frameId,
+          file: '/unload-client.js',
         });
       });
 
@@ -466,7 +484,7 @@ describe('SidebarInjector', function () {
 
         await removeClient();
 
-        assert.notCalled(fakeChromeAPI.tabs.executeScript);
+        assert.notCalled(fakeExecuteScript);
       });
 
       it('rejects if permission to list frames was denied', async () => {

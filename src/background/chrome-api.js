@@ -157,3 +157,59 @@ export function getChromeAPI(chrome = globalThis.chrome) {
  * This has the same shape as the `chrome` or `browser` object.
  */
 export const chromeAPI = getChromeAPI();
+
+/**
+ * Generate a string of code which can be eval-ed to produce the same result
+ * as invoking `func` with `args`.
+ *
+ * @param {Function} func
+ * @param {any[]} args
+ */
+function codeStringForFunctionCall(func, args) {
+  return `(${func})(${args.map(arg => JSON.stringify(arg)).join(',')})`;
+}
+
+// The functions below are wrappers around the extension APIs for scripting
+// which abstract over differences between browsers (eg. Manifest V2 vs Manifest V3)
+// and provide a simpler and more strongly typed interface.
+
+/**
+ * Execute a JavaScript file within a tab.
+ *
+ * @param {object} options
+ *   @param {number} options.tabId
+ *   @param {number} [options.frameId]
+ *   @param {string} options.file
+ * @return {Promise<unknown>}
+ */
+export async function executeScript(
+  { tabId, frameId, file },
+  chromeAPI_ = chromeAPI
+) {
+  const result = await chromeAPI_.tabs.executeScript(tabId, { frameId, file });
+  return result[0];
+}
+
+/**
+ * Execute a JavaScript function within a tab.
+ *
+ * @template {unknown[]} Args
+ * @template Result
+ * @param {object} options
+ * @param {number} options.tabId
+ * @param {number} [options.frameId]
+ * @param {(...args: Args) => Result} options.func - Function to execute. This
+ *   must be self-contained (ie. not reference any identifiers from the enclosing
+ *   scope).
+ * @param {Args} options.args - Arguments to pass to `func`. These must be
+ *   JSON-serializable.
+ * @return {Promise<Result>}
+ */
+export async function executeFunction(
+  { tabId, frameId, func, args },
+  chromeAPI_ = chromeAPI
+) {
+  const code = codeStringForFunctionCall(func, args);
+  const result = await chromeAPI_.tabs.executeScript(tabId, { frameId, code });
+  return result[0];
+}
