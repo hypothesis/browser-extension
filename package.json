@@ -18,7 +18,7 @@
     "@rollup/plugin-node-resolve": "^13.0.6",
     "@types/chrome": "^0.0.162",
     "babel-plugin-istanbul": "^6.1.1",
-    "babel-plugin-mockable-imports": "^1.8.0",
+    "babel-plugin-mockable-imports": "^2.0.0",
     "chai": "^4.3.4",
     "chrome-webstore-upload-cli": "^2.0.1",
     "diff": "^5.0.0",
