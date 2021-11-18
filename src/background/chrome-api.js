@@ -111,6 +111,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
     },
 
     permissions: {
+      getAll: promisify(chrome.permissions.getAll),
       request: promisify(chrome.permissions.request),
     },
 

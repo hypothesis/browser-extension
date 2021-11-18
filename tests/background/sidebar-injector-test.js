@@ -103,6 +103,11 @@ describe('SidebarInjector', function () {
       },
 
       permissions: {
+        getAll: sinon.stub().callsFake(async () => {
+          return {
+            permissions: [...permissions],
+          };
+        }),
         request: sinon.stub().callsFake(async request => {
           const allowed = request.permissions.every(perm =>
             allowedPermissions.includes(perm)
@@ -271,6 +276,19 @@ describe('SidebarInjector', function () {
           file: '/client/build/boot.js',
           frameId: vitalSourceFrames.reader.frameId,
         });
+      });
+
+      it('requests "webNavigation" permission if not present', async () => {
+        await injectClient();
+        assert.calledWith(fakeChromeAPI.permissions.request, {
+          permissions: ['webNavigation'],
+        });
+      });
+
+      it('does not request "webNavigation" permission if already granted', async () => {
+        permissions.add('webNavigation');
+        await injectClient();
+        assert.notCalled(fakeChromeAPI.permissions.request);
       });
 
       it('rejects if "webNavigation" permission is denied', async () => {

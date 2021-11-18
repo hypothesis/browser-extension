@@ -354,11 +354,20 @@ export function SidebarInjector() {
     // browser history, even though we only want to get frames for the current
     // tab :(
     //
-    // A more roundabout way to solve this might be to use `executeScript({ allFrames: true, ... })`
-    // to discover frame IDs and URLs of each frame in the tab.
-    const canUseWebNavigation = await chromeAPI.permissions.request({
-      permissions: ['webNavigation'],
-    });
+    // We check for the permission using `getAll` first, because `request` will
+    // trigger an error if called outside of a user gesture, even if we do have
+    // the permission. When the user initially activates the client in VS, this
+    // function will be called within a user gesture. Subsequent automatic
+    // activations (eg. after navigation) may happen outside of a user gesture
+    // however.
+    let canUseWebNavigation = (
+      await chromeAPI.permissions.getAll()
+    ).permissions?.includes('webNavigation');
+    if (!canUseWebNavigation) {
+      canUseWebNavigation = await chromeAPI.permissions.request({
+        permissions: ['webNavigation'],
+      });
+    }
     if (!canUseWebNavigation) {
       throw new Error('The extension was not granted required permissions');
     }
