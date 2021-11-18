@@ -31,6 +31,7 @@ describe('getChromeAPI', () => {
       },
 
       permissions: {
+        getAll: sinon.stub(),
         request: sinon.stub(),
       },
 
