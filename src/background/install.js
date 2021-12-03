@@ -1,19 +1,19 @@
 import { chromeAPI } from './chrome-api';
-import HypothesisChromeExtension from './hypothesis-chrome-extension';
+import { Extension } from './extension';
 
 export async function init() {
-  const browserExtension = new HypothesisChromeExtension();
+  const extension = new Extension();
 
-  browserExtension.listen();
+  extension.listen();
 
   chromeAPI.runtime.onInstalled.addListener(async installDetails => {
     // Check whether this is the inital installation or an update of an existing
     // installation.
     if (installDetails.reason === 'install') {
       const extensionInfo = await chromeAPI.management.getSelf();
-      browserExtension.firstRun(extensionInfo);
+      extension.firstRun(extensionInfo);
     }
-    browserExtension.install();
+    extension.install();
   });
 
   // Respond to messages sent by the JavaScript from https://hyp.is.
