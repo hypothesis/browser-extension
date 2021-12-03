@@ -76,6 +76,7 @@ describe('SidebarInjector', function () {
       installedURL: EXTENSION_BASE_URL + '/client/app.html',
     };
 
+    // Simulate running a self-contained function in the tab.
     fakeExecuteFunction = sinon.spy(async ({ func, args }) => {
       if (contentFrame) {
         const codeStr = `(${func})(${args
@@ -90,6 +91,7 @@ describe('SidebarInjector', function () {
       }
     });
 
+    // Simulate running a JS script in the tab.
     fakeExecuteScript = sinon.spy(async ({ file }) => {
       if (file.match(/boot/)) {
         return embedScriptReturnValue;
