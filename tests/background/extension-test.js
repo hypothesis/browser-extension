@@ -1,7 +1,5 @@
 import * as errors from '../../src/background/errors';
-import HypothesisChromeExtension, {
-  $imports,
-} from '../../src/background/hypothesis-chrome-extension';
+import { Extension, $imports } from '../../src/background/extension';
 import { toResult } from '../promise-util';
 
 // Creates a constructor function which takes no arguments
@@ -33,7 +31,7 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe('HypothesisChromeExtension', function () {
+describe('Extension', function () {
   let sandbox = sinon.createSandbox();
   let ext;
   let fakeChromeAPI;
@@ -43,10 +41,6 @@ describe('HypothesisChromeExtension', function () {
   let fakeTabState;
   let fakeBrowserAction;
   let fakeSidebarInjector;
-
-  function createExt() {
-    return new HypothesisChromeExtension();
-  }
 
   beforeEach(function () {
     fakeChromeAPI = {
@@ -138,7 +132,7 @@ describe('HypothesisChromeExtension', function () {
       },
     });
 
-    ext = createExt();
+    ext = new Extension();
   });
 
   afterEach(function () {

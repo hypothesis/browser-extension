@@ -2,7 +2,7 @@ import { init, $imports } from '../../src/background/install';
 
 let extension;
 
-function FakeHypothesisChromeExtension() {
+function FakeExtension() {
   extension = this; // eslint-disable-line consistent-this
 
   this.listen = sinon.stub();
@@ -35,7 +35,7 @@ describe('install', function () {
 
     $imports.$mock({
       './chrome-api': { chromeAPI: fakeChromeAPI },
-      './hypothesis-chrome-extension': FakeHypothesisChromeExtension,
+      './extension': { Extension: FakeExtension },
     });
     init();
   });
