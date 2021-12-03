@@ -179,7 +179,7 @@ function codeStringForFunctionCall(func, args) {
  * @param {object} options
  *   @param {number} options.tabId
  *   @param {number} [options.frameId]
- *   @param {string} options.file
+ *   @param {string} options.file - Path to the script within the extension
  * @return {Promise<unknown>}
  */
 export async function executeScript(
