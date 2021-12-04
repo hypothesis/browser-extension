@@ -16,7 +16,10 @@ import * as uriInfo from './uri-info';
  * `TabState` class below. That class needs to be renamed first.
  *
  * @typedef State
- * @prop {'active'|'inactive'|'errored'} state - Whether or not H is active on the page
+ * @prop {'active'|'inactive'|'errored'} state - Whether the user has activated
+ *   Hypothesis for this tab. This state persists across page navigations,
+ *   whereas `extensionSidebarInstalled` will be reset after a navigation,
+ *   until the document has been loaded and the client is re-injected.
  * @prop {number} annotationCount -
  *   The count of annotations on the page visible to the user, as returned by
  *   the badge API
@@ -47,18 +50,16 @@ const DEFAULT_STATE = {
  * TabState stores the Hypothesis-related state for tabs in the current browser
  * session.
  *
- * @param {Record<number, Partial<State>>} initialState - Initial state information for tabs, eg.
- *   from a persistent store.
- * @param {(tabId: number, current: undefined|State) => any} [onchange] -
+ * @param {(tabId: number, current: undefined|State) => any} onchange -
  *   Callback invoked when state for a tab changes
  */
-export function TabState(initialState, onchange) {
+export function TabState(onchange) {
   /**
    * Current Hypothesis-related state for each tab.
    *
    * @type {TabStateMap}
    */
-  let currentState;
+  let currentState = {};
 
   /**
    * @typedef BadgeRequest - this object is used to cancel a pending badge request
@@ -75,26 +76,6 @@ export function TabState(initialState, onchange) {
   const annotationCountCache = new Map();
 
   this.onchange = onchange;
-
-  /**
-   * Replaces the H state for all tabs.
-   *
-   * @param {Record<number, Partial<State>>} newState -
-   *   Map of tab ID to state. The state is merged with the default state for a tab.
-   */
-  this.load = function (newState) {
-    /** @type {TabStateMap} */
-    const newCurrentState = {};
-    Object.keys(newState).forEach(function (tabIdStr) {
-      const tabId = parseInt(tabIdStr);
-      newCurrentState[tabId] = Object.assign(
-        {},
-        DEFAULT_STATE,
-        newState[tabId]
-      );
-    });
-    currentState = newCurrentState;
-  };
 
   /**
    * Mark a tab as having Hypothesis loaded in it.
@@ -294,6 +275,4 @@ export function TabState(initialState, onchange) {
       throw error;
     }
   };
-
-  this.load(initialState || {});
 }

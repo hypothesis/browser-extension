@@ -3,8 +3,7 @@ import { Extension } from './extension';
 
 export async function init() {
   const extension = new Extension();
-
-  extension.listen();
+  const initialized = extension.init();
 
   chromeAPI.runtime.onInstalled.addListener(async installDetails => {
     // Check whether this is the inital installation or an update of an existing
@@ -13,7 +12,6 @@ export async function init() {
       const extensionInfo = await chromeAPI.management.getSelf();
       extension.firstRun(extensionInfo);
     }
-    extension.install();
   });
 
   // Respond to messages sent by the JavaScript from https://hyp.is.
@@ -31,4 +29,6 @@ export async function init() {
       chromeAPI.runtime.reload()
     );
   });
+
+  await initialized;
 }

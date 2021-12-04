@@ -37,7 +37,6 @@ describe('Extension', function () {
   let fakeChromeAPI;
   let fakeErrors;
   let fakeHelpPage;
-  let fakeTabStore;
   let fakeTabState;
   let fakeBrowserAction;
   let fakeSidebarInjector;
@@ -54,7 +53,7 @@ describe('Extension', function () {
         onUpdated: new FakeListener(),
         onReplaced: new FakeListener(),
         onRemoved: new FakeListener(),
-        query: sandbox.stub(),
+        query: sandbox.stub().resolves([]),
         get: sandbox.stub(),
       },
 
@@ -71,12 +70,6 @@ describe('Extension', function () {
 
     fakeHelpPage = {
       showHelpForError: sandbox.spy(),
-    };
-    fakeTabStore = {
-      all: sandbox.spy(),
-      set: sandbox.spy(),
-      unset: sandbox.spy(),
-      reload: sandbox.spy(),
     };
     fakeTabState = {
       activateTab: sandbox.spy(),
@@ -97,6 +90,7 @@ describe('Extension', function () {
       update: sandbox.spy(),
     };
     fakeSidebarInjector = {
+      isClientActiveInTab: sandbox.stub().resolves(false),
       injectIntoTab: sandbox.stub().returns(Promise.resolve()),
       removeFromTab: sandbox.stub().returns(Promise.resolve()),
     };
@@ -108,7 +102,7 @@ describe('Extension', function () {
       report: sandbox.spy(),
     };
 
-    function FakeTabState(initialState, onchange) {
+    function FakeTabState(onchange) {
       fakeTabState.onChangeHandler = onchange;
     }
     FakeTabState.prototype = fakeTabState;
@@ -116,7 +110,6 @@ describe('Extension', function () {
     $imports.$mock({
       './chrome-api': { chromeAPI: fakeChromeAPI },
       './tab-state': { TabState: FakeTabState },
-      './tab-store': { TabStore: createConstructor(fakeTabStore) },
       './help-page': { HelpPage: createConstructor(fakeHelpPage) },
       './browser-action': {
         BrowserAction: createConstructor(fakeBrowserAction),
@@ -138,38 +131,6 @@ describe('Extension', function () {
   afterEach(function () {
     sandbox.restore();
     $imports.$restore();
-  });
-
-  describe('#install', function () {
-    let tabs;
-    let savedState;
-
-    beforeEach(function () {
-      tabs = [];
-      savedState = {
-        1: {
-          state: 'active',
-        },
-      };
-      tabs.push({ id: 1, url: 'http://example.com' });
-      fakeChromeAPI.tabs.query.resolves(tabs);
-      fakeTabStore.all = sandbox.stub().returns(savedState);
-    });
-
-    it('restores the saved tab states', async () => {
-      await ext.install();
-      assert.called(fakeTabStore.reload);
-      assert.calledWith(fakeTabState.load, savedState);
-    });
-
-    it('applies the saved state to open tabs', async () => {
-      fakeTabState.getState = sandbox.stub().returns(savedState[1]);
-      fakeChromeAPI.tabs.get.resolves({ id: 1 });
-
-      await ext.install();
-
-      assert.calledWith(fakeBrowserAction.update, 1, savedState[1]);
-    });
   });
 
   describe('#firstRun', function () {
@@ -198,9 +159,13 @@ describe('Extension', function () {
     });
   });
 
-  describe('#listen', function () {
-    it('sets up event listeners', function () {
-      ext.listen({ addEventListener: sandbox.stub() });
+  describe('#init', () => {
+    afterEach(() => {
+      console.warn.restore?.();
+    });
+
+    it('sets up event listeners', async () => {
+      await ext.init();
       assert.ok(fakeChromeAPI.browserAction.onClicked.listener);
       assert.ok(fakeChromeAPI.tabs.onCreated.listener);
       assert.ok(fakeChromeAPI.tabs.onUpdated.listener);
@@ -208,10 +173,68 @@ describe('Extension', function () {
       assert.ok(fakeChromeAPI.tabs.onReplaced.listener);
     });
 
+    it('initializes state for existing tabs', async () => {
+      fakeChromeAPI.tabs.query.resolves([
+        { id: 1, url: 'https://foo.com', status: 'complete' },
+        { id: 2, url: 'https://bar.com', status: 'complete' },
+        { id: 3, url: 'https://baz.com', status: 'loading' },
+      ]);
+      fakeSidebarInjector.isClientActiveInTab
+        .withArgs(sinon.match({ id: 1 }))
+        .resolves(false);
+      fakeSidebarInjector.isClientActiveInTab
+        .withArgs(sinon.match({ id: 2 }))
+        .resolves(true);
+      fakeSidebarInjector.isClientActiveInTab
+        .withArgs(sinon.match({ id: 3 }))
+        .resolves(true);
+
+      await ext.init();
+
+      assert.calledWith(fakeTabState.setState, 1, {
+        state: 'inactive',
+        extensionSidebarInstalled: false,
+        ready: true,
+      });
+      assert.calledWith(fakeTabState.setState, 2, {
+        state: 'active',
+        extensionSidebarInstalled: true,
+        ready: true,
+      });
+      assert.calledWith(fakeTabState.setState, 3, {
+        state: 'active',
+        extensionSidebarInstalled: true,
+        ready: false,
+      });
+    });
+
+    it('assumes extension is not activated if querying state fails', async () => {
+      const warn = sinon.stub(console, 'warn');
+
+      fakeChromeAPI.tabs.query.resolves([
+        { id: 1, url: 'https://foo.com', status: 'complete' },
+      ]);
+      fakeSidebarInjector.isClientActiveInTab
+        .withArgs(sinon.match({ id: 1 }))
+        .rejects(new Error('Something went wrong'));
+
+      await ext.init();
+
+      assert.calledWith(
+        warn,
+        sinon.match(/Unable to determine extension state in tab 1/)
+      );
+      assert.calledWith(fakeTabState.setState, 1, {
+        state: 'inactive',
+        extensionSidebarInstalled: false,
+        ready: true,
+      });
+    });
+
     describe('when a tab is created', function () {
-      beforeEach(function () {
+      beforeEach(async () => {
         fakeTabState.clearTab = sandbox.spy();
-        ext.listen({ addEventListener: sandbox.stub() });
+        await ext.init();
       });
 
       it('clears the new tab state', function () {
@@ -242,7 +265,7 @@ describe('Extension', function () {
         };
       }
 
-      beforeEach(function () {
+      beforeEach(async () => {
         fakeTabState.clearTab = sandbox.spy();
         fakeTabState.isTabActive = function (tabId) {
           return tabState[tabId].state === 'active';
@@ -257,7 +280,7 @@ describe('Extension', function () {
           tabState[tabId] = Object.assign(tabState[tabId], state);
           assert(isValidState(tabState[tabId]));
         };
-        ext.listen({ addEventListener: sandbox.stub() });
+        await ext.init();
       });
 
       it('sets the tab state to ready when loading completes', function () {
@@ -456,8 +479,8 @@ describe('Extension', function () {
     });
 
     describe('when a tab is replaced', function () {
-      beforeEach(function () {
-        ext.listen({ addEventListener: sandbox.stub() });
+      beforeEach(async () => {
+        await ext.init();
       });
 
       it('preserves the active state of the previous tab', function () {
@@ -485,9 +508,9 @@ describe('Extension', function () {
     });
 
     describe('when a tab is removed', function () {
-      beforeEach(function () {
+      beforeEach(async () => {
         fakeTabState.clearTab = sandbox.spy();
-        ext.listen({ addEventListener: sandbox.stub() });
+        await ext.init();
       });
 
       it('clears the tab', function () {
@@ -497,8 +520,8 @@ describe('Extension', function () {
     });
 
     describe('when the browser icon is clicked', function () {
-      beforeEach(function () {
-        ext.listen({ addEventListener: sandbox.stub() });
+      beforeEach(async () => {
+        await ext.init();
       });
 
       it('activate the tab if the tab is inactive', function () {
@@ -537,8 +560,8 @@ describe('Extension', function () {
       fakeTabState.onChangeHandler(tab.id, tabState, null);
     }
 
-    beforeEach(function () {
-      ext.listen({ addEventListener: sandbox.stub() });
+    beforeEach(async () => {
+      await ext.init();
     });
 
     const injectErrorCases = [
@@ -653,24 +676,6 @@ describe('Extension', function () {
       });
     });
 
-    it('updates the TabStore if the tab has not errored', async () => {
-      fakeTabState.getState = sandbox.stub().returns({
-        state: 'active',
-      });
-
-      await onTabStateChange('active', 'inactive');
-
-      assert.calledWith(fakeTabStore.set, 1, {
-        state: 'active',
-      });
-    });
-
-    it('does not update the TabStore if the tab has errored', async () => {
-      fakeTabState.isTabErrored.returns(true);
-      await onTabStateChange('errored', 'inactive');
-      assert.notCalled(fakeTabStore.set);
-    });
-
     it('injects the sidebar if the tab has been activated', async () => {
       fakeTabState.getState = sandbox.stub().returns({
         state: 'active',
@@ -776,12 +781,6 @@ describe('Extension', function () {
       });
       await onTabStateChange('active', 'inactive');
       assert.called(fakeTabState.clearTab);
-    });
-
-    it('removes the tab from the store if the tab was closed', async () => {
-      await onTabStateChange(null, 'inactive');
-      assert.called(fakeTabStore.unset);
-      assert.calledWith(fakeTabStore.unset);
     });
   });
 });

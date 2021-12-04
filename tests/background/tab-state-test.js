@@ -6,35 +6,9 @@ describe('TabState', () => {
 
   beforeEach(() => {
     onChange = sinon.spy();
-    state = new TabState(
-      {
-        1: { state: 'active' },
-      },
-      onChange
-    );
-  });
-
-  it('can be initialized without any default state', () => {
-    assert.doesNotThrow(() => {
-      state = new TabState(null, onChange);
-      state.isTabActive(1);
-    });
-  });
-
-  it('can be initialized without an onchange callback', () => {
-    assert.doesNotThrow(() => {
-      state = new TabState();
-      state.isTabActive(1);
-    });
-  });
-
-  describe('#load', () => {
-    it('replaces the current tab states with a new object', () => {
-      state.load({ 2: { state: 'inactive' } });
-      // `load` (re)sets all tabs to their default state, which is inactive
-      assert.equal(state.isTabActive(1), false);
-      assert.equal(state.isTabInactive(2), true);
-    });
+    state = new TabState(onChange);
+    state.activateTab(1);
+    onChange.resetHistory();
   });
 
   describe('#activateTab', () => {
@@ -158,7 +132,8 @@ describe('TabState', () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
       uriForBadgeRequestStub.throws('any error');
-      const tabState = new TabState({ 1: { state: 'active' } });
+      const tabState = new TabState();
+      tabState.activateTab(1);
 
       const promise = tabState.updateAnnotationCount(1, 'invalidOrblocked');
       clock.tick(INITIAL_WAIT_MS);
@@ -173,10 +148,9 @@ describe('TabState', () => {
       const secondValue = 41;
       fetchAnnotationCountStub.onCall(0).resolves(firstValue);
       fetchAnnotationCountStub.onCall(1).resolves(secondValue);
-      const tabState = new TabState({
-        1: { state: 'active' },
-        2: { state: 'active' },
-      });
+      const tabState = new TabState();
+      tabState.activateTab(1);
+      tabState.activateTab(2);
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
       clock.tick(INITIAL_WAIT_MS);
@@ -214,10 +188,9 @@ describe('TabState', () => {
         new Promise(resolve => setTimeout(() => resolve(testValue), WAIT_FETCH))
       );
 
-      const tabState = new TabState({
-        1: { state: 'active' },
-        2: { state: 'active' },
-      });
+      const tabState = new TabState();
+      tabState.activateTab(1);
+      tabState.activateTab(2);
 
       // This is the scenario:
       //                         wait   fetch
@@ -249,7 +222,8 @@ describe('TabState', () => {
     it(`queries the service and sets the annotation count after waiting for a period of ${INITIAL_WAIT_MS}ms`, async () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
-      const tabState = new TabState({ 1: { state: 'active' } });
+      const tabState = new TabState();
+      tabState.activateTab(1);
 
       const promise = tabState.updateAnnotationCount(1, 'http://foobar.com');
       clock.tick(INITIAL_WAIT_MS);
@@ -262,7 +236,8 @@ describe('TabState', () => {
     it(`resolves last request after a maximum of ${MAX_WAIT_MS}ms when several requests are made in succession to the service`, async () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
-      const tabState = new TabState({ 1: { state: 'active' } });
+      const tabState = new TabState();
+      tabState.activateTab(1);
 
       // Simulate several URL changes in rapid succession
       const start = Date.now();
@@ -284,9 +259,8 @@ describe('TabState', () => {
       const initialValue = 33;
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
-      const tabState = new TabState({
-        1: { state: 'active', annotationCount: initialValue },
-      });
+      const tabState = new TabState();
+      tabState.setState(1, { state: 'active', annotationCount: initialValue });
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
       const promise2 = tabState.updateAnnotationCount(1, 'http://foobar.com'); // promise 1 is still waiting when promise2 is called
@@ -308,9 +282,8 @@ describe('TabState', () => {
         new Promise(resolve => setTimeout(() => resolve(testValue), WAIT_FETCH))
       );
 
-      const tabState = new TabState({
-        1: { state: 'active', annotationCount: initialValue },
-      });
+      const tabState = new TabState();
+      tabState.setState(1, { state: 'active', annotationCount: initialValue });
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
       clock.tick(INITIAL_WAIT_MS); // promise1 finished waiting and it is fetching the request
@@ -328,10 +301,9 @@ describe('TabState', () => {
       const testValue = 42;
       fetchAnnotationCountStub.resolves(testValue);
 
-      const tabState = new TabState({
-        1: { state: 'active' },
-        2: { state: 'active' },
-      });
+      const tabState = new TabState();
+      tabState.activateTab(1);
+      tabState.activateTab(2);
 
       const promise1 = tabState.updateAnnotationCount(1, 'http://foobar.com');
       const promise2 = tabState.updateAnnotationCount(2, 'http://foobar.com');
@@ -347,9 +319,8 @@ describe('TabState', () => {
     it('sets the annotation count to zero if badge request is rejected', async () => {
       fetchAnnotationCountStub.rejects('some error condition');
 
-      const tabState = new TabState({
-        1: { state: 'active', annotationCount: 33 },
-      });
+      const tabState = new TabState();
+      tabState.setState(1, { state: 'active', annotationCount: 33 });
 
       const promise = tabState.updateAnnotationCount(1, 'http://foobar.com');
       clock.tick(MAX_WAIT_MS);

@@ -5,7 +5,7 @@ let extension;
 function FakeExtension() {
   extension = this; // eslint-disable-line consistent-this
 
-  this.listen = sinon.stub();
+  this.init = sinon.stub().resolves();
   this.install = sinon.stub();
   this.firstRun = sinon.stub();
 }
