@@ -65,6 +65,9 @@ describe('SidebarInjector', function () {
   // Mock return value from embed.js when injected into page
   let embedScriptReturnValue;
 
+  // Mock return value when testing whether the client is active in a page
+  let isClientActiveReturnValue;
+
   // Set of optional permissions that the extension currently has
   let permissions;
 
@@ -75,6 +78,7 @@ describe('SidebarInjector', function () {
     embedScriptReturnValue = {
       installedURL: EXTENSION_BASE_URL + '/client/app.html',
     };
+    isClientActiveReturnValue = false;
 
     // Simulate running a self-contained function in the tab.
     fakeExecuteFunction = sinon.spy(async ({ func, args }) => {
@@ -86,6 +90,8 @@ describe('SidebarInjector', function () {
       }
       if (func.name.match(/detectContentType/)) {
         return { type: contentType };
+      } else if (func.name.match(/isClientActive/)) {
+        return isClientActiveReturnValue;
       } else {
         return null;
       }
@@ -163,6 +169,23 @@ describe('SidebarInjector', function () {
     }
 
     $imports.$restore();
+  });
+
+  describe('#isClientActiveInTab', () => {
+    [true, false].forEach(actuallyActive => {
+      it('returns true if client is active in tab', async () => {
+        isClientActiveReturnValue = actuallyActive;
+        const active = await injector.isClientActiveInTab({
+          id: 1,
+          url: 'https://example.com',
+        });
+        assert.equal(fakeExecuteFunction.args[0][0].tabId, 1);
+        assert.deepEqual(fakeExecuteFunction.args[0][0].args, [
+          'chrome-extension://hypothesis/',
+        ]);
+        assert.equal(active, actuallyActive);
+      });
+    });
   });
 
   describe('.injectIntoTab', function () {
