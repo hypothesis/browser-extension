@@ -6,66 +6,29 @@ import { HelpPage } from './help-page';
 import settings from './settings';
 import { SidebarInjector } from './sidebar-injector';
 import { TabState } from './tab-state';
-import { TabStore } from './tab-store';
 
 /**
- * The main extension application. This wires together all the smaller
- * modules. The app listens to all new created/updated/removed tab events
- * and uses the TabState object to keep track of whether the sidebar is
- * active or inactive in the tab. The app also listens to click events on
- * the browser action and toggles the state and uses the BrowserAction module
- * to update the visual style of the button.
+ * The main extension background application.
  *
- * The SidebarInjector handles the insertion of the Hypothesis code. If it
- * runs into errors the tab is put into an errored state and when the
- * browser action is clicked again the HelpPage module displays more
- * information to the user.
+ * This is responsible for tracking the state of the extension in each tab and
+ * injecting of the client when the extension is activated by clicking the
+ * extension's toolbar icon.
  *
- * Lastly the TabStore listens to changes to the TabState module and persists
- * the current settings to localStorage. This is then loaded into the
- * application on startup.
+ * Initializing the extension has two steps:
+ *
+ *  1. Create an instance of `Extension`
+ *  2. Call the async {@link Extension.init} method to initialize the
+ *     extension state for existing tabs.
  */
 export class Extension {
   constructor() {
     const help = new HelpPage();
-    const store = new TabStore(localStorage);
-    const state = new TabState(store.all(), onTabStateChange);
+    const state = new TabState(onTabStateChange);
     const browserAction = new BrowserAction();
     const sidebar = new SidebarInjector();
 
     /** @type {Map<number, string>} */
     const currentlyLoadingUrl = new Map(); // keeps tracks of what URL each tab is loading
-
-    restoreSavedTabState();
-
-    /**
-     * Sets up the extension and binds event listeners. Requires a window
-     * object to be passed so that it can listen for localStorage events.
-     */
-    this.listen = function () {
-      chromeAPI.browserAction.onClicked.addListener(onBrowserActionClicked);
-      chromeAPI.tabs.onCreated.addListener(onTabCreated);
-
-      // when a user navigates within an existing tab,
-      // onUpdated is fired in most cases
-      chromeAPI.tabs.onUpdated.addListener(onTabUpdated);
-
-      // ... but when a user navigates to a page that is loaded
-      // via prerendering or instant results, onTabReplaced is
-      // fired instead. See https://developer.chrome.com/extensions/tabs#event-onReplaced
-      // and https://code.google.com/p/chromium/issues/detail?id=109557
-      chromeAPI.tabs.onReplaced.addListener(onTabReplaced);
-
-      chromeAPI.tabs.onRemoved.addListener(onTabRemoved);
-    };
-
-    /**
-     * A method that can be used to setup the extension on existing tabs
-     * when the extension is re-installed.
-     */
-    this.install = async () => {
-      await restoreSavedTabState();
-    };
 
     /**
      * Opens the onboarding page.
@@ -94,42 +57,105 @@ export class Extension {
       state.activateTab(/** @type {number} */ (tab.id));
     };
 
-    async function restoreSavedTabState() {
+    /**
+     * Initialize cached state for browser tabs by querying each tab to see
+     * whether the extension is active there.
+     *
+     * This should be called when the extension is loaded or reloaded.
+     */
+    const initTabStates = async () => {
       const tabs = await chromeAPI.tabs.query({});
-      const tabIds = tabs
-        .filter(tab => tab.id !== undefined)
-        .map(({ id }) => /** @type {number} */ (id));
-      store.reload(tabIds);
-      state.load(store.all());
-      tabIds.forEach(tabId => {
-        onTabStateChange(tabId, state.getState(tabId));
-      });
-    }
+      const activeStates = await Promise.all(
+        tabs.map(async tab => {
+          if (tab.id === undefined) {
+            return false;
+          }
+          try {
+            const active = await sidebar.isClientActiveInTab(tab);
+            return active;
+          } catch (e) {
+            console.warn(
+              `Unable to determine extension state in tab ${tab.id}`,
+              e
+            );
+            return false;
+          }
+        })
+      );
+
+      for (let i = 0; i < tabs.length; i++) {
+        const tab = tabs[i];
+        if (!tab.id) {
+          continue;
+        }
+        const isActive = activeStates[i];
+
+        // nb. If tab status is not available, we optimistically assume it is
+        // loaded.
+        const ready =
+          tab.status === 'complete' || typeof tab.status !== 'string';
+
+        state.setState(tab.id, {
+          state: isActive ? 'active' : 'inactive',
+          extensionSidebarInstalled: isActive,
+          ready,
+        });
+      }
+    };
+
+    /**
+     * Initialize the extension.
+     *
+     * This queries the state of the extension in existing tabs and sets up
+     * event listeners to respond to future tab changes.
+     *
+     * If the extension's state in a particular tab cannot be determined,
+     * the extension is assumed not to be loaded in that tab.
+     *
+     * @return - A promise that resolves once listeners have been set up and
+     *   the state of existing tabs has been determined.
+     */
+    this.init = async () => {
+      chromeAPI.browserAction.onClicked.addListener(onBrowserActionClicked);
+
+      // Set up listeners for tab events.
+      chromeAPI.tabs.onCreated.addListener(onTabCreated);
+
+      // When a user navigates within an existing tab, onUpdated is fired in most cases
+      chromeAPI.tabs.onUpdated.addListener(onTabUpdated);
+
+      // ... but when a user navigates to a page that is loaded
+      // via prerendering or instant results, onTabReplaced is
+      // fired instead. See https://developer.chrome.com/extensions/tabs#event-onReplaced
+      // and https://code.google.com/p/chromium/issues/detail?id=109557
+      chromeAPI.tabs.onReplaced.addListener(onTabReplaced);
+
+      chromeAPI.tabs.onRemoved.addListener(onTabRemoved);
+
+      // Determine the state of the extension in existing tabs.
+      await initTabStates();
+    };
 
     /**
      * @param {number} tabId
      * @param {import('./tab-state').State | undefined} current
      */
     async function onTabStateChange(tabId, current) {
-      if (current) {
-        let tab;
-        try {
-          tab = await chromeAPI.tabs.get(tabId);
-        } catch {
-          state.clearTab(tabId);
-          return;
-        }
-
-        browserAction.update(tabId, current);
-
-        updateTabDocument(tab);
-
-        if (!state.isTabErrored(tabId)) {
-          store.set(tabId, current);
-        }
-      } else {
-        store.unset(tabId);
+      if (!current) {
+        return;
       }
+
+      let tab;
+      try {
+        tab = await chromeAPI.tabs.get(tabId);
+      } catch {
+        state.clearTab(tabId);
+        return;
+      }
+
+      browserAction.update(tabId, current);
+
+      updateTabDocument(tab);
     }
 
     // exposed for use by tests
