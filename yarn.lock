@@ -1126,10 +1126,10 @@
     "@types/node" "*"
     "@types/responselike" "*"
 
-"@types/chrome@^0.0.168":
-  version "0.0.168"
-  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.168.tgz#e92df6601acc07427845a58b5bc62be4330d9b5f"
-  integrity sha512-kMA+5H9PSO7kEixgFgehp8xxzBV5qR9hyLCCt8j4/BIf5SJXXtVB6ik2uycU8PHgfFtMDgIC5/qQZplifYon2g==
+"@types/chrome@^0.0.170":
+  version "0.0.170"
+  resolved "https://registry.yarnpkg.com/@types/chrome/-/chrome-0.0.170.tgz#4692a94ce8400d21325386f2c0174bb56ed730b8"
+  integrity sha512-X6IKLdc/fJyCKxGlCUauL3OKmnhzS29Q2NnlErAiLC3voxvSVG1ISG+l24Q3kFZXmnc543KzElIjDQRvQ/yEBQ==
   dependencies:
     "@types/filesystem" "*"
     "@types/har-format" "*"
