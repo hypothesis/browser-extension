@@ -39,6 +39,8 @@ if (process.argv.length !== 3) {
 
 const settings = require(path.join(process.cwd(), process.argv[2]));
 
-console.log(JSON.stringify({
-  'settings': JSON.stringify(appSettings(settings)),
-}));
+console.log(
+  JSON.stringify({
+    settings: JSON.stringify(appSettings(settings)),
+  })
+);

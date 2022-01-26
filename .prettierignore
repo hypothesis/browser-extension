@@ -1,1 +1,4 @@
+.yalc/
+build/
+coverage/
 src/vendor/
