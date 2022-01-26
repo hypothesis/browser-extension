@@ -17,18 +17,18 @@ function appSettings(settings) {
   result.serviceUrl = settings.serviceUrl;
   result.release = settings.version;
   result.appType = settings.appType || '';
-  if (settings.websocketUrl) {
-    result.websocketUrl = settings.websocketUrl;
-  }
+
   if (settings.sentryPublicDSN) {
     result.raven = {
       dsn: settings.sentryPublicDSN,
       release: settings.version,
     };
   }
+
   if (settings.oauthClientId) {
     result.oauthClientId = settings.oauthClientId;
   }
+
   return result;
 }
 

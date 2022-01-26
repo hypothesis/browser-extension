@@ -5,7 +5,6 @@
   "authDomain": "hypothes.is",
   "bouncerUrl": "https://qa.hyp.is/",
   "serviceUrl": "https://qa.hypothes.is/",
-  "websocketUrl": "wss://qa.hypothes.is/ws",
 
   "oauthClientId": "92b42e3c-7793-11e7-8e17-cb2151436a1f",
 
