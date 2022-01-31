@@ -19,7 +19,7 @@
     "@types/chrome": "^0.0.176",
     "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-mockable-imports": "^2.0.0",
-    "chai": "^4.3.4",
+    "chai": "^4.3.6",
     "chrome-webstore-upload-cli": "^2.0.1",
     "diff": "^5.0.0",
     "eslint": "^8.7.0",
