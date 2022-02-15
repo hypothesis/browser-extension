@@ -32,6 +32,8 @@ const IGNORED_ERRORS = [
   // Attempts to access pages for which Chrome does not allow scripting
   /Cannot access contents of.*/,
   /The extensions gallery cannot be scripted/,
+  // The extension is blocked on LMSs
+  /Hypothesis extension can't be used on learning platform assignments/,
 ];
 
 /**

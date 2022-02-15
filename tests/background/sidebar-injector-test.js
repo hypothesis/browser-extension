@@ -357,6 +357,24 @@ describe('SidebarInjector', function () {
       });
     });
 
+    describe('when viewing a LMS assignment on a new window', () => {
+      it("doesn't inject Hypothesis client", async () => {
+        let error;
+
+        try {
+          await injector.injectIntoTab({
+            id: 1,
+            url: 'http://qa-lms.hypothes.is/blah',
+          });
+        } catch (err) {
+          error = err;
+        }
+
+        assert.instanceOf(error, errors.BlockedSiteError);
+        assert.notCalled(fakeExecuteScript);
+      });
+    });
+
     describe('when viewing a local PDF', function () {
       describe('when file access is enabled', function () {
         it('loads the PDFjs viewer', function () {
