@@ -364,7 +364,7 @@ describe('SidebarInjector', function () {
         try {
           await injector.injectIntoTab({
             id: 1,
-            url: 'http://qa-lms.hypothes.is/blah',
+            url: 'https://qa-lms.ca.hypothes.is/lti_launches',
           });
         } catch (err) {
           error = err;

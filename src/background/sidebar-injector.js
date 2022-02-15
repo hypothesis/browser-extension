@@ -148,7 +148,8 @@ export function SidebarInjector() {
   /** @param {string} url */
   function isLMSAssignmentURL(url) {
     const { origin } = new URL(url);
-    return origin.includes('lms.hypothes.is');
+    // Matches origins like `lms.hypothes.is`, `qa-lms.hypothes.is`, `lms.ca.hypothes.is`.
+    return /\blms\b/.test(origin) && origin.endsWith('.hypothes.is');
   }
 
   /** @param {Tab} tab */
@@ -252,8 +253,11 @@ export function SidebarInjector() {
     } else if (type === CONTENT_TYPE_VITALSOURCE) {
       await injectIntoVitalSourceReader(tab, config);
     } else if (type === CONTENT_TYPE_LMS) {
+      // The extension is blocked on LMS assignments to avoid confusion with the
+      // embedded Hypothesis instance. The user can still use the extension on other
+      // pages hosted in the LMS itself.
       throw new BlockedSiteError(
-        "Hypothesis extension can't be used on learning platform assignments"
+        "Hypothesis extension can't be used on Hypothesis LMS assignments"
       );
     } else {
       await injectConfig(tab.id, config);
