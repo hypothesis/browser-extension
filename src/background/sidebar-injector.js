@@ -2,6 +2,7 @@ import { chromeAPI, executeFunction, executeScript } from './chrome-api';
 import { detectContentType } from './detect-content-type';
 import {
   AlreadyInjectedError,
+  BlockedSiteError,
   LocalFileError,
   NoFileAccessError,
   RestrictedProtocolError,
@@ -10,6 +11,7 @@ import {
 const CONTENT_TYPE_HTML = 'HTML';
 const CONTENT_TYPE_PDF = 'PDF';
 const CONTENT_TYPE_VITALSOURCE = 'VITALSOURCE';
+const CONTENT_TYPE_LMS = 'LMS';
 
 /**
  * @param {object} config
@@ -143,6 +145,12 @@ export function SidebarInjector() {
     return url.startsWith('https://bookshelf.vitalsource.com/');
   }
 
+  /** @param {string} url */
+  function isLMSAssignmentURL(url) {
+    const { origin } = new URL(url);
+    return origin.includes('lms.hypothes.is');
+  }
+
   /** @param {Tab} tab */
   async function detectTabContentType(tab) {
     if (isPDFViewerURL(tab.url)) {
@@ -151,6 +159,10 @@ export function SidebarInjector() {
 
     if (isVitalSourceURL(tab.url)) {
       return CONTENT_TYPE_VITALSOURCE;
+    }
+
+    if (isLMSAssignmentURL(tab.url)) {
+      return CONTENT_TYPE_LMS;
     }
 
     const canInject = await canInjectScript(tab.url);
@@ -239,6 +251,10 @@ export function SidebarInjector() {
       await injectIntoPDF(tab);
     } else if (type === CONTENT_TYPE_VITALSOURCE) {
       await injectIntoVitalSourceReader(tab, config);
+    } else if (type === CONTENT_TYPE_LMS) {
+      throw new BlockedSiteError(
+        "Hypothesis extension can't be used on learning platform assignments"
+      );
     } else {
       await injectConfig(tab.id, config);
 
