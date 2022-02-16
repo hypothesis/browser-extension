@@ -98,7 +98,11 @@ format: node_modules/.uptodate
 
 .PHONY: test
 test: node_modules/.uptodate
+ifdef ARGS
+	yarn test $(ARGS)
+else
 	yarn test
+endif
 
 .PHONY: sure
 sure: checkformatting lint test
