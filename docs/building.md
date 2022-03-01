@@ -34,7 +34,8 @@ This, for example, will build a production extension: one that talks to the main
 
 > Note:
 > It may be convenient to create a new, untracked config file
-> based on `chrome-dev.json` to maintain your settings
+> based on `chrome-dev.json` to maintain your settings. Any settings JSON file
+> in the `settings` directory with `custom` in the name will be git-ignored
 > (here called `custom.json`):
 >
 >       $ make build SETTINGS_FILE=settings/custom.json
