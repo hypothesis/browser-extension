@@ -5,3 +5,6 @@ coverage/
 
 # The client uses yarn rather than npm to manage the lockfile.
 package-lock.json
+
+# Local settings for dev and test
+settings/*custom*.json
