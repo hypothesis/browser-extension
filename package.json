@@ -46,7 +46,7 @@
     "raven-js": "^3.27.2",
     "rollup": "^2.68.0",
     "sinon": "^13.0.1",
-    "typescript": "^4.5.5",
+    "typescript": "^4.6.2",
     "web-ext": "^6.7.0"
   },
   "browserslist": "chrome 85, firefox 75",
