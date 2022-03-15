@@ -25,7 +25,7 @@
     "eslint": "^8.11.0",
     "eslint-config-hypothesis": "^2.5.0",
     "eslint-plugin-mocha": "^10.0.3",
-    "eslint-plugin-react": "^7.29.3",
+    "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.3.0",
     "git-describe": "^4.1.0",
     "gulp": "^4.0.2",
