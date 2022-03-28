@@ -47,7 +47,7 @@
     "rollup": "^2.70.1",
     "sinon": "^13.0.1",
     "typescript": "^4.6.3",
-    "web-ext": "^6.7.0"
+    "web-ext": "^6.8.0"
   },
   "browserslist": "chrome 85, firefox 75",
   "scripts": {
