@@ -45,7 +45,7 @@
     "puppeteer": "^13.5.2",
     "raven-js": "^3.27.2",
     "rollup": "^2.70.1",
-    "sinon": "^13.0.1",
+    "sinon": "^13.0.2",
     "typescript": "^4.6.3",
     "web-ext": "^6.8.0"
   },
