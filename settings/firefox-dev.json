@@ -5,6 +5,8 @@
   "authDomain": "localhost",
   "serviceUrl": "http://localhost:5000/",
 
+  "oauthClientId": "DEV_UNDEFINED_CLIENT",
+
   "browserIsFirefox": true,
   "appType": "firefox-extension"
 }

@@ -6,6 +6,8 @@
   "bouncerUrl": "http://localhost:8000/",
   "serviceUrl": "http://localhost:5000/",
 
+  "oauthClientId": "DEV_UNDEFINED_CLIENT",
+
   "browserIsChrome": true,
   "appType": "chrome-extension"
 }
