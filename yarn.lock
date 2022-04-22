@@ -2195,10 +2195,10 @@ chrome-launcher@0.15.0:
     is-wsl "^2.2.0"
     lighthouse-logger "^1.0.0"
 
-chrome-webstore-upload-cli@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/chrome-webstore-upload-cli/-/chrome-webstore-upload-cli-2.0.1.tgz#3357e6d523846537e71f455b46c33479df9762eb"
-  integrity sha512-89S1AZU24IJjUhEHdnjLibw0xizcP656i3h0eDwKvuUNsEf0fC8xB0E6jgRUvgN6u0e/U21RfMOgxOdSiVdvVw==
+chrome-webstore-upload-cli@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/chrome-webstore-upload-cli/-/chrome-webstore-upload-cli-2.1.0.tgz#0992787a44269b13cb51ce298e7c1b6aff58abe4"
+  integrity sha512-HEQYWh9zZXOyEKWIp87oRYp6u8GJcaEXq6IZixOQfM0EKJuhJ+T7DRRLVeyOCFaRKMEntwTn00scBGBw6Rof9Q==
   dependencies:
     chrome-webstore-upload "^0.5.0"
     junk "^4.0.0"
