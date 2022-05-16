@@ -44,7 +44,7 @@
     "prettier": "2.6.2",
     "puppeteer": "^13.7.0",
     "raven-js": "^3.27.2",
-    "rollup": "^2.72.1",
+    "rollup": "^2.73.0",
     "sinon": "^14.0.0",
     "typescript": "^4.6.4",
     "web-ext": "^6.8.0"
