@@ -21,7 +21,7 @@
     "babel-plugin-mockable-imports": "^2.0.0",
     "chai": "^4.3.6",
     "chrome-webstore-upload-cli": "^2.1.0",
-    "diff": "^5.0.0",
+    "diff": "^5.1.0",
     "eslint": "^8.15.0",
     "eslint-config-hypothesis": "^2.5.0",
     "eslint-plugin-mocha": "^10.0.4",
