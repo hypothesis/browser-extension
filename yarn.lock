@@ -3153,13 +3153,13 @@ eslint-config-hypothesis@^2.5.0:
   resolved "https://registry.yarnpkg.com/eslint-config-hypothesis/-/eslint-config-hypothesis-2.5.0.tgz#bc9c281b07923666696c5df1c1f96f3cbace266b"
   integrity sha512-3KiknU/zX117ggOhDetdbnqn+RupdIsp4XXl9kn8NICc/1ObVY3dt802L01A//ajCGHgiYu5/vR2afsuChlnhw==
 
-eslint-plugin-mocha@^10.0.4:
-  version "10.0.4"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-mocha/-/eslint-plugin-mocha-10.0.4.tgz#b129a1aef8312e8ceaf1b35ff0367f93e917d90a"
-  integrity sha512-8wzAeepVY027oBHz/TmBmUr7vhVqoC1KTFeDybFLhbaWKx+aQ7fJJVuUsqcUy+L+G+XvgQBJY+cbAf7hl5DF7Q==
+eslint-plugin-mocha@^10.0.5:
+  version "10.0.5"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-mocha/-/eslint-plugin-mocha-10.0.5.tgz#c3b1e9f59c01063566d8e64b64226533376ffccd"
+  integrity sha512-H5xuD5NStlpaKLqUWYC5BsMx8fHgrIYsdloFbONUTc2vgVNiJcWdKoX29Tt0BO75QgAltplPLIziByMozGGixA==
   dependencies:
     eslint-utils "^3.0.0"
-    ramda "^0.28.0"
+    rambda "^7.1.0"
 
 eslint-plugin-no-unsanitized@4.0.1:
   version "4.0.1"
@@ -6604,10 +6604,10 @@ quick-lru@^5.1.1:
   resolved "https://registry.yarnpkg.com/quick-lru/-/quick-lru-5.1.1.tgz#366493e6b3e42a3a6885e2e99d18f80fb7a8c932"
   integrity sha512-WuyALRjWPDGtt/wzJiadO5AXY+8hZ80hVpe6MyivgraREW751X3SbhRvG3eLKOYN+8VEvqLcf3wdnt44Z4S4SA==
 
-ramda@^0.28.0:
-  version "0.28.0"
-  resolved "https://registry.yarnpkg.com/ramda/-/ramda-0.28.0.tgz#acd785690100337e8b063cab3470019be427cc97"
-  integrity sha512-9QnLuG/kPVgWvMQ4aODhsBUFKOUmnbUnsSXACv+NCQZcHbeb+v8Lodp8OVxtRULN1/xOyYLLaL6npE6dMq5QTA==
+rambda@^7.1.0:
+  version "7.1.4"
+  resolved "https://registry.yarnpkg.com/rambda/-/rambda-7.1.4.tgz#7faa9665a54c5d81773975532a942b3113bb4a56"
+  integrity sha512-bPK8sSiVHIC7CqdWga8R+hRi5hfc4hK6S01lZW4KrLwSNryQoKaCOJA9GNiF20J7Nbe1vejRfR37/ASQXFL5EA==
 
 randombytes@^2.1.0:
   version "2.1.0"
