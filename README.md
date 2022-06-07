@@ -2,7 +2,7 @@
 
 [![BSD licensed](https://img.shields.io/badge/license-BSD-blue.svg)][license]
 
-[license]: https://github.com/hypothesis/browser-extension/blob/master/LICENSE
+[license]: https://github.com/hypothesis/browser-extension/blob/main/LICENSE
 
 The Hypothesis browser extensions allow you to annotate web documents using your
 [Hypothesis][service] account.
@@ -77,7 +77,7 @@ Please note that this project is released with a [Contributor Code of
 Conduct][coc]. By participating in this project you agree to abide by its terms.
 
 [ml]: https://groups.google.com/a/list.hypothes.is/forum/#!forum/dev
-[coc]: https://github.com/hypothesis/browser-extension/blob/master/CODE_OF_CONDUCT
+[coc]: https://github.com/hypothesis/browser-extension/blob/main/CODE_OF_CONDUCT
 
 ## License
 
@@ -87,4 +87,4 @@ third-party components are included. They are subject to their own licenses. All
 of the license information can be found in the included [LICENSE][license] file.
 
 [bsd2c]: http://www.opensource.org/licenses/BSD-2-Clause
-[license]: https://github.com/hypothesis/browser-extensions/blob/master/LICENSE
+[license]: https://github.com/hypothesis/browser-extensions/blob/main/LICENSE
