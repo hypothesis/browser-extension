@@ -21,7 +21,7 @@ node {
     workspace = pwd()
 
     // Git branch which releases are deployed from.
-    releaseFromBranch = "master"
+    releaseFromBranch = "main"
 
     sh "docker build -t hypothesis-browser-extension-tests ."
     nodeEnv = docker.image("hypothesis-browser-extension-tests")
