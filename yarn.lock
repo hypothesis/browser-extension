@@ -6499,10 +6499,10 @@ pupa@^2.1.1:
   dependencies:
     escape-goat "^2.0.0"
 
-puppeteer@^15.1.1:
-  version "15.1.1"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-15.1.1.tgz#f995fc3e5794649c4689b87ad29bd083065e53c7"
-  integrity sha512-XMysu48uIcaYad/IelRTX3yxpHkcNdhdzPegnBEz9h1uEQfLhFcMJnjyvus51Sm+OPwr2gaKQhtyuIVaVKqd0Q==
+puppeteer@^15.3.0:
+  version "15.3.0"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-15.3.0.tgz#2d79200cb72d938dfc7af4fdedaa03c04e7ace14"
+  integrity sha512-PYZwL0DjGeUOauSie6n9Pf+vDUod+vFnC1uHa1Uj3ex1PhRI6DOheau6oJxxj9oyEPWy8SS19KfZDwln4v4LTg==
   dependencies:
     cross-fetch "3.1.5"
     debug "4.3.4"
@@ -8386,11 +8386,6 @@ write-file-atomic@^3.0.0:
     is-typedarray "^1.0.0"
     signal-exit "^3.0.2"
     typedarray-to-buffer "^3.1.5"
-
-ws@8.7.0:
-  version "8.7.0"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-8.7.0.tgz#eaf9d874b433aa00c0e0d8752532444875db3957"
-  integrity sha512-c2gsP0PRwcLFzUiA8Mkr37/MI7ilIlHQxaEAtd0uNMbVMoy8puJyafRlm0bV9MbGSabUPeLrRRaqIBcFcA2Pqg==
 
 ws@8.8.0:
   version "8.8.0"
