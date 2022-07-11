@@ -42,7 +42,7 @@
     "mocha": "^10.0.0",
     "mustache": "^4.2.0",
     "prettier": "2.7.1",
-    "puppeteer": "^15.3.0",
+    "puppeteer": "^15.3.2",
     "raven-js": "^3.27.2",
     "rollup": "^2.75.7",
     "sinon": "^14.0.0",
