@@ -2,8 +2,5 @@
   "extends": "hypothesis",
   "globals": {
     "chrome": false
-  },
-  "rules": {
-    "indent": "off"
   }
 }
