@@ -24,7 +24,7 @@
     "diff": "^5.1.0",
     "eslint": "^8.20.0",
     "eslint-config-hypothesis": "^2.6.0",
-    "eslint-plugin-mocha": "^10.0.5",
+    "eslint-plugin-mocha": "^10.1.0",
     "eslint-plugin-react": "^7.30.1",
     "eslint-plugin-react-hooks": "^4.6.0",
     "git-describe": "^4.1.1",
