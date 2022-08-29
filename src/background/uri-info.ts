@@ -13,10 +13,8 @@ const BLOCKED_HOSTNAMES = new Set([
 
 /**
  * Encodes a string for use in a query parameter.
- *
- * @param {string} val
  */
-function encodeUriQuery(val) {
+function encodeUriQuery(val: string) {
   return encodeURIComponent(val).replace(/%20/g, '+');
 }
 
@@ -30,11 +28,10 @@ function encodeUriQuery(val) {
  *
  *  In addition, this normalization facilitates the identification of unique URLs.
  *
- * @param {string} uri
- * @return {string} - URL without fragment
+ * @return URL without fragment
  * @throws Will throw if URL is invalid or should not be sent to the 'badge' request endpoint
  */
-export function uriForBadgeRequest(uri) {
+export function uriForBadgeRequest(uri: string) {
   const url = new URL(uri);
 
   if (!ALLOWED_PROTOCOLS.has(url.protocol)) {
@@ -54,11 +51,9 @@ export function uriForBadgeRequest(uri) {
  * Queries the Hypothesis service that provides statistics about the annotations
  * for a given URL.
  *
- * @param {string} uri
- * @return {Promise<number>}
  * @throws Will throw a variety of errors: network, json parsing, or wrong format errors.
  */
-export async function fetchAnnotationCount(uri) {
+export async function fetchAnnotationCount(uri: string): Promise<number> {
   const response = await fetch(
     settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri),
     {
