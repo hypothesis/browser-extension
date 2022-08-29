@@ -26,6 +26,7 @@ export default {
     babel({
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
+      extensions: ['.js', '.ts'],
       plugins: [
         [
           'mockable-imports',
@@ -41,7 +42,7 @@ export default {
         ],
       ],
     }),
-    nodeResolve(),
+    nodeResolve({ extensions: ['.js', '.ts'] }),
     commonjs(),
     json(),
     multi(),
