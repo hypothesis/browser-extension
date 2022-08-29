@@ -13,8 +13,9 @@ export default {
     babel({
       babelHelpers: 'bundled',
       exclude: 'node_modules/**',
+      extensions: ['.js', '.ts'],
     }),
-    nodeResolve(),
+    nodeResolve({ extensions: ['.js', '.ts'] }),
     commonjs(),
     json(),
   ],
