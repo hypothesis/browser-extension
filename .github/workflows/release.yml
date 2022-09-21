@@ -1,0 +1,45 @@
+name: Release
+
+concurrency:
+  group: ${{ github.event.repository.name }}-deploy
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  continuous-integration:
+    uses: ./.github/workflows/continuous-integration.yml
+    name: continuous integration
+
+  upload-packages:
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+    - name: Cache the node_modules dir
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}
+    - name: Install
+      run: yarn install --frozen-lockfile
+    - name: Fetch packages
+      uses: actions/download-artifact@v3
+      with:
+        name: packages
+        path: dist/
+    - name: Upload packages
+      env:
+        CHROME_WEBSTORE_CLIENT_ID: ${{ secrets.CHROME_WEBSTORE_CLIENT_ID }}
+        CHROME_WEBSTORE_CLIENT_SECRET: ${{ secrets.CHROME_WEBSTORE_CLIENT_SECRET }}
+        CHROME_WEBSTORE_REFRESH_TOKEN: ${{ secrets.CHROME_WEBSTORE_REFRESH_TOKEN }}
+        FIREFOX_AMO_KEY: ${{ secrets.FIREFOX_AMO_KEY }}
+        FIREFOX_AMO_SECRET: ${{ secrets.FIREFOX_AMO_SECRET }}
+      run: tools/deploy
