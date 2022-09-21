@@ -21,6 +21,18 @@ jobs:
       run: make lint
     - name: Test
       run: make test
+    - name: Fetch git tags
+      run: |
+        # Fetch tags because `git describe` uses them and the output from `git describe`
+        # is in turn used to produce the extension version number in `build/manifest.json`.
+        #
+        # GitHub does a shallow clone by default, so we have to un-shallow it for
+        # `git describe` to work.
+        git fetch --quiet --tags --unshallow
+
+        # Show version information in the build logs. This command will also be
+        # used by `tools/settings.js` to generate the extension version.
+        git describe
     - name: Build packages
       run: |
         make clean # Remove assets from test step
@@ -28,3 +40,11 @@ jobs:
         make build SETTINGS_FILE=settings/chrome-prod.json dist/ci-chrome-prod.zip
         make build SETTINGS_FILE=settings/firefox-qa.json dist/ci-firefox-qa.xpi
         make build SETTINGS_FILE=settings/firefox-prod.json dist/ci-firefox-prod.xpi
+    - name: Archive packages
+      uses: actions/upload-artifact@v3
+      with:
+        name: packages
+        path: |
+          dist/*.zip
+          dist/*.xpi
+        retention-days: 30
