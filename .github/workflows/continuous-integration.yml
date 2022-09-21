@@ -32,7 +32,7 @@ jobs:
 
         # Show version information in the build logs. This command will also be
         # used by `tools/settings.js` to generate the extension version.
-        git describe
+        git describe --tags
     - name: Build packages
       run: |
         make clean # Remove assets from test step
