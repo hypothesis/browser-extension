@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -eu
+
+CURRENT_BRANCH=$(git branch --show-current)
+
+if [ "$CURRENT_BRANCH" != "main" ]; then
+  echo "This command should only be run on the main branch"
+  exit 1
+fi
+
+yarn add hypothesis@latest --dev
+
+NEW_CLIENT_VERSION=$(node -p 'require("./package.json").devDependencies.hypothesis.match(/[0-9.]+/)[0]')
+TAG_NAME="v$NEW_CLIENT_VERSION"
+
+# Update Hypothesis client and set the version of the extension to match the
+# client release.
+yarn add hypothesis@latest --dev
+yarn version --no-git-tag-version --new-version "$NEW_CLIENT_VERSION"
+git commit -a -m "Update Hypothesis client to $NEW_CLIENT_VERSION"
+git tag "$TAG_NAME"
+
+# Push the new commit to the source branch as well as the tag. Make the push
+# atomic so that both will fail if the source branch has been updated since
+# the current checkout.
+git push --atomic origin HEAD:main "$TAG_NAME"
