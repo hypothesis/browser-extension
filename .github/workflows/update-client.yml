@@ -15,4 +15,7 @@ jobs:
     - name: Install
       run: yarn install --frozen-lockfile
     - name: Update client
-      run: tools/update-client
+      run: |
+        git config --global user.name "Hypothesis GitHub Actions"
+        git config --global user.email "hypothesis@users.noreply.github.com"
+        tools/update-client
