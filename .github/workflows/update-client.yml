@@ -4,6 +4,8 @@ on:
 jobs:
   update-client:
     runs-on: ubuntu-latest
+    outputs:
+      ref: ${{ steps.update-client.outputs.ref }}
     steps:
     - name: Checkout
       uses: actions/checkout@v2
@@ -15,10 +17,12 @@ jobs:
     - name: Install
       run: yarn install --frozen-lockfile
     - name: Update client
+      id: update-client
       run: |
         git config --global user.name "Hypothesis GitHub Actions"
         git config --global user.email "hypothesis@users.noreply.github.com"
         tools/update-client
+        echo "::set-output ref=$(git rev-parse HEAD)"
 
   # Release a new version of the extension with the updated client.
   #
@@ -30,3 +34,5 @@ jobs:
     uses: ./.github/workflows/release.yml
     name: Release extension
     secrets: inherit
+    with:
+      ref: ${{ needs.update-client.outputs.ref }}
