@@ -29,3 +29,4 @@ jobs:
     needs: update-client
     uses: ./.github/workflows/release.yml
     name: Release extension
+    secrets: inherit
