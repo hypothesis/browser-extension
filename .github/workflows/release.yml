@@ -6,6 +6,11 @@ concurrency:
 
 on:
   workflow_call:
+    inputs:
+      ref:
+        description: 'Git commit to release'
+        required: false
+        type: string
   workflow_dispatch:
   push:
     branches:
@@ -24,6 +29,8 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        ref: ${{ inputs.ref }}
     - name: Cache the node_modules dir
       uses: actions/cache@v2
       with:
