@@ -2,12 +2,19 @@ name: Continuous integration
 on:
   pull_request:
   workflow_call:
+    inputs:
+      ref:
+        description: 'Git commit to build and test'
+        required: false
+        type: string
 jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
       uses: actions/checkout@v2
+      with:
+        ref: ${{ inputs.ref }}
     - name: Cache the node_modules dir
       uses: actions/cache@v2
       with:

@@ -20,6 +20,8 @@ jobs:
   continuous-integration:
     uses: ./.github/workflows/continuous-integration.yml
     name: continuous integration
+    with:
+      ref: ${{ inputs.ref }}
 
   upload-packages:
     needs: continuous-integration
