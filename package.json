@@ -16,7 +16,7 @@
     "@rollup/plugin-json": "^5.0.0",
     "@rollup/plugin-multi-entry": "^5.0.0",
     "@rollup/plugin-node-resolve": "^15.0.0",
-    "@types/chrome": "^0.0.198",
+    "@types/chrome": "^0.0.199",
     "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-mockable-imports": "^2.0.1",
     "chai": "^4.3.6",
