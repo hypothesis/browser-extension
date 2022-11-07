@@ -8,7 +8,7 @@
   "bugs": "https://github.com/hypothesis/browser-extension/issues",
   "repository": "hypothesis/browser-extension",
   "devDependencies": {
-    "@babel/core": "^7.19.6",
+    "@babel/core": "^7.20.2",
     "@babel/preset-env": "^7.19.4",
     "@rollup/plugin-alias": "^4.0.2",
     "@rollup/plugin-babel": "^6.0.0",
