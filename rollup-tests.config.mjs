@@ -1,4 +1,4 @@
-import * as glob from 'glob';
+import glob from 'glob';
 import alias from '@rollup/plugin-alias';
 import { babel } from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
