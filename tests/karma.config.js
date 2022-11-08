@@ -1,12 +1,8 @@
 'use strict';
 
-/* global __dirname, process */
+/* global __dirname */
 
 const path = require('path');
-
-let chromeFlags = [];
-
-process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function (config) {
   config.set({
@@ -58,14 +54,7 @@ module.exports = function (config) {
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['ChromeHeadless_Custom'],
-
-    customLaunchers: {
-      ChromeHeadless_Custom: {
-        base: 'ChromeHeadless',
-        flags: chromeFlags,
-      },
-    },
+    browsers: ['ChromeHeadless'],
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
