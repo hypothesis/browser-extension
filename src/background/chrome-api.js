@@ -242,11 +242,10 @@ export async function executeFunction(
     }
     const results = await chromeAPI_.scripting.executeScript({
       target,
-      // @ts-expect-error - Typechecking error needs debugging.
       func,
       args,
     });
-    return results[0].result;
+    return /** @type {Result} */ (results[0].result);
   }
 
   const code = codeStringForFunctionCall(func, args);
