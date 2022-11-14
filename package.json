@@ -22,7 +22,7 @@
     "@typescript-eslint/parser": "^5.42.1",
     "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-mockable-imports": "^2.0.1",
-    "chai": "^4.3.6",
+    "chai": "^4.3.7",
     "chrome-webstore-upload-cli": "^2.1.0",
     "diff": "^5.1.0",
     "eslint": "^8.27.0",
