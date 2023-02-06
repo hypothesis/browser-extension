@@ -22,7 +22,7 @@ jobs:
         git config --global user.name "Hypothesis GitHub Actions"
         git config --global user.email "hypothesis@users.noreply.github.com"
         tools/update-client
-        echo "::set-output name=ref::$(git rev-parse HEAD)"
+        echo "ref=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
 
   # Release a new version of the extension with the updated client.
   #
