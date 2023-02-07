@@ -52,6 +52,7 @@ extension: build/manifest.json
 extension: build/client/build
 extension: build/client/app.html
 extension: build/client/notebook.html
+extension: build/client/profile.html
 extension: build/unload-client.js
 extension: build/pdfjs-init.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
@@ -69,6 +70,8 @@ build/client/build: node_modules/hypothesis/build/manifest.json
 build/client/app.html: src/sidebar-app.html.mustache build/client build/settings.json
 	tools/template-context-app.js build/settings.json | $(MUSTACHE) - $< >$@
 build/client/notebook.html: build/client/app.html
+	cp $< $@
+build/client/profile.html: build/client/app.html
 	cp $< $@
 build/unload-client.js: src/unload-client.js
 	cp $< $@
