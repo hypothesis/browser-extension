@@ -277,9 +277,6 @@ export class Extension {
 
         const config = {
           // Configure client to load assets and sidebar app from extension.
-          // Note: Even though the sidebar app URL is correct here and the page
-          // does load, Chrome devtools may incorrectly report that it failed to
-          // load. See https://bugs.chromium.org/p/chromium/issues/detail?id=667533
           assetRoot: chromeAPI.runtime.getURL('/client/'),
           notebookAppUrl: chromeAPI.runtime.getURL('/client/notebook.html'),
           profileAppUrl: chromeAPI.runtime.getURL('/client/profile.html'),
