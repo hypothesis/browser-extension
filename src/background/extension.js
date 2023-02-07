@@ -281,8 +281,9 @@ export class Extension {
           // does load, Chrome devtools may incorrectly report that it failed to
           // load. See https://bugs.chromium.org/p/chromium/issues/detail?id=667533
           assetRoot: chromeAPI.runtime.getURL('/client/'),
-          sidebarAppUrl: chromeAPI.runtime.getURL('/client/app.html'),
           notebookAppUrl: chromeAPI.runtime.getURL('/client/notebook.html'),
+          profileAppUrl: chromeAPI.runtime.getURL('/client/profile.html'),
+          sidebarAppUrl: chromeAPI.runtime.getURL('/client/app.html'),
         };
 
         // Pass the direct-link query as configuration into the client.

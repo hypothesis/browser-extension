@@ -695,6 +695,7 @@ describe('Extension', function () {
       assert.calledWith(fakeSidebarInjector.injectIntoTab, tab, {
         assetRoot: 'chrome://1234/client/',
         notebookAppUrl: 'chrome://1234/client/notebook.html',
+        profileAppUrl: 'chrome://1234/client/profile.html',
         sidebarAppUrl: 'chrome://1234/client/app.html',
       });
     });
