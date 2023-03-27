@@ -46,7 +46,7 @@
     "mustache": "^4.2.0",
     "prettier": "2.8.7",
     "raven-js": "^3.27.2",
-    "rollup": "^3.20.0",
+    "rollup": "^3.20.2",
     "sinon": "^15.0.2",
     "typescript": "^5.0.2",
     "web-ext": "^7.5.0"
