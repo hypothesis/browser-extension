@@ -160,6 +160,74 @@ describe('Extension', function () {
     });
   });
 
+  describe('#activate', () => {
+    beforeEach(async () => {
+      await ext.init();
+    });
+
+    it('activates extension immediately if `afterNavigationTo` is not set', () => {
+      ext.activate(1, {
+        query: '#annotations:1234',
+      });
+      assert.calledWith(fakeTabState.setState, 1, {
+        state: 'active',
+        directLinkQuery: { annotations: '1234' },
+      });
+    });
+
+    it('activates extension after navigation if `afterNavigationTo` is set', () => {
+      ext.activate(1, {
+        afterNavigationTo: 'https://newsite.com/',
+        query: '#annotations:1234',
+      });
+      assert.notCalled(fakeTabState.setState);
+
+      fakeChromeAPI.tabs.onUpdated.listener(
+        1,
+        { status: 'loading' },
+        { url: 'https://newsite.com/' }
+      );
+
+      assert.calledWith(fakeTabState.setState, 1, {
+        state: 'active',
+        directLinkQuery: { annotations: '1234' },
+      });
+    });
+
+    [
+      // HTTP vs HTTPS is ignored. This is important as a bouncer link might
+      // point to an HTTP URL, but the browser may auto-redirect to HTTPS.
+      {
+        afterNavigationTo: 'http://example.com/',
+        tabURL: 'https://example.com/',
+      },
+
+      // Fragments are ignored in URL comparison.
+      {
+        afterNavigationTo: 'https://example.com/',
+        tabURL: 'https://example.com/#some-fragment',
+      },
+    ].forEach(({ tabURL, afterNavigationTo }) => {
+      it('ignores some differences when comparing tab URL and `afterNavigationTo` URL', () => {
+        ext.activate(1, {
+          afterNavigationTo,
+          query: '#annotations:1234',
+        });
+
+        fakeChromeAPI.tabs.onUpdated.listener(
+          1,
+          { status: 'loading' },
+          { url: tabURL }
+        );
+
+        assert.calledWith(fakeTabState.setState, 1, {
+          state: 'active',
+          directLinkQuery: { annotations: '1234' },
+        });
+      });
+    });
+  });
+
   describe('#init', () => {
     afterEach(() => {
       console.warn.restore?.();
