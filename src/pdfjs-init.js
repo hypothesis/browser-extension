@@ -7,10 +7,14 @@
 
 // Configure Hypothesis client to load assets from the extension instead of
 // the CDN.
+//
+// Note this configuration is duplicated in `src/background/extension.js`. Any
+// changes made here must be reflected there as well.
 const clientConfig = {
   assetRoot: '/client/',
   sidebarAppUrl: '/client/app.html',
   notebookAppUrl: '/client/notebook.html',
+  profileAppUrl: '/client/profile.html',
 };
 
 const configScript = document.createElement('script');

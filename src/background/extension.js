@@ -275,8 +275,11 @@ export class Extension {
 
         const { directLinkQuery } = state.getState(tabId);
 
+        // Configure client to load assets from extension.
+        //
+        // Note this configuration is duplicated in `pdfjs-init.js`. Any changes
+        // made here must be reflected there as well.
         const config = {
-          // Configure client to load assets and sidebar app from extension.
           assetRoot: chromeAPI.runtime.getURL('/client/'),
           notebookAppUrl: chromeAPI.runtime.getURL('/client/notebook.html'),
           profileAppUrl: chromeAPI.runtime.getURL('/client/profile.html'),
