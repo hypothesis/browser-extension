@@ -22,6 +22,8 @@ function setClientConfig(config) {
   script.className = 'js-hypothesis-config';
   script.type = 'application/json';
   script.textContent = JSON.stringify(config);
+  // This ensures the client removes the script when the extension is deactivated
+  script.setAttribute('data-remove-on-unload', '');
   document.head.appendChild(script);
 }
 

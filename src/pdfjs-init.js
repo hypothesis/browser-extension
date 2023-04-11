@@ -21,6 +21,8 @@ const configScript = document.createElement('script');
 configScript.type = 'application/json';
 configScript.className = 'js-hypothesis-config';
 configScript.textContent = JSON.stringify(clientConfig);
+// This ensures the client removes the script when the extension is deactivated
+configScript.setAttribute('data-remove-on-unload', '');
 document.head.appendChild(configScript);
 
 // See https://github.com/mozilla/pdf.js/wiki/Third-party-viewer-usage
