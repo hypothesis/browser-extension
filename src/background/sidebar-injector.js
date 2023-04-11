@@ -262,10 +262,8 @@ export function SidebarInjector() {
         "Hypothesis extension can't be used on Hypothesis LMS assignments"
       );
     } else {
-      await injectConfig(tab.id, config);
-
       const result = /** @type {{ installedURL: string }|null} */ (
-        await injectIntoHTML(tab)
+        await injectIntoHTML(tab, config)
       );
       if (
         typeof result?.installedURL === 'string' &&
@@ -296,12 +294,13 @@ export function SidebarInjector() {
     }
   }
 
-  /** @param {Tab} tab */
-  function injectIntoHTML(tab) {
-    return executeScript({
-      tabId: tab.id,
-      file: '/client/build/boot.js',
-    });
+  /**
+   * @param {Tab} tab
+   * @param {object} config
+   */
+  async function injectIntoHTML(tab, config) {
+    await injectConfig(tab.id, config);
+    return executeClientBootScript(tab.id);
   }
 
   /** @param {Tab} tab */
@@ -402,11 +401,7 @@ export function SidebarInjector() {
       throw new Error('Book viewer frame not found');
     }
     await injectConfig(tab.id, config, frame.frameId);
-    await executeScript({
-      tabId: tab.id,
-      frameId: frame.frameId,
-      file: '/client/build/boot.js',
-    });
+    await executeClientBootScript(tab.id, frame.frameId);
   }
 
   /** @param {Tab} tab */
@@ -436,6 +431,18 @@ export function SidebarInjector() {
       frameId,
       func: setClientConfig,
       args: [clientConfig],
+    });
+  }
+
+  /**
+   * @param {number} tabId
+   * @param {number} [frameId]
+   */
+  async function executeClientBootScript(tabId, frameId) {
+    return executeScript({
+      tabId,
+      frameId,
+      file: '/client/build/boot.js',
     });
   }
 }
