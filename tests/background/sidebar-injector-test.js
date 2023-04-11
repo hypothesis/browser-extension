@@ -261,10 +261,13 @@ describe('SidebarInjector', function () {
         const url = 'http://example.com/foo.html';
 
         return injector.injectIntoTab({ id: 1, url: url }).then(function () {
-          assert.calledWith(fakeExecuteScript, {
-            tabId: 1,
-            file: sinon.match('/client/build/boot.js'),
-          });
+          assert.calledWith(
+            fakeExecuteScript,
+            sinon.match({
+              tabId: 1,
+              file: sinon.match('/client/build/boot.js'),
+            })
+          );
         });
       });
 
