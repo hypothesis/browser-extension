@@ -1,4 +1,4 @@
-// @ts-ignore
+// @ts-expect-error
 import isShallowEqual from 'is-equal-shallow';
 
 import { RequestCanceledError } from './errors';
