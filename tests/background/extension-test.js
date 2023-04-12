@@ -91,8 +91,9 @@ describe('Extension', function () {
     };
     fakeSidebarInjector = {
       isClientActiveInTab: sandbox.stub().resolves(false),
-      injectIntoTab: sandbox.stub().returns(Promise.resolve()),
-      removeFromTab: sandbox.stub().returns(Promise.resolve()),
+      injectIntoTab: sandbox.stub().resolves(),
+      removeFromTab: sandbox.stub().resolves(),
+      requestExtraPermissionsForTab: sandbox.stub().resolves(true),
     };
     fakeErrors = {
       AlreadyInjectedError: function AlreadyInjectedError() {},
@@ -524,17 +525,50 @@ describe('Extension', function () {
         await ext.init();
       });
 
-      it('activate the tab if the tab is inactive', function () {
+      it('activates the tab if the tab is inactive', async () => {
         fakeTabState.isTabInactive.returns(true);
-        fakeChromeAPI.browserAction.onClicked.listener({
+        const tab = {
           id: 1,
           url: 'http://example.com/foo.html',
-        });
+        };
+        fakeChromeAPI.browserAction.onClicked.listener(tab);
+
+        // Wait for any extra permissions to be granted (none needed here).
+        await delay(0);
+
+        assert.calledWith(
+          fakeSidebarInjector.requestExtraPermissionsForTab,
+          tab
+        );
         assert.called(fakeTabState.activateTab);
         assert.calledWith(fakeTabState.activateTab, 1);
       });
 
-      it('deactivate the tab if the tab is active', function () {
+      it('reports error if user rejects permissions request', async () => {
+        fakeSidebarInjector.requestExtraPermissionsForTab.returns(false);
+        fakeTabState.isTabInactive.returns(true);
+        const tab = {
+          id: 1,
+          url: 'http://example.com/foo.html',
+        };
+        fakeChromeAPI.browserAction.onClicked.listener(tab);
+
+        // Wait for user to "reject" permissions request.
+        await delay(0);
+
+        assert.notCalled(fakeTabState.activateTab);
+        assert.calledOnce(fakeTabState.errorTab);
+        assert.calledWith(
+          fakeTabState.errorTab,
+          1,
+          sinon.match({
+            message:
+              'Hypothesis could not get the permissions needed to load in this tab',
+          })
+        );
+      });
+
+      it('deactivates the tab if the tab is active', function () {
         fakeTabState.isTabActive.returns(true);
         fakeChromeAPI.browserAction.onClicked.listener({
           id: 1,
