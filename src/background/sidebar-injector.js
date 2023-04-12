@@ -93,11 +93,7 @@ export function SidebarInjector() {
     // In the VitalSource book reader, we need to test a specific frame.
     let frameId;
     if (isVitalSourceURL(tab_.url)) {
-      const vsFrame = await getVitalSourceViewerFrame(tab_, {
-        // If we don't have permissions to query frames in the page, make this
-        // call fail and we'll return false.
-        requestPermissions: false,
-      });
+      const vsFrame = await getVitalSourceViewerFrame(tab_);
       if (vsFrame) {
         frameId = vsFrame.frameId;
       }
@@ -121,6 +117,11 @@ export function SidebarInjector() {
 
   /**
    * Injects the Hypothesis sidebar into the tab provided.
+   *
+   * Certain URLs (eg. VitalSource books) may require extra permissions to
+   * inject. These must be obtained by calling {@link requestExtraPermissionsForTab},
+   * directly after the user clicks the extension's toolbar icon, before calling
+   * this method.
    *
    * @param {chrome.tabs.Tab} tab - A tab object representing the tab to insert the sidebar
    *        into.
@@ -155,6 +156,29 @@ export function SidebarInjector() {
       return removeFromVitalSource(tab_);
     } else {
       return removeFromHTML(tab_);
+    }
+  };
+
+  /**
+   * Request additional permissions that are required to inject Hypothesis
+   * into a given tab.
+   *
+   * Ideally the permissions request would just be part of {@link injectIntoTab}
+   * however it needs to be performed immediately after the user clicks the
+   * extension's toolbar icon, before any async calls, otherwise it will fail
+   * due to lack of a user gesture. See https://bugs.chromium.org/p/chromium/issues/detail?id=1363490.
+   *
+   * @param {chrome.tabs.Tab} tab
+   */
+  this.requestExtraPermissionsForTab = async tab => {
+    const tab_ = checkTab(tab);
+    if (isVitalSourceURL(tab_.url)) {
+      return await chromeAPI.permissions.request({
+        permissions: ['webNavigation'],
+      });
+    } else {
+      // No extra permissions needed for other tabs.
+      return true;
     }
   };
 
@@ -406,34 +430,23 @@ export function SidebarInjector() {
    *     |- jigsaw.vitalsource.com (Content of current chapter)
    *
    * @param {Tab} tab
-   * @param {object} options
-   *   @param {boolean} [options.requestPermissions] - Whether to request the `webNavigation`
-   *     permission from the user to query frames, if not already granted.
    * @return {Promise<chrome.webNavigation.GetAllFrameResultDetails|undefined>}
    */
-  async function getVitalSourceViewerFrame(
-    tab,
-    { requestPermissions = true } = {}
-  ) {
+  async function getVitalSourceViewerFrame(tab) {
     // Using `chrome.webNavigation.getAllFrames` requires asking for the
     // `webNavigation` permission which results in a scary prompt about reading
     // browser history, even though we only want to get frames for the current
     // tab :(
     //
-    // We check for the permission using `getAll` first, because `request` will
-    // trigger an error if called outside of a user gesture, even if we do have
-    // the permission. When the user initially activates the client in VS, this
-    // function will be called within a user gesture. Subsequent automatic
-    // activations (eg. after navigation) may happen outside of a user gesture
-    // however.
-    let canUseWebNavigation = (
+    // The request for permissions must happen immediately after clicking
+    // the browser action, to avoid an error about it happening outside a user
+    // gesture [1]. This is done by calling `requestExtraPermissionsForTab`
+    // before `injectIntoTab`.
+    //
+    // [1] https://bugs.chromium.org/p/chromium/issues/detail?id=1363490
+    const canUseWebNavigation = (
       await chromeAPI.permissions.getAll()
     ).permissions?.includes('webNavigation');
-    if (!canUseWebNavigation && requestPermissions) {
-      canUseWebNavigation = await chromeAPI.permissions.request({
-        permissions: ['webNavigation'],
-      });
-    }
     if (!canUseWebNavigation) {
       throw new Error('The extension was not granted required permissions');
     }

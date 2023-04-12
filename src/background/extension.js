@@ -162,7 +162,7 @@ export class Extension {
     this._onTabStateChange = onTabStateChange;
 
     /** @param {chrome.tabs.Tab} tab */
-    function onBrowserActionClicked(tab) {
+    async function onBrowserActionClicked(tab) {
       const tabId = /** @type {number} */ (tab.id);
       const tabError = state.getState(tabId).error;
       if (tabError) {
@@ -170,7 +170,21 @@ export class Extension {
       } else if (state.isTabActive(tabId)) {
         state.deactivateTab(tabId);
       } else {
-        state.activateTab(tabId);
+        // Immediately request additional permissions we may need for this
+        // specific tab, before any async calls. See notes in
+        // `requestExtraPermissionsForTab` docs.
+        //
+        // eslint-disable-next-line no-lonely-if
+        if (await sidebar.requestExtraPermissionsForTab(tab)) {
+          state.activateTab(tabId);
+        } else {
+          state.errorTab(
+            tabId,
+            new Error(
+              'Hypothesis could not get the permissions needed to load in this tab'
+            )
+          );
+        }
       }
     }
 

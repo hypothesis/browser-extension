@@ -188,6 +188,36 @@ describe('SidebarInjector', function () {
     });
   });
 
+  describe('#requestExtraPermissionsForTab', () => {
+    it('returns true for non-VitalSource URLs', async () => {
+      const granted = await injector.requestExtraPermissionsForTab({
+        id: 1,
+        url: 'https://example.com',
+      });
+      assert.isTrue(granted);
+    });
+
+    it('returns true for VitalSource URLs if user grants permission', async () => {
+      const granted = await injector.requestExtraPermissionsForTab({
+        id: 1,
+        url: 'https://bookshelf.vitalsource.com/reader/books/9780132119177',
+      });
+      assert.calledWith(fakeChromeAPI.permissions.request, {
+        permissions: ['webNavigation'],
+      });
+      assert.isTrue(granted);
+    });
+
+    it('returns false for VitalSource URLs if user rejects permission', async () => {
+      fakeChromeAPI.permissions.request.resolves(false);
+      const granted = await injector.requestExtraPermissionsForTab({
+        id: 1,
+        url: 'https://bookshelf.vitalsource.com/reader/books/9780132119177',
+      });
+      assert.isFalse(granted);
+    });
+  });
+
   describe('.injectIntoTab', function () {
     const urls = [
       'chrome://version',
@@ -305,6 +335,13 @@ describe('SidebarInjector', function () {
       const injectClient = () =>
         injector.injectIntoTab({ id: 1, url: vitalSourceFrames.main.url });
 
+      beforeEach(() => {
+        // Simulate user granting "webNavigation" permission in an earlier call
+        // to `requestExtraPermissionsForTab`, which must be called before
+        // `injectIntoTab`.
+        permissions.add('webNavigation');
+      });
+
       it('injects client into book viewer frame', async () => {
         await injectClient();
 
@@ -324,21 +361,8 @@ describe('SidebarInjector', function () {
         });
       });
 
-      it('requests "webNavigation" permission if not present', async () => {
-        await injectClient();
-        assert.calledWith(fakeChromeAPI.permissions.request, {
-          permissions: ['webNavigation'],
-        });
-      });
-
-      it('does not request "webNavigation" permission if already granted', async () => {
-        permissions.add('webNavigation');
-        await injectClient();
-        assert.notCalled(fakeChromeAPI.permissions.request);
-      });
-
-      it('rejects if "webNavigation" permission is denied', async () => {
-        fakeChromeAPI.permissions.request.resolves(false);
+      it('rejects if extension does not have "webNavigation" permission', async () => {
+        permissions.delete('webNavigation');
 
         let error;
         try {
@@ -446,7 +470,7 @@ describe('SidebarInjector', function () {
     });
   });
 
-  describe('.removeFromTab', function () {
+  describe('#removeFromTab', function () {
     it('bails early when trying to unload a chrome url', function () {
       const url = 'chrome://extensions/';
 
@@ -512,6 +536,10 @@ describe('SidebarInjector', function () {
     });
 
     describe('when viewing a VitalSource book', () => {
+      beforeEach(() => {
+        permissions.add('webNavigation');
+      });
+
       const removeClient = () =>
         injector.removeFromTab({ id: 1, url: vitalSourceFrames.main.url });
 
@@ -533,8 +561,8 @@ describe('SidebarInjector', function () {
         assert.notCalled(fakeExecuteScript);
       });
 
-      it('rejects if permission to list frames was denied', async () => {
-        fakeChromeAPI.permissions.request.resolves(false);
+      it('rejects if extension does not have "webNavigation" permission', async () => {
+        permissions.delete('webNavigation');
 
         let error;
         try {
