@@ -74,7 +74,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
    * @return {(...args: Args) => Promise<Result>}
    */
   const promisifyAlt = fn => {
-    // @ts-ignore
+    // @ts-expect-error
     return promisify(fn);
   };
 
@@ -85,10 +85,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
       onClicked: browserAction.onClicked,
       setBadgeBackgroundColor: promisify(browserAction.setBadgeBackgroundColor),
       setBadgeText: promisify(browserAction.setBadgeText),
-
-      // @ts-ignore - Ignore an incorrect typing error about setIcon's callback
       setIcon: promisify(browserAction.setIcon),
-
       setTitle: promisify(browserAction.setTitle),
     },
 
