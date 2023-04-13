@@ -1,5 +1,6 @@
 {
   "buildType": "dev",
+  "manifestV3": true,
 
   "apiUrl": "http://localhost:5000/api/",
   "authDomain": "localhost",
