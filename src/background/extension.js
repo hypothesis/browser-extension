@@ -8,7 +8,7 @@ import { SidebarInjector } from './sidebar-injector';
 import { TabState } from './tab-state';
 
 /**
- * @typedef {import('./tab-state').Query} Query
+ * @typedef {import('./direct-link-query').Query} Query
  */
 
 /**
