@@ -1,9 +1,7 @@
 import { chromeAPI } from './chrome-api';
 import settings from './settings';
 
-/**
- * @typedef {import('./tab-state').State} TabState
- */
+import type { State as TabState } from './tab-state';
 
 // Each button state has two icons one for normal resolution (19) and one
 // for hi-res screens (38).
@@ -21,10 +19,8 @@ const icons = {
 /**
  * Themes to apply to the toolbar icon badge depending on the type of
  * build. Production builds use the default color and no text
- *
- * @type {Record<string, { defaultText: string, color: string }>}
  */
-const badgeThemes = {
+const badgeThemes: Record<string, { defaultText: string; color: string }> = {
   dev: {
     defaultText: 'DEV',
     color: '#5BCF59', // Emerald green
@@ -43,17 +39,12 @@ const badgeThemes = {
  * a tab (whether the extension is active, annotation count) to
  * the badge state.
  */
-export function BrowserAction() {
-  const buildType = settings.buildType;
-
+export class BrowserAction {
   /**
    * Updates the state of the browser action to reflect the logical
    * H state of a tab.
-   *
-   * @param {number} tabId
-   * @param {TabState} state
    */
-  this.update = function (tabId, state) {
+  update(tabId: number, state: TabState) {
     let activeIcon;
     let title;
     let badgeText = '';
@@ -93,7 +84,7 @@ export function BrowserAction() {
     }
 
     // update the badge style to reflect the build type
-    const badgeTheme = badgeThemes[buildType];
+    const badgeTheme = badgeThemes[settings.buildType];
     if (badgeTheme) {
       chromeAPI.browserAction.setBadgeBackgroundColor({
         tabId: tabId,
@@ -107,7 +98,7 @@ export function BrowserAction() {
     chromeAPI.browserAction.setBadgeText({ tabId: tabId, text: badgeText });
     chromeAPI.browserAction.setIcon({ tabId: tabId, path: activeIcon });
     chromeAPI.browserAction.setTitle({ tabId: tabId, title: title });
-  };
-}
+  }
 
-BrowserAction.icons = icons;
+  static icons = icons;
+}
