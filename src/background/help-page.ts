@@ -6,8 +6,6 @@ import {
   RestrictedProtocolError,
 } from './errors';
 
-/** @typedef {import('./errors').ExtensionError} ExtensionError */
-
 /**
  * A controller for displaying help pages. These are bound to extension
  * specific errors (found in errors.js) but can also be triggered manually.
@@ -17,10 +15,10 @@ export class HelpPage {
    * Accepts an instance of errors.ExtensionError and displays an appropriate
    * help page if one exists.
    *
-   * @param {chrome.tabs.Tab} tab - The tab where the error occurred
-   * @param {Error} error - The error to display, usually an instance of {@link ExtensionError}
+   * @param tab - The tab where the error occurred
+   * @param error - The error to display, usually an instance of {@link ExtensionError}
    */
-  showHelpForError(tab, error) {
+  showHelpForError(tab: chrome.tabs.Tab, error: Error) {
     let section;
     if (error instanceof LocalFileError) {
       section = 'local-file';
