@@ -93,11 +93,11 @@ lint: node_modules/.uptodate build/settings.json
 
 .PHONY: checkformatting
 checkformatting: node_modules/.uptodate
-	$(PRETTIER) --check '**/*.js'
+	$(PRETTIER) --check '**/*.{ts,js}'
 
 .PHONY: format
 format: node_modules/.uptodate
-	$(PRETTIER) --list-different --write '**/*.js'
+	$(PRETTIER) --list-different --write '**/*.{ts,js}'
 
 .PHONY: test
 test: node_modules/.uptodate
