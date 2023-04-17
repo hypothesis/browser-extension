@@ -3,24 +3,26 @@
  *
  * This contains only the settings that the background script uses. Other
  * settings are used when generating the `manifest.json` file.
- *
- * @typedef Settings
- * @prop {string} apiUrl
- * @prop {string} buildType
- * @prop {{ dsn: string, release: string }} [raven]
- * @prop {string} serviceUrl
- * @prop {boolean} [manifestV3]
  */
+export type Settings = {
+  apiUrl: string;
+  buildType: string;
+  raven?: { dsn: string; release: string };
+  serviceUrl: string;
+  manifestV3?: boolean;
+};
 
 // nb. This will error if the build has not been run yet.
-import settings from '../../build/settings.json';
+import rawSettings from '../../build/settings.json';
 
 /**
  * Configuration data for the extension.
  */
-export default /** @type {Settings} */ ({
-  ...settings,
+const settings: Settings = {
+  ...rawSettings,
 
   // Ensure API url does not end with '/'
-  apiUrl: settings.apiUrl.replace(/\/$/, ''),
-});
+  apiUrl: rawSettings.apiUrl.replace(/\/$/, ''),
+};
+
+export default settings;
