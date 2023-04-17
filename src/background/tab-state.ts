@@ -53,8 +53,6 @@ const DEFAULT_STATE: State = {
   error: undefined,
 };
 
-type TabStateMap = { [tabId: number]: State };
-
 /**
  * Represents a pending request to the `/api/badge` endpoint to get the
  * annotation count for a URI.
@@ -77,7 +75,7 @@ export class TabState {
   /** Map of tab ID to current badge request. */
   private _pendingAnnotationCountRequests: Map<number, BadgeRequest>;
 
-  private _currentState: TabStateMap;
+  private _currentState: Map<number, State>;
 
   /** Callback invoked when a tab's state changes. */
   onchange: (tabId: number, current: State | undefined) => void;
@@ -88,7 +86,7 @@ export class TabState {
    * @param onchange - Callback invoked when state for a tab changes
    */
   constructor(onchange: (tabid: number, current: State | undefined) => void) {
-    this._currentState = {};
+    this._currentState = new Map();
     this._pendingAnnotationCountRequests = new Map();
     this._annotationCountCache = new Map();
     this.onchange = onchange;
@@ -130,10 +128,7 @@ export class TabState {
    * Return the current Hypothesis-related state for a tab.
    */
   getState(tabId: number): State {
-    if (!this._currentState[tabId]) {
-      return DEFAULT_STATE;
-    }
-    return this._currentState[tabId];
+    return this._currentState.get(tabId) ?? DEFAULT_STATE;
   }
 
   /**
@@ -178,14 +173,14 @@ export class TabState {
       }
     }
 
-    if (isShallowEqual(newState, this._currentState[tabId])) {
+    if (isShallowEqual(newState, this._currentState.get(tabId))) {
       return;
     }
 
     if (newState) {
-      this._currentState[tabId] = newState;
+      this._currentState.set(tabId, newState);
     } else {
-      delete this._currentState[tabId];
+      this._currentState.delete(tabId);
     }
 
     if (this.onchange) {
