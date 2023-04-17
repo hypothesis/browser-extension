@@ -18,10 +18,8 @@ export class BadgeUriError extends Error {}
 
 /**
  * Returns true if `err` is a recognized 'expected' error.
- *
- * @param {unknown} err
  */
-function isKnownError(err) {
+function isKnownError(err: unknown) {
   return err instanceof ExtensionError;
 }
 
@@ -42,14 +40,10 @@ const IGNORED_ERRORS = [
  * Returns true if a given `err` is anticipated during sidebar injection, such
  * as the tab being closed by the user, and should not be reported to Sentry.
  *
- * @param {{message: string}} err - The Error-like object
+ * @param err - The Error-like object
  */
-export function shouldIgnoreInjectionError(err) {
-  if (
-    IGNORED_ERRORS.some(function (pattern) {
-      return err.message.match(pattern);
-    })
-  ) {
+export function shouldIgnoreInjectionError(err: { message: string }) {
+  if (IGNORED_ERRORS.some(pattern => err.message.match(pattern))) {
     return true;
   }
   if (isKnownError(err)) {
@@ -65,11 +59,11 @@ export function shouldIgnoreInjectionError(err) {
  * ie. those which are not instances of ExtensionError, are reported to
  * Sentry.
  *
- * @param {Error} error - The error which happened.
- * @param {string} when - Describes the context in which the error occurred.
- * @param {object} context - Additional context for the error.
+ * @param error - The error which happened.
+ * @param when - Describes the context in which the error occurred.
+ * @param context - Additional context for the error.
  */
-export function report(error, when, context) {
+export function report(error: Error, when: string, context?: object) {
   console.error(when, error);
   if (!isKnownError(error)) {
     raven.report(error, when, context);
