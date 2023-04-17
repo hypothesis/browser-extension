@@ -157,6 +157,7 @@ describe('SidebarInjector', function () {
         chromeAPI: fakeChromeAPI,
         executeFunction: fakeExecuteFunction,
         executeScript: fakeExecuteScript,
+        getExtensionId: () => 'hypothesisId',
       },
     });
 
@@ -351,6 +352,7 @@ describe('SidebarInjector', function () {
             tabId: 1,
             frameId: vitalSourceFrames.reader.frameId,
             func: { name: 'setClientConfig' },
+            args: [sinon.match.any, 'hypothesisId'],
           })
         );
 

@@ -1,4 +1,9 @@
-import { chromeAPI, executeFunction, executeScript } from './chrome-api';
+import {
+  chromeAPI,
+  executeFunction,
+  executeScript,
+  getExtensionId,
+} from './chrome-api';
 import { detectContentType } from './detect-content-type';
 import {
   AlreadyInjectedError,
@@ -15,13 +20,15 @@ const CONTENT_TYPE_LMS = 'LMS';
 
 /**
  * @param {object} config
+ * @param {string} extensionId
  */
 /* istanbul ignore next - Code coverage breaks `eval`-ing of this function in tests. */
-function setClientConfig(config) {
+function setClientConfig(config, extensionId) {
   const script = document.createElement('script');
   script.className = 'js-hypothesis-config';
   script.type = 'application/json';
   script.textContent = JSON.stringify(config);
+  script.setAttribute('data-extension-id', extensionId);
   // This ensures the client removes the script when the extension is deactivated
   script.setAttribute('data-remove-on-unload', '');
   document.head.appendChild(script);
@@ -506,11 +513,12 @@ export function SidebarInjector() {
    * @param {number} [frameId]
    */
   function injectConfig(tabId, clientConfig, frameId) {
+    const extensionId = getExtensionId();
     return executeFunction({
       tabId,
       frameId,
       func: setClientConfig,
-      args: [clientConfig],
+      args: [clientConfig, extensionId],
     });
   }
 

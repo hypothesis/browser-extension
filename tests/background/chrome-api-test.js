@@ -2,6 +2,7 @@ import {
   getChromeAPI,
   executeFunction,
   executeScript,
+  getExtensionId,
 } from '../../src/background/chrome-api';
 
 // Helper defined at top level to simplify its stringified representation.
@@ -224,6 +225,21 @@ describe('chrome-api', () => {
         file: 'foo.js',
       });
       assert.deepEqual(result, 'result');
+    });
+  });
+
+  describe('getExtensionId', () => {
+    let fakeChromeAPI;
+    const id = 'hypothesisId';
+
+    beforeEach(() => {
+      fakeChromeAPI = {
+        runtime: { id },
+      };
+    });
+
+    it('gets ID from `chrome.runtime.id`', () => {
+      assert.equal(getExtensionId(fakeChromeAPI), id);
     });
   });
 });

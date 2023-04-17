@@ -100,6 +100,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
     },
 
     runtime: {
+      id: chrome.runtime.id,
       getURL: chrome.runtime.getURL,
       onMessageExternal: chrome.runtime.onMessageExternal,
       onInstalled: chrome.runtime.onInstalled,
@@ -248,4 +249,8 @@ export async function executeFunction(
   const code = codeStringForFunctionCall(func, args);
   const result = await chromeAPI_.tabs.executeScript(tabId, { frameId, code });
   return result[0];
+}
+
+export function getExtensionId(chromeAPI_ = chromeAPI) {
+  return chromeAPI_.runtime.id;
 }
