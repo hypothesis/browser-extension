@@ -195,13 +195,10 @@ export class SidebarInjector {
      * a tab with a given URL.
      */
     async function canInjectScript(url: string) {
-      if (isSupportedURL(url)) {
-        return true;
-      } else if (isFileURL(url)) {
+      if (isFileURL(url)) {
         return chromeAPI.extension.isAllowedFileSchemeAccess();
-      } else {
-        return false;
       }
+      return isSupportedURL(url);
     }
 
     /**
