@@ -267,8 +267,11 @@ describe('SidebarInjector', function () {
     describe('when viewing a remote PDF', function () {
       const url = 'http://example.com/foo.pdf';
 
-      it('navigates page to Hypothesis PDF viewer', async () => {
+      beforeEach(() => {
         contentType = 'PDF';
+      });
+
+      it('navigates page to Hypothesis PDF viewer', async () => {
         const spy = fakeChromeAPI.tabs.update.resolves({ tab: 1 });
 
         await injector.injectIntoTab({ id: 1, url: url });
@@ -279,7 +282,6 @@ describe('SidebarInjector', function () {
       });
 
       it('responds to Hypothesis client config request', async () => {
-        contentType = 'PDF';
         const clientConfig = {
           assetRoot: 'chrome-extension://abc/',
           annotations: 'abc123',
@@ -301,17 +303,15 @@ describe('SidebarInjector', function () {
         assert.calledWith(onMessage.removeListener, onMessageCallback);
       });
 
-      it('preserves #annotations fragments in the URL', function () {
-        contentType = 'PDF';
+      it('preserves fragments in the URL', async () => {
         const spy = fakeChromeAPI.tabs.update.resolves({ tab: 1 });
-        const hash = '#annotations:456';
-        return injector
-          .injectIntoTab({ id: 1, url: url + hash })
-          .then(function () {
-            assert.calledWith(spy, 1, {
-              url: PDF_VIEWER_BASE_URL + encodeURIComponent(url) + hash,
-            });
-          });
+        const hash = '#foobar';
+
+        await injector.injectIntoTab({ id: 1, url: url + hash });
+
+        assert.calledWith(spy, 1, {
+          url: PDF_VIEWER_BASE_URL + encodeURIComponent(url) + hash,
+        });
       });
     });
 
