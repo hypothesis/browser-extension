@@ -180,9 +180,11 @@ export class SidebarInjector {
     };
 
     function getPDFViewerURL(url: string) {
-      // Encode the original URL but preserve the fragment, so that a
-      // '#annotations' fragment in the original URL will persist and trigger the
-      // sidebar to focus and scroll to that annotation when the PDF viewer loads.
+      // Encode the original URL but preserve the fragment. Preserving the
+      // fragment was originally done to support `#annotations:` fragments that
+      // bouncer used to use. Bouncer and the extension now use a different
+      // mechanism to pass direct-linked annotation IDs to the client. However
+      // preserving the fragment may be useful for other reasons.
       const parsedURL = new URL(url);
       const hash = parsedURL.hash;
       parsedURL.hash = '';
