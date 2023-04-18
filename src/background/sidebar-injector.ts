@@ -326,6 +326,8 @@ export class SidebarInjector {
           "Hypothesis extension can't be used on Hypothesis LMS assignments"
         );
       } else {
+        // FIXME - Nothing actually sets `installedURL`. It used to be part of
+        // the client's boot script. See e0bf3fd2a09414170eb991d7837bf6acd821502b.
         const result = (await injectIntoHTML(tab, config)) as {
           installedURL: string;
         } | null;
