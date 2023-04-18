@@ -119,6 +119,10 @@ describe('SidebarInjector', function () {
 
       runtime: {
         getURL: sinon.spy(path => EXTENSION_BASE_URL + path),
+        onMessage: {
+          addListener: sinon.stub(),
+          removeListener: sinon.stub(),
+        },
       },
 
       permissions: {
@@ -263,14 +267,38 @@ describe('SidebarInjector', function () {
     describe('when viewing a remote PDF', function () {
       const url = 'http://example.com/foo.pdf';
 
-      it('injects hypothesis into the page', function () {
+      it('navigates page to Hypothesis PDF viewer', async () => {
         contentType = 'PDF';
         const spy = fakeChromeAPI.tabs.update.resolves({ tab: 1 });
-        return injector.injectIntoTab({ id: 1, url: url }).then(function () {
-          assert.calledWith(spy, 1, {
-            url: PDF_VIEWER_BASE_URL + encodeURIComponent(url),
-          });
+
+        await injector.injectIntoTab({ id: 1, url: url });
+
+        assert.calledWith(spy, 1, {
+          url: PDF_VIEWER_BASE_URL + encodeURIComponent(url),
         });
+      });
+
+      it('responds to Hypothesis client config request', async () => {
+        contentType = 'PDF';
+        const clientConfig = {
+          assetRoot: 'chrome-extension://abc/',
+          annotations: 'abc123',
+        };
+
+        await injector.injectIntoTab({ id: 1, url: url }, clientConfig);
+
+        const onMessage = fakeChromeAPI.runtime.onMessage;
+        assert.calledOnce(onMessage.addListener);
+
+        // Simulate request for client config from `pdfjs-init.js`.
+        const onMessageCallback = onMessage.addListener.args[0][0];
+        const sender = { tab: { id: 1 } };
+        const sendResponse = sinon.stub();
+        onMessageCallback({ type: 'getConfigForTab' }, sender, sendResponse);
+
+        // Verify config was sent to tab and listener was removed.
+        assert.calledWith(sendResponse, clientConfig);
+        assert.calledWith(onMessage.removeListener, onMessageCallback);
       });
 
       it('preserves #annotations fragments in the URL', function () {

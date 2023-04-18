@@ -312,7 +312,7 @@ export class SidebarInjector {
       const type = await detectTabContentType(tab);
 
       if (type === CONTENT_TYPE_PDF) {
-        await injectIntoPDF(tab);
+        await injectIntoPDF(tab, config);
       } else if (type === CONTENT_TYPE_VITALSOURCE) {
         await injectIntoVitalSourceReader(tab, config);
       } else if (type === CONTENT_TYPE_LMS) {
@@ -339,17 +339,26 @@ export class SidebarInjector {
       }
     }
 
-    function injectIntoPDF(tab: Tab) {
+    function injectIntoPDF(tab: Tab, config: object) {
       if (isPDFViewerURL(tab.url)) {
         return Promise.resolve();
       }
+
+      const onMessage = chromeAPI.runtime.onMessage;
+      const listener = (request, sender, sendResponse) => {
+        if (sender.tab.id === tab.id && request?.type === 'getConfigForTab') {
+          sendResponse(config);
+          onMessage.removeListener(listener);
+        }
+      };
+      onMessage.addListener(listener);
       return chromeAPI.tabs.update(tab.id, { url: getPDFViewerURL(tab.url) });
     }
 
-    async function injectIntoLocalPDF(tab: Tab) {
+    async function injectIntoLocalPDF(tab: Tab, config: object) {
       const isAllowed = await chromeAPI.extension.isAllowedFileSchemeAccess();
       if (isAllowed) {
-        await injectIntoPDF(tab);
+        await injectIntoPDF(tab, config);
       } else {
         throw new NoFileAccessError('Local file scheme access denied');
       }
