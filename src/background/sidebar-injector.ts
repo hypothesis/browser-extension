@@ -187,7 +187,7 @@ export class SidebarInjector {
       const hash = parsedURL.hash;
       parsedURL.hash = '';
       const encodedURL = encodeURIComponent(parsedURL.href);
-      return pdfViewerBaseURL + '?file=' + encodedURL + hash;
+      return `${pdfViewerBaseURL}?file=${encodedURL}${hash}`;
     }
 
     /**
@@ -308,7 +308,7 @@ export class SidebarInjector {
         // URL and open that in the Hypothesis viewer instead.
         const protocol = tab.url.split(':')[0];
         throw new RestrictedProtocolError(
-          'Cannot load Hypothesis into ' + protocol + ' pages'
+          `Cannot load Hypothesis into ${protocol} pages`
         );
       }
 
