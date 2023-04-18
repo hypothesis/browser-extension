@@ -96,6 +96,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
     runtime: {
       id: chrome.runtime.id,
       getURL: chrome.runtime.getURL,
+      onMessage: chrome.runtime.onMessage,
       onMessageExternal: chrome.runtime.onMessageExternal,
       onInstalled: chrome.runtime.onInstalled,
       onUpdateAvailable: chrome.runtime.onUpdateAvailable,
