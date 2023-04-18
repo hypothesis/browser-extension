@@ -1,19 +1,24 @@
+/** Details of the detected content type. */
+export type ContentTypeInfo = {
+  type: 'HTML' | 'PDF';
+};
+
 /**
- * Returns the type of content in the current document,
- * currently either 'PDF' or 'HTML'.
+ * Detect the type of content in the current document.
  *
- * This function is injected as a content script into tabs in
- * order to detect the type of content on the page (PDF, HTML) etc.
- * by sniffing for viewer plugins.
+ * This function is injected as a content script into tabs in order to detect
+ * the type of content on the page (PDF, HTML) etc.  by sniffing for viewer
+ * plugins.
  *
- * In future this could also be extended to support extraction of the URLs
- * of content in embedded viewers where that differs from the tab's
- * main URL.
+ * In future this could also be extended to support extraction of the URLs of
+ * content in embedded viewers where that differs from the tab's main URL.
  *
- * @param {Document} document_ - Test seam
+ * @param document - Document to query
  */
 /* istanbul ignore next */
-export function detectContentType(document_ = document) {
+export function detectContentType(
+  document_ = document
+): ContentTypeInfo | null {
   function detectChromePDFViewer() {
     // When viewing a PDF in Chrome, the viewer consists of a top-level
     // document with an <embed> tag, which in turn instantiates an inner HTML
