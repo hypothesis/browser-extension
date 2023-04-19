@@ -32,6 +32,9 @@ async function init() {
 
   // This ensures the client removes the script when the extension is deactivated
   configScript.setAttribute('data-remove-on-unload', '');
+  // The boot script expects this attribute when running from the browser extension
+  configScript.setAttribute('data-extension-id', chrome.runtime.id);
+
   document.head.appendChild(configScript);
 
   const embedScript = document.createElement('script');
