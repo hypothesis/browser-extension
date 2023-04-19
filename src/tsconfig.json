@@ -10,6 +10,6 @@
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true
   },
-  "include": ["**/*.js", "../gulpfile.js"],
+  "include": ["**/*.js", "**/*.ts", "../gulpfile.js"],
   "exclude": ["vendor/"]
 }

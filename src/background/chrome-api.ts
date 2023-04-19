@@ -200,7 +200,10 @@ export async function executeScript(
     return results[0].result;
   }
 
-  const result = await chromeAPI_.tabs.executeScript(tabId, { frameId, file });
+  const result = (await chromeAPI_.tabs.executeScript(tabId, {
+    frameId,
+    file,
+  })) as unknown[];
   return result[0];
 }
 
@@ -239,7 +242,10 @@ export async function executeFunction<Args extends unknown[], Result>(
   }
 
   const code = codeStringForFunctionCall(func, args);
-  const result = await chromeAPI_.tabs.executeScript(tabId, { frameId, code });
+  const result = (await chromeAPI_.tabs.executeScript(tabId, {
+    frameId,
+    code,
+  })) as Result[];
   return result[0];
 }
 
