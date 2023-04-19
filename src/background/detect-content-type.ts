@@ -1,7 +1,9 @@
+export type PDFContentType = { type: 'PDF' };
+
+export type HTMLContentType = { type: 'HTML' };
+
 /** Details of the detected content type. */
-export type ContentTypeInfo = {
-  type: 'HTML' | 'PDF';
-};
+export type ContentTypeInfo = PDFContentType | HTMLContentType;
 
 /**
  * Detect the type of content in the current document.
@@ -19,7 +21,7 @@ export type ContentTypeInfo = {
 export function detectContentType(
   document_ = document
 ): ContentTypeInfo | null {
-  function detectChromePDFViewer() {
+  function detectChromePDFViewer(): PDFContentType | null {
     // When viewing a PDF in Chrome, the viewer consists of a top-level
     // document with an <embed> tag, which in turn instantiates an inner HTML
     // document providing the PDF viewer UI plus another <embed> tag which
@@ -35,7 +37,7 @@ export function detectContentType(
     return null;
   }
 
-  function detectFirefoxPDFViewer() {
+  function detectFirefoxPDFViewer(): PDFContentType | null {
     // The Firefox PDF viewer is an instance of PDF.js.
     //
     // The Firefox PDF plugin specifically can be detected via the <base>

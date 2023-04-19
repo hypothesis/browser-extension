@@ -135,7 +135,7 @@ export class SidebarInjector {
     this.injectIntoTab = (tab: chrome.tabs.Tab, config: object = {}) => {
       const tab_ = checkTab(tab);
       if (isFileURL(tab_.url)) {
-        return injectIntoLocalDocument(tab_);
+        return injectIntoLocalDocument(tab_, config);
       } else {
         return injectIntoRemoteDocument(tab_, config);
       }
@@ -283,10 +283,10 @@ export class SidebarInjector {
       return ['http:', 'https:', 'ftp:'].includes(parsedURL.protocol);
     }
 
-    async function injectIntoLocalDocument(tab: Tab) {
+    async function injectIntoLocalDocument(tab: Tab, config: object) {
       const type = await detectTabContentType(tab);
       if (type === CONTENT_TYPE_PDF) {
-        return injectIntoLocalPDF(tab);
+        return injectIntoLocalPDF(tab, config);
       } else {
         throw new LocalFileError('Local non-PDF files are not supported');
       }
@@ -347,8 +347,12 @@ export class SidebarInjector {
       }
 
       const onMessage = chromeAPI.runtime.onMessage;
-      const listener = (request, sender, sendResponse) => {
-        if (sender.tab.id === tab.id && request?.type === 'getConfigForTab') {
+      const listener = (
+        request: any,
+        sender: chrome.runtime.MessageSender,
+        sendResponse: (response?: any) => void
+      ) => {
+        if (sender.tab?.id === tab.id && request?.type === 'getConfigForTab') {
           sendResponse(config);
           onMessage.removeListener(listener);
         }
