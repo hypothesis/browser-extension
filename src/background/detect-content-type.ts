@@ -13,7 +13,7 @@ export type ContentTypeInfo = {
  * In future this could also be extended to support extraction of the URLs of
  * content in embedded viewers where that differs from the tab's main URL.
  *
- * @param document - Document to query
+ * @param document_ - Document to query
  */
 /* istanbul ignore next */
 export function detectContentType(
