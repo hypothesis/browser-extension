@@ -1,5 +1,3 @@
-import * as raven from './raven';
-
 export class ExtensionError extends Error {}
 
 export class LocalFileError extends ExtensionError {}
@@ -64,8 +62,5 @@ export function shouldIgnoreInjectionError(err: { message: string }) {
  * @param context - Additional context for the error.
  */
 export function report(error: Error, when: string, context?: object) {
-  console.error(when, error);
-  if (!isKnownError(error)) {
-    raven.report(error, when, context);
-  }
+  console.error(when, error, context);
 }

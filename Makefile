@@ -57,7 +57,7 @@ extension: build/unload-client.js
 extension: build/pdfjs-init.js
 extension: $(addprefix build/,$(EXTENSION_SRC))
 
-build/extension.bundle.js: src/background/*.js src/background/*.ts rollup.config.mjs build/settings.json
+build/extension.bundle.js: src/background/*.ts rollup.config.mjs build/settings.json
 	$(ROLLUP) -c rollup.config.mjs
 build/manifest.json: src/manifest.json.mustache build/settings.json
 	$(MUSTACHE) build/settings.json $< > $@
