@@ -83,34 +83,29 @@ describe('background/uri-info', () => {
       window.fetch.restore();
     });
 
-    it('returns value from API service', () => {
-      return uriInfo
-        .fetchAnnotationCount('http://www.example.com')
-        .then(result => {
-          assert.equal(result, 1);
-        });
+    it('returns value from API service', async () => {
+      const result = await uriInfo.fetchAnnotationCount(
+        'http://www.example.com'
+      );
+      assert.equal(result, 1);
     });
 
-    it('sends the correct fetch request', () => {
-      return uriInfo.fetchAnnotationCount('http://tabUrl.com').then(() => {
-        assert.equal(fetchStub.callCount, 1);
-        assert.deepEqual(fetchStub.lastCall.args, [
-          badgeURL + '?uri=http%3A%2F%2FtabUrl.com',
-          { credentials: 'include' },
-        ]);
-      });
+    it('sends the correct fetch request', async () => {
+      await uriInfo.fetchAnnotationCount('http://tabUrl.com');
+      assert.equal(fetchStub.callCount, 1);
+      assert.deepEqual(fetchStub.lastCall.args, [
+        badgeURL + '?uri=http%3A%2F%2FtabUrl.com',
+        { credentials: 'include' },
+      ]);
     });
 
-    it('urlencodes the URL appropriately', () => {
-      return uriInfo
-        .fetchAnnotationCount('http://foo.com?bar=baz qüx')
-        .then(() => {
-          assert.equal(fetchStub.callCount, 1);
-          assert.equal(
-            fetchStub.lastCall.args[0],
-            badgeURL + '?uri=http%3A%2F%2Ffoo.com%3Fbar%3Dbaz+q%C3%BCx'
-          );
-        });
+    it('URL-encodes the URL appropriately', async () => {
+      await uriInfo.fetchAnnotationCount('http://foo.com?bar=baz qüx');
+      assert.equal(fetchStub.callCount, 1);
+      assert.equal(
+        fetchStub.lastCall.args[0],
+        badgeURL + '?uri=http%3A%2F%2Ffoo.com%3Fbar%3Dbaz+q%C3%BCx'
+      );
     });
 
     ['{"total": "not a valid number"}', '{"rows": []}', '{"foop": 5}'].forEach(
@@ -134,28 +129,33 @@ describe('background/uri-info', () => {
       }
     );
 
-    it('throws an error if the response is not valid JSON', () => {
+    it('throws an error if the response is not valid JSON', async () => {
       fetchStub.resolves(
         new Response('this is not valid json', {
           status: 200,
           headers: {},
         })
       );
-      return uriInfo
-        .fetchAnnotationCount('http://www.example.com')
-        .catch(error => {
-          assert.instanceOf(error, SyntaxError);
-        });
+
+      let error;
+      try {
+        await uriInfo.fetchAnnotationCount('http://www.example.com');
+      } catch (e) {
+        error = e;
+      }
+      assert.instanceOf(error, SyntaxError);
     });
 
-    it('throws errors for other fetch failures', () => {
+    it('throws errors for other fetch failures', async () => {
       fetchStub.rejects('Network error');
 
-      return uriInfo
-        .fetchAnnotationCount('http://www.example.com')
-        .catch(error => {
-          assert.strictEqual(error.name, 'Network error');
-        });
+      let error;
+      try {
+        await uriInfo.fetchAnnotationCount('http://www.example.com');
+      } catch (e) {
+        error = e;
+      }
+      assert.strictEqual(error.name, 'Network error');
     });
   });
 });

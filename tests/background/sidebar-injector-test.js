@@ -336,20 +336,19 @@ describe('SidebarInjector', () => {
         });
       });
 
-      it('injects config options into the page', () => {
+      it('injects config options into the page', async () => {
         contentFrame = createTestFrame();
         const url = 'http://example.com';
-        return injector
-          .injectIntoTab({ id: 1, url }, { annotations: '456' })
-          .then(() => {
-            const configEl = contentFrame.contentDocument.querySelector(
-              'script.js-hypothesis-config'
-            );
-            assert.ok(configEl);
-            assert.deepEqual(JSON.parse(configEl.textContent), {
-              annotations: '456',
-            });
-          });
+
+        await injector.injectIntoTab({ id: 1, url }, { annotations: '456' });
+
+        const configEl = contentFrame.contentDocument.querySelector(
+          'script.js-hypothesis-config'
+        );
+        assert.ok(configEl);
+        assert.deepEqual(JSON.parse(configEl.textContent), {
+          annotations: '456',
+        });
       });
     });
 
@@ -450,16 +449,16 @@ describe('SidebarInjector', () => {
 
     describe('when viewing a local PDF', () => {
       describe('when file access is enabled', () => {
-        it('loads the PDFjs viewer', () => {
+        it('loads the PDFjs viewer', async () => {
           const spy = fakeChromeAPI.tabs.update.resolves([]);
           const url = 'file:///foo.pdf';
           contentType = 'PDF';
 
-          return injector.injectIntoTab({ id: 1, url }).then(() => {
-            assert.called(spy);
-            assert.calledWith(spy, 1, {
-              url: PDF_VIEWER_BASE_URL + encodeURIComponent('file:///foo.pdf'),
-            });
+          await injector.injectIntoTab({ id: 1, url });
+
+          assert.called(spy);
+          assert.calledWith(spy, 1, {
+            url: PDF_VIEWER_BASE_URL + encodeURIComponent('file:///foo.pdf'),
           });
         });
       });
@@ -494,67 +493,67 @@ describe('SidebarInjector', () => {
   });
 
   describe('#removeFromTab', () => {
-    it('bails early when trying to unload a chrome url', () => {
+    it('bails early when trying to unload a chrome url', async () => {
       const url = 'chrome://extensions/';
-
-      return injector.removeFromTab({ id: 1, url }).then(() => {
-        assert.notCalled(fakeExecuteScript);
-      });
+      await injector.removeFromTab({ id: 1, url });
+      assert.notCalled(fakeExecuteScript);
     });
 
     const protocols = ['chrome:', 'chrome-devtools:', 'chrome-extension:'];
     protocols.forEach(protocol => {
       it(
         'bails early when trying to unload an unsupported ' + protocol + ' url',
-        () => {
+        async () => {
           const url = protocol + '//foobar/';
-
-          return injector.removeFromTab({ id: 1, url }).then(() => {
-            assert.notCalled(fakeExecuteScript);
-          });
+          await injector.removeFromTab({ id: 1, url });
+          assert.notCalled(fakeExecuteScript);
         }
       );
     });
 
     describe('when viewing a PDF', () => {
-      it('reverts the tab back to the original document', () => {
+      it('reverts the tab back to the original document', async () => {
         const spy = fakeChromeAPI.tabs.update.resolves([]);
         const url =
           PDF_VIEWER_BASE_URL +
           encodeURIComponent('http://example.com/foo.pdf') +
           '#foo';
-        return injector.removeFromTab({ id: 1, url }).then(() => {
-          assert.calledWith(spy, 1, {
-            url: 'http://example.com/foo.pdf#foo',
-          });
+
+        await injector.removeFromTab({ id: 1, url });
+
+        assert.calledWith(spy, 1, {
+          url: 'http://example.com/foo.pdf#foo',
         });
       });
 
-      it('drops #annotations fragments', () => {
+      it('drops #annotations fragments', async () => {
         const spy = fakeChromeAPI.tabs.update.resolves([]);
         const url =
           PDF_VIEWER_BASE_URL +
           encodeURIComponent('http://example.com/foo.pdf') +
           '#annotations:456';
-        return injector.removeFromTab({ id: 1, url }).then(() => {
-          assert.calledWith(spy, 1, {
-            url: 'http://example.com/foo.pdf',
-          });
+
+        await injector.removeFromTab({ id: 1, url });
+
+        assert.calledWith(spy, 1, {
+          url: 'http://example.com/foo.pdf',
         });
       });
     });
 
     describe('when viewing an HTML page', () => {
-      it('injects a destroy script into the page', () => {
+      it('injects a destroy script into the page', async () => {
         isAlreadyInjected = true;
-        return injector
-          .removeFromTab({ id: 1, url: 'http://example.com/foo.html' })
-          .then(() => {
-            assert.calledWith(fakeExecuteScript, {
-              tabId: 1,
-              file: sinon.match('/unload-client.js'),
-            });
-          });
+
+        await injector.removeFromTab({
+          id: 1,
+          url: 'http://example.com/foo.html',
+        });
+
+        assert.calledWith(fakeExecuteScript, {
+          tabId: 1,
+          file: sinon.match('/unload-client.js'),
+        });
       });
     });
 
