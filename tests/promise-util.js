@@ -7,10 +7,10 @@
  */
 export function toResult(promise) {
   return promise
-    .then(function (result) {
-      return { result: result };
+    .then(result => {
+      return { result };
     })
-    .catch(function (err) {
+    .catch(err => {
       return { error: err };
     });
 }

@@ -1,10 +1,10 @@
 import { BrowserAction, $imports } from '../../src/background/browser-action';
 
-describe('BrowserAction', function () {
+describe('BrowserAction', () => {
   let action;
   let fakeChromeBrowserAction;
 
-  beforeEach(function () {
+  beforeEach(() => {
     fakeChromeBrowserAction = {
       annotationCount: 0,
       title: '',
@@ -37,18 +37,18 @@ describe('BrowserAction', function () {
     $imports.$restore();
   });
 
-  describe('active state', function () {
-    it('sets the active browser icon', function () {
+  describe('active state', () => {
+    it('sets the active browser icon', () => {
       action.update(1, { state: 'active' });
       assert.equal(fakeChromeBrowserAction.icon, BrowserAction.icons.active);
     });
 
-    it('sets the title of the browser icon', function () {
+    it('sets the title of the browser icon', () => {
       action.update(1, { state: 'active' });
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis is active');
     });
 
-    it('does not set the title if there is badge text showing', function () {
+    it('does not set the title if there is badge text showing', () => {
       const state = {
         state: 'inactive',
         annotationCount: 9,
@@ -60,26 +60,26 @@ describe('BrowserAction', function () {
     });
   });
 
-  describe('inactive state', function () {
-    it('sets the inactive browser icon and title', function () {
+  describe('inactive state', () => {
+    it('sets the inactive browser icon and title', () => {
       action.update(1, { state: 'inactive' });
       assert.equal(fakeChromeBrowserAction.icon, BrowserAction.icons.inactive);
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis is inactive');
     });
   });
 
-  describe('error state', function () {
-    it('sets the inactive browser icon', function () {
+  describe('error state', () => {
+    it('sets the inactive browser icon', () => {
       action.update(1, { state: 'errored' });
       assert.equal(fakeChromeBrowserAction.icon, BrowserAction.icons.inactive);
     });
 
-    it('sets the title of the browser icon', function () {
+    it('sets the title of the browser icon', () => {
       action.update(1, { state: 'errored' });
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis failed to load');
     });
 
-    it('still sets the title even there is badge text showing', function () {
+    it('still sets the title even there is badge text showing', () => {
       action.update(1, {
         state: 'errored',
         annotationCount: 9,
@@ -87,7 +87,7 @@ describe('BrowserAction', function () {
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis failed to load');
     });
 
-    it('shows a badge', function () {
+    it('shows a badge', () => {
       action.update(1, {
         state: 'errored',
       });
@@ -95,8 +95,8 @@ describe('BrowserAction', function () {
     });
   });
 
-  describe('annotation counts', function () {
-    it('sets the badge text', function () {
+  describe('annotation counts', () => {
+    it('sets the badge text', () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 23,
@@ -104,7 +104,7 @@ describe('BrowserAction', function () {
       assert.equal(fakeChromeBrowserAction.badgeText, '23');
     });
 
-    it("sets the badge title when there's 1 annotation", function () {
+    it("sets the badge title when there's 1 annotation", () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 1,
@@ -115,7 +115,7 @@ describe('BrowserAction', function () {
       );
     });
 
-    it("sets the badge title when there's >1 annotation", function () {
+    it("sets the badge title when there's >1 annotation", () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 23,
@@ -126,7 +126,7 @@ describe('BrowserAction', function () {
       );
     });
 
-    it('does not set the badge text if there are 0 annotations', function () {
+    it('does not set the badge text if there are 0 annotations', () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 0,
@@ -134,7 +134,7 @@ describe('BrowserAction', function () {
       assert.equal(fakeChromeBrowserAction.badgeText, '');
     });
 
-    it('does not set the badge title if there are 0 annotations', function () {
+    it('does not set the badge title if there are 0 annotations', () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 0,
@@ -142,7 +142,7 @@ describe('BrowserAction', function () {
       assert.equal(fakeChromeBrowserAction.title, 'Hypothesis is inactive');
     });
 
-    it("truncates numbers greater than 999 to '999+'", function () {
+    it("truncates numbers greater than 999 to '999+'", () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 1001,
@@ -155,8 +155,8 @@ describe('BrowserAction', function () {
     });
   });
 
-  describe('build type', function () {
-    beforeEach(function () {
+  describe('build type', () => {
+    beforeEach(() => {
       let fakeSettings = {
         buildType: 'qa',
       };
@@ -172,7 +172,7 @@ describe('BrowserAction', function () {
       $imports.$restore();
     });
 
-    it('sets the text to QA when there are no annotations', function () {
+    it('sets the text to QA when there are no annotations', () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 0,
@@ -180,7 +180,7 @@ describe('BrowserAction', function () {
       assert.equal(fakeChromeBrowserAction.badgeText, 'QA');
     });
 
-    it('shows the annotation count when there are annotations', function () {
+    it('shows the annotation count when there are annotations', () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 3,
@@ -188,7 +188,7 @@ describe('BrowserAction', function () {
       assert.equal(fakeChromeBrowserAction.badgeText, '3');
     });
 
-    it('sets the background color', function () {
+    it('sets the background color', () => {
       action.update(1, {
         state: 'inactive',
         annotationCount: 0,

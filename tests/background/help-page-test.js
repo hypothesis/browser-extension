@@ -1,12 +1,12 @@
 import * as errors from '../../src/background/errors';
 import { HelpPage, $imports } from '../../src/background/help-page';
 
-describe('HelpPage', function () {
+describe('HelpPage', () => {
   let fakeChromeTabs;
   let fakeExtensionURL;
   let help;
 
-  beforeEach(function () {
+  beforeEach(() => {
     fakeChromeTabs = { create: sinon.stub() };
     fakeExtensionURL = path => `chrome://abcd${path}`;
 
@@ -26,7 +26,7 @@ describe('HelpPage', function () {
     $imports.$restore();
   });
 
-  describe('showHelpForError', function () {
+  describe('showHelpForError', () => {
     [
       {
         getError: () => new errors.LocalFileError('msg'),
@@ -56,7 +56,7 @@ describe('HelpPage', function () {
       });
     });
 
-    it('renders the "other-error" page for unknown errors', function () {
+    it('renders the "other-error" page for unknown errors', () => {
       help.showHelpForError({ id: 1, index: 1 }, new Error('Unexpected Error'));
       assert.called(fakeChromeTabs.create);
       assert.calledWith(fakeChromeTabs.create, {
