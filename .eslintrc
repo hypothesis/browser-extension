@@ -3,6 +3,9 @@
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint"],
   "rules": {
+    "prefer-arrow-callback": ["error", { "allowNamedFunctions": true }],
+    "object-shorthand": ["error", "properties"],
+
     // Upgrade TS rules from warning to error.
     "@typescript-eslint/no-unused-vars": "error",
 

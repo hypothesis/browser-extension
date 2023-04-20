@@ -31,7 +31,7 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-describe('Extension', function () {
+describe('Extension', () => {
   let sandbox = sinon.createSandbox();
   let ext;
   let fakeChromeAPI;
@@ -41,7 +41,7 @@ describe('Extension', function () {
   let fakeBrowserAction;
   let fakeSidebarInjector;
 
-  beforeEach(function () {
+  beforeEach(() => {
     fakeChromeAPI = {
       storage: {
         sync: {
@@ -129,13 +129,13 @@ describe('Extension', function () {
     ext = new Extension();
   });
 
-  afterEach(function () {
+  afterEach(() => {
     sandbox.restore();
     $imports.$restore();
   });
 
-  describe('#firstRun', function () {
-    beforeEach(function () {
+  describe('#firstRun', () => {
+    beforeEach(() => {
       fakeChromeAPI.tabs.create = sandbox.stub().resolves({ id: 1 });
     });
 
@@ -300,13 +300,13 @@ describe('Extension', function () {
       });
     });
 
-    describe('when a tab is created', function () {
+    describe('when a tab is created', () => {
       beforeEach(async () => {
         fakeTabState.clearTab = sandbox.spy();
         await ext.init();
       });
 
-      it('clears the new tab state', function () {
+      it('clears the new tab state', () => {
         fakeChromeAPI.tabs.onCreated.listener({
           id: 1,
           url: 'http://example.com/foo.html',
@@ -315,7 +315,7 @@ describe('Extension', function () {
       });
     });
 
-    describe('when a tab is updated', function () {
+    describe('when a tab is updated', () => {
       const tabState = {};
       function createTab(initialState) {
         const tabId = 1;
@@ -352,7 +352,7 @@ describe('Extension', function () {
         await ext.init();
       });
 
-      it('sets the tab state to ready when loading completes', function () {
+      it('sets the tab state to ready when loading completes', () => {
         const tab = createTab({ state: 'active' });
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
@@ -362,7 +362,7 @@ describe('Extension', function () {
         assert.equal(tabState[tab.id].ready, true);
       });
 
-      it('resets the tab state when loading', function () {
+      it('resets the tab state when loading', () => {
         const tab = createTab({
           state: 'active',
           annotationCount: 8,
@@ -379,7 +379,7 @@ describe('Extension', function () {
         assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
       });
 
-      it('ignores consecutive `loading` events for the same URL and tab until the loading is completed', function () {
+      it('ignores consecutive `loading` events for the same URL and tab until the loading is completed', () => {
         const tab = createTab({
           state: 'active',
           annotationCount: 8,
@@ -418,7 +418,7 @@ describe('Extension', function () {
         assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
       });
 
-      it('resets the tab state when loading a different URL (even when previous loading event did not complete)', function () {
+      it('resets the tab state when loading a different URL (even when previous loading event did not complete)', () => {
         const tab = createTab({
           state: 'active',
           annotationCount: 8,
@@ -446,7 +446,7 @@ describe('Extension', function () {
         assert.equal(tabState[tab.id].extensionSidebarInstalled, false);
       });
 
-      it('resets the tab state to active if errored', function () {
+      it('resets the tab state to active if errored', () => {
         const tab = createTab({ state: 'errored' });
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
@@ -461,7 +461,7 @@ describe('Extension', function () {
         '#annotations:query:blah',
         '#annotations:group:123',
       ].forEach(fragment => {
-        it('injects the sidebar if a direct link is present', function () {
+        it('injects the sidebar if a direct link is present', () => {
           const tab = createTab();
           tab.url += fragment;
           fakeChromeAPI.tabs.onUpdated.listener(
@@ -478,7 +478,7 @@ describe('Extension', function () {
         });
       });
 
-      it('injects the sidebar if the page rewrites the URL fragment', function () {
+      it('injects the sidebar if the page rewrites the URL fragment', () => {
         const tab = createTab();
         const origURL = tab.url;
         tab.url += '#annotations:456';
@@ -528,7 +528,7 @@ describe('Extension', function () {
         );
       });
 
-      it('does not update the badge count if the option is disabled', function () {
+      it('does not update the badge count if the option is disabled', () => {
         const tab = createTab();
         fakeChromeAPI.storage.sync.get.resolves({ badge: false });
 
@@ -547,12 +547,12 @@ describe('Extension', function () {
       });
     });
 
-    describe('when a tab is replaced', function () {
+    describe('when a tab is replaced', () => {
       beforeEach(async () => {
         await ext.init();
       });
 
-      it('preserves the active state of the previous tab', function () {
+      it('preserves the active state of the previous tab', () => {
         fakeTabState.getState = sandbox.stub().returns({
           state: 'active',
         });
@@ -564,7 +564,7 @@ describe('Extension', function () {
         });
       });
 
-      it('reactivates errored tabs', function () {
+      it('reactivates errored tabs', () => {
         fakeTabState.getState = sandbox.stub().returns({
           state: 'errored',
         });
@@ -576,19 +576,19 @@ describe('Extension', function () {
       });
     });
 
-    describe('when a tab is removed', function () {
+    describe('when a tab is removed', () => {
       beforeEach(async () => {
         fakeTabState.clearTab = sandbox.spy();
         await ext.init();
       });
 
-      it('clears the tab', function () {
+      it('clears the tab', () => {
         fakeChromeAPI.tabs.onRemoved.listener(1);
         assert.calledWith(fakeTabState.clearTab, 1);
       });
     });
 
-    describe('when the browser icon is clicked', function () {
+    describe('when the browser icon is clicked', () => {
       beforeEach(async () => {
         await ext.init();
       });
@@ -636,7 +636,7 @@ describe('Extension', function () {
         );
       });
 
-      it('deactivates the tab if the tab is active', function () {
+      it('deactivates the tab if the tab is active', () => {
         fakeTabState.isTabActive.returns(true);
         fakeChromeAPI.browserAction.onClicked.listener({
           id: 1,
@@ -648,7 +648,7 @@ describe('Extension', function () {
     });
   });
 
-  describe('when injection fails', function () {
+  describe('when injection fails', () => {
     function triggerInstall() {
       const tab = { id: 1, url: 'file://foo.html', status: 'complete' };
       const tabState = {
@@ -672,21 +672,21 @@ describe('Extension', function () {
       errors.RestrictedProtocolError,
     ];
 
-    injectErrorCases.forEach(function (ErrorType) {
-      describe('with ' + ErrorType.name, function () {
-        it('puts the tab into an errored state', function () {
+    injectErrorCases.forEach(ErrorType => {
+      describe('with ' + ErrorType.name, () => {
+        it('puts the tab into an errored state', () => {
           const injectError = Promise.reject(new ErrorType('msg'));
           fakeSidebarInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
 
-          return toResult(injectError).then(function () {
+          return toResult(injectError).then(() => {
             assert.called(fakeTabState.errorTab);
             assert.calledWith(fakeTabState.errorTab, 1);
           });
         });
 
-        it('shows the help page for ' + ErrorType.name, function () {
+        it('shows the help page for ' + ErrorType.name, () => {
           const tab = { id: 1, url: 'file://foo.html' };
 
           fakeTabState.getState.returns({
@@ -704,7 +704,7 @@ describe('Extension', function () {
           );
         });
 
-        it('does not log known errors', function () {
+        it('does not log known errors', () => {
           const error = new Error('Some error');
           fakeErrors.shouldIgnoreInjectionError = function () {
             return true;
@@ -714,19 +714,19 @@ describe('Extension', function () {
 
           triggerInstall();
 
-          return toResult(injectError).then(function () {
+          return toResult(injectError).then(() => {
             assert.notCalled(fakeErrors.report);
           });
         });
 
-        it('logs unexpected errors', function () {
+        it('logs unexpected errors', () => {
           const error = new ErrorType('msg');
           const injectError = Promise.reject(error);
           fakeSidebarInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
 
-          return toResult(injectError).then(function () {
+          return toResult(injectError).then(() => {
             assert.calledWith(
               fakeErrors.report,
               error,
@@ -739,7 +739,7 @@ describe('Extension', function () {
     });
   });
 
-  describe('TabState.onchange', function () {
+  describe('TabState.onchange', () => {
     let onChangeHandler;
     let tab;
 
@@ -760,7 +760,7 @@ describe('Extension', function () {
       );
     }
 
-    beforeEach(function () {
+    beforeEach(() => {
       tab = { id: 1, status: 'complete' };
       fakeChromeAPI.tabs.get = sandbox.stub().resolves(tab);
       onChangeHandler = ext._onTabStateChange;

@@ -112,7 +112,7 @@ export class TabState {
   errorTab(tabId: number, error: Error) {
     this.setState(tabId, {
       state: 'errored',
-      error: error,
+      error,
     });
   }
 

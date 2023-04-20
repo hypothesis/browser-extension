@@ -1,7 +1,7 @@
 'use strict';
 
 // Detect the current OS and show approprite help.
-chrome.runtime.getPlatformInfo(function (info) {
+chrome.runtime.getPlatformInfo(info => {
   const opts = /** @type {NodeListOf<HTMLElement>} */ (
     document.querySelectorAll('[data-extension-path]')
   );

@@ -18,7 +18,7 @@ function loadOptions() {
     {
       badge: true,
     },
-    function (items) {
+    items => {
       badgeCheckbox().checked = items.badge;
     }
   );

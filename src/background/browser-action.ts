@@ -87,7 +87,7 @@ export class BrowserAction {
     const badgeTheme = badgeThemes[settings.buildType];
     if (badgeTheme) {
       chromeAPI.browserAction.setBadgeBackgroundColor({
-        tabId: tabId,
+        tabId,
         color: badgeTheme.color,
       });
       if (!badgeText) {
@@ -95,9 +95,9 @@ export class BrowserAction {
       }
     }
 
-    chromeAPI.browserAction.setBadgeText({ tabId: tabId, text: badgeText });
-    chromeAPI.browserAction.setIcon({ tabId: tabId, path: activeIcon });
-    chromeAPI.browserAction.setTitle({ tabId: tabId, title: title });
+    chromeAPI.browserAction.setBadgeText({ tabId, text: badgeText });
+    chromeAPI.browserAction.setIcon({ tabId, path: activeIcon });
+    chromeAPI.browserAction.setTitle({ tabId, title });
   }
 
   static icons = icons;

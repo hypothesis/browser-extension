@@ -51,7 +51,7 @@ function translateSourceURLs(data) {
   try {
     /** @type {Array<{ filename: string }>} */
     const frames = data.exception.values[0].stacktrace.frames;
-    frames.forEach(function (frame) {
+    frames.forEach(frame => {
       frame.filename = convertLocalURLsToFilenames(frame.filename);
     });
     data.culprit = frames[0].filename;
@@ -96,8 +96,8 @@ export function report(error, when, context) {
     }
   }
 
-  const extra = Object.assign({ when: when }, context);
-  Raven.captureException(error, { extra: extra });
+  const extra = Object.assign({ when }, context);
+  Raven.captureException(error, { extra });
 }
 
 /**
@@ -115,7 +115,7 @@ export function report(error, when, context) {
  * automatically, in which case this code can simply be removed.
  */
 function installUnhandledPromiseErrorHandler() {
-  globalThis.addEventListener('unhandledrejection', function (event) {
+  globalThis.addEventListener('unhandledrejection', event => {
     if (event.reason) {
       report(event.reason, 'Unhandled Promise rejection');
     }
