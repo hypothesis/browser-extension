@@ -72,7 +72,7 @@ export class Extension {
     const help = new HelpPage();
     const state = new TabState(onTabStateChange);
     const browserAction = new BrowserAction();
-    const sidebar = new SidebarInjector();
+    const sidebarInjector = new SidebarInjector();
 
     const currentlyLoadingUrl = new Map<number, string>(); // keeps tracks of what URL each tab is loading
 
@@ -136,7 +136,7 @@ export class Extension {
             return false;
           }
           try {
-            const active = await sidebar.isClientActiveInTab(tab);
+            const active = await sidebarInjector.isClientActiveInTab(tab);
             return active;
           } catch (e) {
             console.warn(
@@ -183,7 +183,7 @@ export class Extension {
 
       browserAction.update(tabId, current);
 
-      updateTabDocument(tab);
+      addOrRemoveClientFromTab(tab);
     }
 
     // exposed for use by tests
@@ -202,7 +202,7 @@ export class Extension {
         // `requestExtraPermissionsForTab` docs.
         //
         // eslint-disable-next-line no-lonely-if
-        if (await sidebar.requestExtraPermissionsForTab(tab)) {
+        if (await sidebarInjector.requestExtraPermissionsForTab(tab)) {
           state.activateTab(tabId);
         } else {
           state.errorTab(
@@ -318,10 +318,10 @@ export class Extension {
     }
 
     /**
-     * Installs or uninstalls the sidebar from a tab when the H
-     * state for a tab changes
+     * Load or unload the Hypothesis client in a tab to match the corresponding
+     * state in {@link state}.
      */
-    function updateTabDocument(tab: chrome.tabs.Tab) {
+    async function addOrRemoveClientFromTab(tab: chrome.tabs.Tab) {
       const tabId = tab.id!;
 
       // If the tab has not yet finished loading then just quietly return.
@@ -331,8 +331,8 @@ export class Extension {
 
       const isInstalled = state.getState(tabId).extensionSidebarInstalled;
       if (state.isTabActive(tabId) && !isInstalled) {
-        // optimistically set the state flag indicating that the sidebar
-        // has been installed
+        // Optimistically set the state flag indicating that the sidebar has
+        // been installed.
         state.setState(tabId, {
           extensionSidebarInstalled: true,
         });
@@ -348,41 +348,39 @@ export class Extension {
           notebookAppUrl: chromeAPI.runtime.getURL('/client/notebook.html'),
           profileAppUrl: chromeAPI.runtime.getURL('/client/profile.html'),
           sidebarAppUrl: chromeAPI.runtime.getURL('/client/app.html'),
+
+          // Pass the direct-link query as configuration into the client.
+          //
+          // The reason we don't rely on just putting this into the URL and letting
+          // the client pick it up is to make direct-linking work in sites/apps
+          // that modify the URL fragment as they load. See commit 3143ca27e05d.
+          ...directLinkQuery,
         };
 
-        // Pass the direct-link query as configuration into the client.
-        //
-        // The reason we don't rely on just putting this into the URL and letting
-        // the client pick it up is to make direct-linking work in sites/apps
-        // that modify the URL fragment as they load. See commit 3143ca27e05d.
-        Object.assign(config, directLinkQuery);
+        try {
+          await sidebarInjector.injectIntoTab(tab, config);
 
-        sidebar
-          .injectIntoTab(tab, config)
-          .then(function () {
-            // Clear the direct link once H has been successfully injected
-            state.setState(tabId, { directLinkQuery: undefined });
-          })
-          .catch(function (err) {
-            if (err instanceof errors.AlreadyInjectedError) {
-              state.setState(tabId, {
-                state: 'inactive',
-                extensionSidebarInstalled: false,
-              });
-              return;
-            }
-            if (!errors.shouldIgnoreInjectionError(err)) {
-              errors.report(err, 'Injecting Hypothesis sidebar', {
-                url: tab.url,
-              });
-            }
-            state.errorTab(tabId, err);
-          });
+          // Clear the direct link once H has been successfully injected.
+          state.setState(tabId, { directLinkQuery: undefined });
+        } catch (err: any) {
+          if (err instanceof errors.AlreadyInjectedError) {
+            state.setState(tabId, {
+              state: 'inactive',
+              extensionSidebarInstalled: false,
+            });
+            return;
+          }
+          if (!errors.shouldIgnoreInjectionError(err)) {
+            errors.report(err, 'Injecting Hypothesis sidebar', {
+              url: tab.url,
+            });
+          }
+          state.errorTab(tabId, err);
+        }
       } else if (state.isTabInactive(tabId) && isInstalled) {
-        sidebar.removeFromTab(tab).then(function () {
-          state.setState(tabId, {
-            extensionSidebarInstalled: false,
-          });
+        await sidebarInjector.removeFromTab(tab);
+        state.setState(tabId, {
+          extensionSidebarInstalled: false,
         });
       }
     }
