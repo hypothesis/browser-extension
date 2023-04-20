@@ -35,7 +35,7 @@ const IGNORED_ERRORS = [
 ];
 
 /**
- * Returns true if a given `err` is anticipated during sidebar injection, such
+ * Returns true if a given `err` is anticipated during client injection, such
  * as the tab being closed by the user, and should not be reported to Sentry.
  *
  * @param err - The Error-like object

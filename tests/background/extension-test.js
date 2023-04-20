@@ -39,7 +39,7 @@ describe('Extension', () => {
   let fakeHelpPage;
   let fakeTabState;
   let fakeBrowserAction;
-  let fakeSidebarInjector;
+  let fakeClientInjector;
 
   beforeEach(() => {
     fakeChromeAPI = {
@@ -89,7 +89,7 @@ describe('Extension', () => {
     fakeBrowserAction = {
       update: sandbox.spy(),
     };
-    fakeSidebarInjector = {
+    fakeClientInjector = {
       isClientActiveInTab: sandbox.stub().resolves(false),
       injectIntoTab: sandbox.stub().resolves(),
       removeFromTab: sandbox.stub().resolves(),
@@ -115,8 +115,8 @@ describe('Extension', () => {
       './browser-action': {
         BrowserAction: createConstructor(fakeBrowserAction),
       },
-      './sidebar-injector': {
-        SidebarInjector: createConstructor(fakeSidebarInjector),
+      './client-injector': {
+        ClientInjector: createConstructor(fakeClientInjector),
       },
       './errors': fakeErrors,
       './settings': {
@@ -248,13 +248,13 @@ describe('Extension', () => {
         { id: 2, url: 'https://bar.com', status: 'complete' },
         { id: 3, url: 'https://baz.com', status: 'loading' },
       ]);
-      fakeSidebarInjector.isClientActiveInTab
+      fakeClientInjector.isClientActiveInTab
         .withArgs(sinon.match({ id: 1 }))
         .resolves(false);
-      fakeSidebarInjector.isClientActiveInTab
+      fakeClientInjector.isClientActiveInTab
         .withArgs(sinon.match({ id: 2 }))
         .resolves(true);
-      fakeSidebarInjector.isClientActiveInTab
+      fakeClientInjector.isClientActiveInTab
         .withArgs(sinon.match({ id: 3 }))
         .resolves(true);
 
@@ -283,7 +283,7 @@ describe('Extension', () => {
       fakeChromeAPI.tabs.query.resolves([
         { id: 1, url: 'https://foo.com', status: 'complete' },
       ]);
-      fakeSidebarInjector.isClientActiveInTab
+      fakeClientInjector.isClientActiveInTab
         .withArgs(sinon.match({ id: 1 }))
         .rejects(new Error('Something went wrong'));
 
@@ -461,7 +461,7 @@ describe('Extension', () => {
         '#annotations:query:blah',
         '#annotations:group:123',
       ].forEach(fragment => {
-        it('injects the sidebar if a direct link is present', () => {
+        it('injects the client if a direct link is present', () => {
           const tab = createTab();
           tab.url += fragment;
           fakeChromeAPI.tabs.onUpdated.listener(
@@ -478,7 +478,7 @@ describe('Extension', () => {
         });
       });
 
-      it('injects the sidebar if the page rewrites the URL fragment', () => {
+      it('injects the client if the page rewrites the URL fragment', () => {
         const tab = createTab();
         const origURL = tab.url;
         tab.url += '#annotations:456';
@@ -488,7 +488,7 @@ describe('Extension', () => {
           tab
         );
 
-        // Simulate client side JS rewriting the URL fragment before the sidebar
+        // Simulate client side JS rewriting the URL fragment before the client
         // is injected
         tab.url = origURL + '#modified-fragment';
         fakeChromeAPI.tabs.onUpdated.listener(
@@ -605,7 +605,7 @@ describe('Extension', () => {
         await delay(0);
 
         assert.calledWith(
-          fakeSidebarInjector.requestExtraPermissionsForTab,
+          fakeClientInjector.requestExtraPermissionsForTab,
           tab
         );
         assert.called(fakeTabState.activateTab);
@@ -613,7 +613,7 @@ describe('Extension', () => {
       });
 
       it('reports error if user rejects permissions request', async () => {
-        fakeSidebarInjector.requestExtraPermissionsForTab.returns(false);
+        fakeClientInjector.requestExtraPermissionsForTab.returns(false);
         fakeTabState.isTabInactive.returns(true);
         const tab = {
           id: 1,
@@ -676,7 +676,7 @@ describe('Extension', () => {
       describe('with ' + ErrorType.name, () => {
         it('puts the tab into an errored state', () => {
           const injectError = Promise.reject(new ErrorType('msg'));
-          fakeSidebarInjector.injectIntoTab.returns(injectError);
+          fakeClientInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
 
@@ -710,7 +710,7 @@ describe('Extension', () => {
             return true;
           };
           const injectError = Promise.reject(error);
-          fakeSidebarInjector.injectIntoTab.returns(injectError);
+          fakeClientInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
 
@@ -722,7 +722,7 @@ describe('Extension', () => {
         it('logs unexpected errors', () => {
           const error = new ErrorType('msg');
           const injectError = Promise.reject(error);
-          fakeSidebarInjector.injectIntoTab.returns(injectError);
+          fakeClientInjector.injectIntoTab.returns(injectError);
 
           triggerInstall();
 
@@ -730,7 +730,7 @@ describe('Extension', () => {
             assert.calledWith(
               fakeErrors.report,
               error,
-              'Injecting Hypothesis sidebar',
+              'Injecting Hypothesis client',
               { url: 'file://foo.html' }
             );
           });
@@ -787,7 +787,7 @@ describe('Extension', () => {
 
       await onTabStateChange('active', 'inactive');
 
-      assert.calledWith(fakeSidebarInjector.injectIntoTab, tab);
+      assert.calledWith(fakeClientInjector.injectIntoTab, tab);
     });
 
     it('configures the client to load assets from the extension', async () => {
@@ -799,7 +799,7 @@ describe('Extension', () => {
 
       await onTabStateChange('active', 'inactive');
 
-      assert.calledWith(fakeSidebarInjector.injectIntoTab, tab, {
+      assert.calledWith(fakeClientInjector.injectIntoTab, tab, {
         assetRoot: 'chrome://1234/client/',
         notebookAppUrl: 'chrome://1234/client/notebook.html',
         profileAppUrl: 'chrome://1234/client/profile.html',
@@ -817,7 +817,7 @@ describe('Extension', () => {
 
       await onTabStateChange('active', 'active');
 
-      assert.notCalled(fakeSidebarInjector.injectIntoTab);
+      assert.notCalled(fakeClientInjector.injectIntoTab);
     });
 
     it('removes the sidebar if the tab has been deactivated', async () => {
@@ -834,7 +834,7 @@ describe('Extension', () => {
 
       await onTabStateChange('inactive', 'active');
 
-      assert.calledWith(fakeSidebarInjector.removeFromTab, tab);
+      assert.calledWith(fakeClientInjector.removeFromTab, tab);
     });
 
     it('does not remove the sidebar if not installed', async () => {
@@ -850,7 +850,7 @@ describe('Extension', () => {
 
       await onTabStateChange('inactive', 'active');
 
-      assert.notCalled(fakeSidebarInjector.removeFromTab);
+      assert.notCalled(fakeClientInjector.removeFromTab);
     });
 
     it('does nothing with the sidebar if the tab is errored', async () => {
@@ -858,8 +858,8 @@ describe('Extension', () => {
 
       await onTabStateChange('errored', 'inactive');
 
-      assert.notCalled(fakeSidebarInjector.injectIntoTab);
-      assert.notCalled(fakeSidebarInjector.removeFromTab);
+      assert.notCalled(fakeClientInjector.injectIntoTab);
+      assert.notCalled(fakeClientInjector.removeFromTab);
     });
 
     it('does nothing if the tab is still loading', async () => {
@@ -871,7 +871,7 @@ describe('Extension', () => {
 
       await onTabStateChange('active', 'inactive');
 
-      assert.notCalled(fakeSidebarInjector.injectIntoTab);
+      assert.notCalled(fakeClientInjector.injectIntoTab);
     });
 
     it('clears the tab if fetching tab data fails', async () => {

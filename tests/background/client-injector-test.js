@@ -1,8 +1,5 @@
 import * as errors from '../../src/background/errors';
-import {
-  SidebarInjector,
-  $imports,
-} from '../../src/background/sidebar-injector';
+import { ClientInjector, $imports } from '../../src/background/client-injector';
 import { toResult } from '../promise-util';
 
 // The root URL for the extension returned by the
@@ -13,7 +10,7 @@ const PDF_VIEWER_BASE_URL = EXTENSION_BASE_URL + '/pdfjs/web/viewer.html?file=';
 
 /**
  * Creates an <iframe> for testing the effects of code injected
- * into the page by the sidebar injector
+ * into the page by the client injector
  */
 function createTestFrame() {
   const frame = document.createElement('iframe');
@@ -44,7 +41,7 @@ const vitalSourceFrames = {
   },
 };
 
-describe('SidebarInjector', () => {
+describe('ClientInjector', () => {
   let injector;
   let fakeChromeAPI;
 
@@ -55,11 +52,11 @@ describe('SidebarInjector', () => {
   // the page should report ('HTML' or 'PDF')
   let contentType;
   // The return value from the content script which checks whether
-  // the sidebar has already been injected into the page
+  // the client has already been injected into the page
   let isAlreadyInjected;
 
   // An <iframe> created by some tests to verify the effects on the DOM of
-  // code injected into the page by the sidebar
+  // code injected into the page by the client
   let contentFrame;
 
   // Mock return value from embed.js when injected into page
@@ -165,7 +162,7 @@ describe('SidebarInjector', () => {
       },
     });
 
-    injector = new SidebarInjector();
+    injector = new ClientInjector();
   });
 
   afterEach(() => {

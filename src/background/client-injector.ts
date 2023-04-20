@@ -124,11 +124,14 @@ async function canInjectScript(url: string) {
 }
 
 /**
- * The SidebarInjector is used to deploy and remove the Hypothesis sidebar
- * from tabs. It also deals with loading PDF documents into the PDF.js viewer
- * when applicable.
+ * ClientInjector handles loading and unloading the Hypothesis client into tabs.
+ *
+ * For content types which use a viewer application built into the extension
+ * (eg. PDFs) it also handles navigating the tab to the custom viewer when
+ * Hypothesis is activated and back to the original URL when the client is
+ * unloaded.
  */
-export class SidebarInjector {
+export class ClientInjector {
   private _pdfViewerBaseURL: string;
 
   constructor() {
@@ -175,14 +178,14 @@ export class SidebarInjector {
   }
 
   /**
-   * Injects the Hypothesis sidebar into the tab provided.
+   * Injects the Hypothesis client into the tab provided.
    *
    * Certain URLs (eg. VitalSource books) may require extra permissions to
    * inject. These must be obtained by calling {@link requestExtraPermissionsForTab},
    * directly after the user clicks the extension's toolbar icon, before calling
    * this method.
    *
-   * @param tab - A tab object representing the tab to insert the sidebar into.
+   * @param tab - A tab object representing the tab to insert the client into.
    * @param config - An object containing configuration info that is passed to
    *   the app when it loads.
    *
@@ -202,7 +205,7 @@ export class SidebarInjector {
   }
 
   /**
-   * Removes the Hypothesis sidebar from the tab provided.
+   * Removes the Hypothesis client from the tab provided.
    *
    * Returns a promise that will be resolved if the removal succeeded
    * otherwise it will be rejected with an error.

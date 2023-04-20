@@ -44,8 +44,8 @@ describe('errors', () => {
   describe('#report', () => {
     it('logs errors', () => {
       const error = new Error('A most unexpected error');
-      errors.report(error, 'injecting the sidebar', { foo: 'bar' });
-      assert.calledWith(console.error, 'injecting the sidebar', error, {
+      errors.report(error, 'injecting the client', { foo: 'bar' });
+      assert.calledWith(console.error, 'injecting the client', error, {
         foo: 'bar',
       });
     });

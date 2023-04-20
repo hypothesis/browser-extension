@@ -4,7 +4,7 @@ import { directLinkQuery } from './direct-link-query';
 import * as errors from './errors';
 import { HelpPage } from './help-page';
 import settings from './settings';
-import { SidebarInjector } from './sidebar-injector';
+import { ClientInjector } from './client-injector';
 import { TabState } from './tab-state';
 import type { State } from './tab-state';
 
@@ -72,7 +72,7 @@ export class Extension {
     const help = new HelpPage();
     const state = new TabState(onTabStateChange);
     const browserAction = new BrowserAction();
-    const sidebarInjector = new SidebarInjector();
+    const clientInjector = new ClientInjector();
 
     const currentlyLoadingUrl = new Map<number, string>(); // keeps tracks of what URL each tab is loading
 
@@ -136,7 +136,7 @@ export class Extension {
             return false;
           }
           try {
-            const active = await sidebarInjector.isClientActiveInTab(tab);
+            const active = await clientInjector.isClientActiveInTab(tab);
             return active;
           } catch (e) {
             console.warn(
@@ -202,7 +202,7 @@ export class Extension {
         // `requestExtraPermissionsForTab` docs.
         //
         // eslint-disable-next-line no-lonely-if
-        if (await sidebarInjector.requestExtraPermissionsForTab(tab)) {
+        if (await clientInjector.requestExtraPermissionsForTab(tab)) {
           state.activateTab(tabId);
         } else {
           state.errorTab(
@@ -331,7 +331,7 @@ export class Extension {
 
       const isInstalled = state.getState(tabId).extensionSidebarInstalled;
       if (state.isTabActive(tabId) && !isInstalled) {
-        // Optimistically set the state flag indicating that the sidebar has
+        // Optimistically set the state flag indicating that the client has
         // been installed.
         state.setState(tabId, {
           extensionSidebarInstalled: true,
@@ -358,7 +358,7 @@ export class Extension {
         };
 
         try {
-          await sidebarInjector.injectIntoTab(tab, config);
+          await clientInjector.injectIntoTab(tab, config);
 
           // Clear the direct link once H has been successfully injected.
           state.setState(tabId, { directLinkQuery: undefined });
@@ -371,14 +371,14 @@ export class Extension {
             return;
           }
           if (!errors.shouldIgnoreInjectionError(err)) {
-            errors.report(err, 'Injecting Hypothesis sidebar', {
+            errors.report(err, 'Injecting Hypothesis client', {
               url: tab.url,
             });
           }
           state.errorTab(tabId, err);
         }
       } else if (state.isTabInactive(tabId) && isInstalled) {
-        await sidebarInjector.removeFromTab(tab);
+        await clientInjector.removeFromTab(tab);
         state.setState(tabId, {
           extensionSidebarInstalled: false,
         });
