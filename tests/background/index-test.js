@@ -1,4 +1,4 @@
-import { init, $imports } from '../../src/background/install';
+import { init, $imports } from '../../src/background';
 
 let extension;
 
@@ -17,10 +17,10 @@ function eventListenerStub() {
   };
 }
 
-describe('install', function () {
+describe('background/index', () => {
   let fakeChromeAPI;
 
-  beforeEach(function () {
+  beforeEach(() => {
     fakeChromeAPI = {
       runtime: {
         getURL: sinon.stub(),
@@ -44,7 +44,7 @@ describe('install', function () {
     init();
   });
 
-  afterEach(function () {
+  afterEach(() => {
     $imports.$restore();
   });
 
@@ -58,7 +58,7 @@ describe('install', function () {
     return cb(request, sender, sendResponse);
   }
 
-  context('when the extension is installed', function () {
+  context('when the extension is installed', () => {
     function triggerInstallEvent() {
       const cb = fakeChromeAPI.runtime.onInstalled.addListener.args[0][0];
       return cb({ reason: 'install' });

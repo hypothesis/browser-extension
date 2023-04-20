@@ -8,6 +8,11 @@ export default {
   output: {
     file: 'build/extension.bundle.js',
     format: 'iife',
+
+    // Global variable used for entry point exports. This is not actually used,
+    // but it suppresses a warning from Rollup about accessing exports of an
+    // IIFE bundle.
+    name: 'hypothesis',
   },
   plugins: [
     babel({
