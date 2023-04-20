@@ -1,21 +1,12 @@
 import * as errors from '../../src/background/errors';
 
 describe('errors', () => {
-  let fakeRaven;
-
   beforeEach(() => {
-    fakeRaven = {
-      report: sinon.stub(),
-    };
-    errors.$imports.$mock({
-      './raven': fakeRaven,
-    });
     sinon.stub(console, 'error');
   });
 
   afterEach(() => {
     console.error.restore();
-    errors.$imports.$restore();
   });
 
   describe('#shouldIgnoreInjectionError', () => {
@@ -51,16 +42,12 @@ describe('errors', () => {
   });
 
   describe('#report', () => {
-    it('reports unknown errors via Raven', () => {
+    it('logs errors', () => {
       const error = new Error('A most unexpected error');
-      errors.report(error, 'injecting the sidebar');
-      assert.calledWith(fakeRaven.report, error, 'injecting the sidebar');
-    });
-
-    it('does not report known errors via Raven', () => {
-      const error = new errors.LocalFileError('some message');
-      errors.report(error, 'injecting the sidebar');
-      assert.notCalled(fakeRaven.report);
+      errors.report(error, 'injecting the sidebar', { foo: 'bar' });
+      assert.calledWith(console.error, 'injecting the sidebar', error, {
+        foo: 'bar',
+      });
     });
   });
 });

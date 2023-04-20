@@ -7,7 +7,6 @@
 export type Settings = {
   apiUrl: string;
   buildType: string;
-  raven?: { dsn: string; release: string };
   serviceUrl: string;
   manifestV3?: boolean;
 };

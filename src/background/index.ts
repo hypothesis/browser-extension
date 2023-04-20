@@ -1,8 +1,6 @@
 import { chromeAPI } from './chrome-api';
 import { Extension } from './extension';
 import type { ExternalMessage } from './messages';
-import * as raven from './raven';
-import settings from './settings';
 
 /**
  * Initialize the extension's Service Worker / background page.
@@ -76,8 +74,5 @@ export async function init() {
 // tests but `self` in the real extension's Service Worker.
 const inTests = '__karma__' in globalThis;
 if (!inTests) {
-  if (settings.raven) {
-    raven.init(settings.raven);
-  }
   init();
 }
