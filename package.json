@@ -23,7 +23,7 @@
     "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-mockable-imports": "^2.0.1",
     "chai": "^4.3.7",
-    "chrome-webstore-upload-cli": "^2.2.1",
+    "chrome-webstore-upload-cli": "^2.2.2",
     "diff": "^5.1.0",
     "eslint": "^8.44.0",
     "eslint-config-hypothesis": "^2.6.0",
