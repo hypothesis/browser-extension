@@ -58,12 +58,12 @@ export async function init() {
           }
           break;
       }
-    }
+    },
   );
 
   chromeAPI.runtime.requestUpdateCheck?.().then(() => {
     chromeAPI.runtime.onUpdateAvailable.addListener(() =>
-      chromeAPI.runtime.reload()
+      chromeAPI.runtime.reload(),
     );
   });
 

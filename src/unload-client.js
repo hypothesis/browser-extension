@@ -7,7 +7,7 @@
 // are not visible to any scripts that are subsequently run by the JS extension.
 function unloadClient() {
   const annotatorLink = document.querySelector(
-    'link[type="application/annotator+html"]'
+    'link[type="application/annotator+html"]',
   );
 
   if (annotatorLink) {

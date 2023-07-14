@@ -111,7 +111,7 @@ describe('BrowserAction', () => {
       });
       assert.equal(
         fakeChromeBrowserAction.title,
-        "There's 1 annotation on this page"
+        "There's 1 annotation on this page",
       );
     });
 
@@ -122,7 +122,7 @@ describe('BrowserAction', () => {
       });
       assert.equal(
         fakeChromeBrowserAction.title,
-        'There are 23 annotations on this page'
+        'There are 23 annotations on this page',
       );
     });
 
@@ -150,7 +150,7 @@ describe('BrowserAction', () => {
       assert.equal(fakeChromeBrowserAction.badgeText, '999+');
       assert.equal(
         fakeChromeBrowserAction.title,
-        'There are 999+ annotations on this page'
+        'There are 999+ annotations on this page',
       );
     });
   });

@@ -44,7 +44,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
    * @return Wrapped API that doesn't take a callback but returns a Promise instead
    */
   function promisify<Args extends any[], Result>(
-    fn: (...args: [...Args, Callback<Result>]) => void
+    fn: (...args: [...Args, Callback<Result>]) => void,
   ): (...args: Args) => Promise<Result> {
     const cached = cache.get(fn);
     if (cached) {
@@ -66,7 +66,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
   }
 
   function promisifyAlt<Args extends any[], Result>(
-    fn: (...args: Args) => Promise<Result>
+    fn: (...args: Args) => Promise<Result>,
   ): (...args: Args) => Promise<Result> {
     // @ts-expect-error
     return promisify(fn);
@@ -85,7 +85,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
 
     extension: {
       isAllowedFileSchemeAccess: promisify(
-        chrome.extension.isAllowedFileSchemeAccess
+        chrome.extension.isAllowedFileSchemeAccess,
       ),
     },
 
@@ -186,7 +186,7 @@ export type ExecuteScriptOptions = {
  */
 export async function executeScript(
   { tabId, frameId, file }: ExecuteScriptOptions,
-  chromeAPI_ = chromeAPI
+  chromeAPI_ = chromeAPI,
 ): Promise<unknown> {
   if (settings.manifestV3) {
     const target: chrome.scripting.InjectionTarget = { tabId };
@@ -226,7 +226,7 @@ export type ExecuteFunctionOptions<Args extends unknown[], Result> = {
  */
 export async function executeFunction<Args extends unknown[], Result>(
   { tabId, frameId, func, args }: ExecuteFunctionOptions<Args, Result>,
-  chromeAPI_ = chromeAPI
+  chromeAPI_ = chromeAPI,
 ): Promise<Result> {
   if (settings.manifestV3) {
     const target: chrome.scripting.InjectionTarget = { tabId };

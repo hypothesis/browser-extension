@@ -133,7 +133,7 @@ describe('SidebarInjector', () => {
         }),
         request: sinon.stub().callsFake(async request => {
           const allowed = request.permissions.every(perm =>
-            allowedPermissions.includes(perm)
+            allowedPermissions.includes(perm),
           );
           if (allowed) {
             request.permissions.forEach(perm => permissions.add(perm));
@@ -320,7 +320,7 @@ describe('SidebarInjector', () => {
             sinon.match({
               tabId: 1,
               file: sinon.match('/client/build/boot.js'),
-            })
+            }),
           );
         });
       });
@@ -343,7 +343,7 @@ describe('SidebarInjector', () => {
         await injector.injectIntoTab({ id: 1, url }, { annotations: '456' });
 
         const configEl = contentFrame.contentDocument.querySelector(
-          'script.js-hypothesis-config'
+          'script.js-hypothesis-config',
         );
         assert.ok(configEl);
         assert.deepEqual(JSON.parse(configEl.textContent), {
@@ -373,7 +373,7 @@ describe('SidebarInjector', () => {
             frameId: vitalSourceFrames.reader.frameId,
             func: { name: 'setClientConfig' },
             args: [sinon.match.any, 'hypothesisId'],
-          })
+          }),
         );
 
         assert.calledWith(fakeExecuteScript, {
@@ -396,7 +396,7 @@ describe('SidebarInjector', () => {
         assert.instanceOf(error, Error);
         assert.equal(
           error.message,
-          'The extension was not granted required permissions'
+          'The extension was not granted required permissions',
         );
       });
 
@@ -507,7 +507,7 @@ describe('SidebarInjector', () => {
           const url = protocol + '//foobar/';
           await injector.removeFromTab({ id: 1, url });
           assert.notCalled(fakeExecuteScript);
-        }
+        },
       );
     });
 
@@ -596,7 +596,7 @@ describe('SidebarInjector', () => {
         assert.instanceOf(error, Error);
         assert.equal(
           error.message,
-          'The extension was not granted required permissions'
+          'The extension was not granted required permissions',
         );
       });
     });

@@ -87,7 +87,7 @@ describe('background/index', () => {
       simulateExternalMessage(
         { type: 'ping', queryFeatures: ['activate'] },
         sender,
-        sendResponse
+        sendResponse,
       );
       assert.calledWith(sendResponse, { type: 'pong', features: ['activate'] });
     });
@@ -103,7 +103,7 @@ describe('background/index', () => {
           query: '#annotations:1234',
         },
         sender,
-        sendResponse
+        sendResponse,
       );
 
       assert.calledWith(fakeChromeAPI.tabs.update, 123, {
@@ -126,7 +126,7 @@ describe('background/index', () => {
           query: '#annotations:1234',
         },
         sender,
-        sendResponse
+        sendResponse,
       );
 
       assert.notCalled(fakeChromeAPI.tabs.update);
@@ -135,7 +135,7 @@ describe('background/index', () => {
         123,
         sinon.match({
           query: '#annotations:1234',
-        })
+        }),
       );
       assert.calledWith(sendResponse, { active: true });
     });
@@ -150,7 +150,7 @@ describe('background/index', () => {
           query: '#annotations:1234',
         },
         sender,
-        sendResponse
+        sendResponse,
       );
 
       assert.notCalled(fakeChromeAPI.tabs.update);

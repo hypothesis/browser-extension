@@ -58,7 +58,7 @@ export async function fetchAnnotationCount(uri: string): Promise<number> {
     settings.apiUrl + '/badge?uri=' + encodeUriQuery(uri),
     {
       credentials: 'include',
-    }
+    },
   );
 
   const data = await response.json();

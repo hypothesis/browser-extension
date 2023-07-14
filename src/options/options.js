@@ -20,7 +20,7 @@ function loadOptions() {
     },
     items => {
       badgeCheckbox().checked = items.badge;
-    }
+    },
   );
 }
 
