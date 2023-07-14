@@ -216,7 +216,7 @@ export class TabState {
 
     const wait = Math.min(
       pendingRequest?.waitMs ?? INITIAL_WAIT_MS,
-      MAX_WAIT_MS
+      MAX_WAIT_MS,
     );
 
     pendingRequest?.cancel();
@@ -234,7 +234,7 @@ export class TabState {
           this._annotationCountCache.set(url, count);
           setTimeout(
             () => this._annotationCountCache.delete(url),
-            CACHE_EXPIRATION_MS
+            CACHE_EXPIRATION_MS,
           );
         } catch {
           count = 0;

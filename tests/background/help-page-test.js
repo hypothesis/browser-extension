@@ -63,7 +63,7 @@ describe('HelpPage', () => {
         index: 2,
         openerTabId: 1,
         url: fakeExtensionURL(
-          '/help/index.html?message=Unexpected+Error#other-error'
+          '/help/index.html?message=Unexpected+Error#other-error',
         ),
       });
     });

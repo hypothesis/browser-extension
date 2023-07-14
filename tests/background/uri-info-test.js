@@ -60,7 +60,7 @@ describe('background/uri-info', () => {
       it('removes the fragment', () => {
         assert.strictEqual(
           uriInfo.uriForBadgeRequest(okURI),
-          'https://www.google.com/'
+          'https://www.google.com/',
         );
       });
     });
@@ -75,7 +75,7 @@ describe('background/uri-info', () => {
         new Response('{"total": 1}', {
           status: 200,
           headers: {},
-        })
+        }),
       );
     });
 
@@ -85,7 +85,7 @@ describe('background/uri-info', () => {
 
     it('returns value from API service', async () => {
       const result = await uriInfo.fetchAnnotationCount(
-        'http://www.example.com'
+        'http://www.example.com',
       );
       assert.equal(result, 1);
     });
@@ -104,7 +104,7 @@ describe('background/uri-info', () => {
       assert.equal(fetchStub.callCount, 1);
       assert.equal(
         fetchStub.lastCall.args[0],
-        badgeURL + '?uri=http%3A%2F%2Ffoo.com%3Fbar%3Dbaz+q%C3%BCx'
+        badgeURL + '?uri=http%3A%2F%2Ffoo.com%3Fbar%3Dbaz+q%C3%BCx',
       );
     });
 
@@ -115,18 +115,18 @@ describe('background/uri-info', () => {
             new Response(badBody, {
               status: 200,
               headers: {},
-            })
+            }),
           );
           return uriInfo
             .fetchAnnotationCount('http://www.example.com')
             .catch(error => {
               assert.strictEqual(
                 error.message,
-                'Unable to parse badge response'
+                'Unable to parse badge response',
               );
             });
         });
-      }
+      },
     );
 
     it('throws an error if the response is not valid JSON', async () => {
@@ -134,7 +134,7 @@ describe('background/uri-info', () => {
         new Response('this is not valid json', {
           status: 200,
           headers: {},
-        })
+        }),
       );
 
       let error;

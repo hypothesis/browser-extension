@@ -185,7 +185,7 @@ describe('Extension', () => {
       fakeChromeAPI.tabs.onUpdated.listener(
         1,
         { status: 'loading' },
-        { url: 'https://newsite.com/' }
+        { url: 'https://newsite.com/' },
       );
 
       assert.calledWith(fakeTabState.setState, 1, {
@@ -217,7 +217,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           1,
           { status: 'loading' },
-          { url: tabURL }
+          { url: tabURL },
         );
 
         assert.calledWith(fakeTabState.setState, 1, {
@@ -291,7 +291,7 @@ describe('Extension', () => {
 
       assert.calledWith(
         warn,
-        sinon.match(/Unable to determine extension state in tab 1/)
+        sinon.match(/Unable to determine extension state in tab 1/),
       );
       assert.calledWith(fakeTabState.setState, 1, {
         state: 'inactive',
@@ -325,7 +325,7 @@ describe('Extension', () => {
             annotationCount: 0,
             ready: false,
           },
-          initialState
+          initialState,
         );
         return {
           id: tabId,
@@ -357,7 +357,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'complete' },
-          tab
+          tab,
         );
         assert.equal(tabState[tab.id].ready, true);
       });
@@ -372,7 +372,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         assert.equal(tabState[tab.id].ready, false);
         assert.equal(tabState[tab.id].annotationCount, 0);
@@ -389,7 +389,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         assert.equal(tabState[tab.id].ready, false);
         assert.equal(tabState[tab.id].annotationCount, 0);
@@ -399,19 +399,19 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         ); // ignored
         assert.equal(tabState[tab.id].annotationCount, 5);
 
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'complete' },
-          tab
+          tab,
         );
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         assert.equal(tabState[tab.id].ready, false);
         assert.equal(tabState[tab.id].annotationCount, 0);
@@ -428,7 +428,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         assert.equal(tabState[tab.id].ready, false);
         assert.equal(tabState[tab.id].annotationCount, 0);
@@ -439,7 +439,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         ); // not ignored, because url changed
         assert.equal(tabState[tab.id].ready, false);
         assert.equal(tabState[tab.id].annotationCount, 0);
@@ -451,7 +451,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         assert.equal(tabState[tab.id].state, 'active');
       });
@@ -467,12 +467,12 @@ describe('Extension', () => {
           fakeChromeAPI.tabs.onUpdated.listener(
             tab.id,
             { status: 'loading' },
-            tab
+            tab,
           );
           fakeChromeAPI.tabs.onUpdated.listener(
             tab.id,
             { status: 'complete' },
-            tab
+            tab,
           );
           assert.equal(tabState[tab.id].state, 'active');
         });
@@ -485,7 +485,7 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
 
         // Simulate client side JS rewriting the URL fragment before the sidebar
@@ -494,12 +494,12 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'complete' },
-          tab
+          tab,
         );
         assert.equal(tabState[tab.id].state, 'active');
       });
@@ -510,12 +510,12 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'complete' },
-          tab
+          tab,
         );
 
         // Wait for tab state change to be processed.
@@ -524,7 +524,7 @@ describe('Extension', () => {
         assert.calledWith(
           fakeTabState.updateAnnotationCount,
           tab.id,
-          'http://example.com/foo.html'
+          'http://example.com/foo.html',
         );
       });
 
@@ -535,12 +535,12 @@ describe('Extension', () => {
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'loading' },
-          tab
+          tab,
         );
         fakeChromeAPI.tabs.onUpdated.listener(
           tab.id,
           { status: 'complete' },
-          tab
+          tab,
         );
 
         assert.notCalled(fakeTabState.updateAnnotationCount);
@@ -606,7 +606,7 @@ describe('Extension', () => {
 
         assert.calledWith(
           fakeSidebarInjector.requestExtraPermissionsForTab,
-          tab
+          tab,
         );
         assert.called(fakeTabState.activateTab);
         assert.calledWith(fakeTabState.activateTab, 1);
@@ -632,7 +632,7 @@ describe('Extension', () => {
           sinon.match({
             message:
               'Hypothesis could not get the permissions needed to load in this tab',
-          })
+          }),
         );
       });
 
@@ -700,7 +700,7 @@ describe('Extension', () => {
           assert.calledWith(
             fakeHelpPage.showHelpForError,
             tab,
-            sinon.match.instanceOf(ErrorType)
+            sinon.match.instanceOf(ErrorType),
           );
         });
 
@@ -731,7 +731,7 @@ describe('Extension', () => {
               fakeErrors.report,
               error,
               'Injecting Hypothesis sidebar',
-              { url: 'file://foo.html' }
+              { url: 'file://foo.html' },
             );
           });
         });
@@ -756,7 +756,7 @@ describe('Extension', () => {
           ? {
               state: prev,
             }
-          : null
+          : null,
       );
     }
 

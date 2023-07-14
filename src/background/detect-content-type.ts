@@ -19,7 +19,7 @@ export type ContentTypeInfo = PDFContentType | HTMLContentType;
  */
 /* istanbul ignore next */
 export function detectContentType(
-  document_ = document
+  document_ = document,
 ): ContentTypeInfo | null {
   function detectChromePDFViewer(): PDFContentType | null {
     // When viewing a PDF in Chrome, the viewer consists of a top-level

@@ -65,7 +65,7 @@ export class Extension {
 
   private _onTabStateChange: (
     tabId: number,
-    current: State | undefined
+    current: State | undefined,
   ) => Promise<void>;
 
   constructor() {
@@ -141,11 +141,11 @@ export class Extension {
           } catch (e) {
             console.warn(
               `Unable to determine extension state in tab ${tab.id}`,
-              e
+              e,
             );
             return false;
           }
-        })
+        }),
       );
 
       for (let i = 0; i < tabs.length; i++) {
@@ -208,8 +208,8 @@ export class Extension {
           state.errorTab(
             tabId,
             new Error(
-              'Hypothesis could not get the permissions needed to load in this tab'
-            )
+              'Hypothesis could not get the permissions needed to load in this tab',
+            ),
           );
         }
       }
@@ -250,7 +250,7 @@ export class Extension {
     const onTabUpdated = (
       tabId: number,
       { status }: chrome.tabs.TabChangeInfo,
-      tab: chrome.tabs.Tab
+      tab: chrome.tabs.Tab,
     ) => {
       // `url` property is included because manifest has the `tabs` permission
       const url = tab.url!;

@@ -158,7 +158,7 @@ describe('chrome-api', () => {
           func: testFunc,
           args: [1, 2],
         },
-        fakeChromeAPI
+        fakeChromeAPI,
       );
       assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
         frameId: undefined,
@@ -175,7 +175,7 @@ describe('chrome-api', () => {
           func: testFunc,
           args: [1, 2],
         },
-        fakeChromeAPI
+        fakeChromeAPI,
       );
       assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
         frameId: 2,
@@ -202,7 +202,7 @@ describe('chrome-api', () => {
           tabId: 1,
           file: 'foo.js',
         },
-        fakeChromeAPI
+        fakeChromeAPI,
       );
       assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
         frameId: undefined,
@@ -218,7 +218,7 @@ describe('chrome-api', () => {
           frameId: 2,
           file: 'foo.js',
         },
-        fakeChromeAPI
+        fakeChromeAPI,
       );
       assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
         frameId: 2,

@@ -53,17 +53,17 @@ describe('TabState', () => {
       assert.equal(
         state.isTabActive(1),
         false,
-        'expected isTabActive to return false'
+        'expected isTabActive to return false',
       );
       assert.equal(
         state.isTabInactive(1),
         true,
-        'expected isTabInactive to return true'
+        'expected isTabInactive to return true',
       );
       assert.equal(
         state.isTabErrored(1),
         false,
-        'expected isTabInactive to return false'
+        'expected isTabInactive to return false',
       );
     });
 
@@ -185,7 +185,9 @@ describe('TabState', () => {
       const testValue = 33;
       const WAIT_FETCH = 500; // Takes 2000ms to return a response
       fetchAnnotationCountStub.returns(
-        new Promise(resolve => setTimeout(() => resolve(testValue), WAIT_FETCH))
+        new Promise(resolve =>
+          setTimeout(() => resolve(testValue), WAIT_FETCH),
+        ),
       );
 
       const tabState = new TabState();
@@ -279,7 +281,9 @@ describe('TabState', () => {
 
       const WAIT_FETCH = 2000; // Takes 2000ms to return a response
       fetchAnnotationCountStub.returns(
-        new Promise(resolve => setTimeout(() => resolve(testValue), WAIT_FETCH))
+        new Promise(resolve =>
+          setTimeout(() => resolve(testValue), WAIT_FETCH),
+        ),
       );
 
       const tabState = new TabState();
