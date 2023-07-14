@@ -55,5 +55,5 @@
     "test": "rollup -c rollup-tests.config.mjs && karma start tests/karma.config.js --single-run",
     "typecheck": "tsc --build src/tsconfig.json"
   },
-  "dependencies": {}
+  "packageManager": "yarn@3.6.1"
 }
