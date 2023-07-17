@@ -2026,13 +2026,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:^0.0.240":
-  version: 0.0.240
-  resolution: "@types/chrome@npm:0.0.240"
+"@types/chrome@npm:^0.0.241":
+  version: 0.0.241
+  resolution: "@types/chrome@npm:0.0.241"
   dependencies:
     "@types/filesystem": "*"
     "@types/har-format": "*"
-  checksum: 5c7c8b6bc8961d64135793459256cbb454a2c88612cc2676629355278781c186d85d18c69da337368e56921cee6c8492b9c657427472f3ba26eb3d77a1da3ed7
+  checksum: af6cf474ed120b046001c0edf50bb752191369d5205d0b2d1ebcb7548db6b87183a098ee7ab77db1a441eacbf36fbfc3cd5b04a9642a99180a13018ced400984
   languageName: node
   linkType: hard
 
@@ -6539,7 +6539,7 @@ __metadata:
     "@rollup/plugin-json": ^6.0.0
     "@rollup/plugin-multi-entry": ^6.0.0
     "@rollup/plugin-node-resolve": ^15.1.0
-    "@types/chrome": ^0.0.240
+    "@types/chrome": ^0.0.241
     "@typescript-eslint/eslint-plugin": ^5.61.0
     "@typescript-eslint/parser": ^5.61.0
     babel-plugin-istanbul: ^6.1.1
