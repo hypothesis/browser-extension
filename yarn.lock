@@ -6631,7 +6631,7 @@ __metadata:
     mocha: ^10.2.0
     mustache: ^4.2.0
     prettier: 3.0.0
-    rollup: ^3.26.2
+    rollup: ^3.26.3
     sinon: ^15.2.0
     typescript: ^5.1.6
     web-ext: ^7.6.2
@@ -10661,9 +10661,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.26.2":
-  version: 3.26.2
-  resolution: "rollup@npm:3.26.2"
+"rollup@npm:^3.26.3":
+  version: 3.26.3
+  resolution: "rollup@npm:3.26.3"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -10671,7 +10671,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 7186beeba0e6fd33b37aa33ede7157e77af0a0be4b75d345a51dab4be5962a8e7a1c5ec8868e7c4cd361b456eb1b47bdb75e5db32ab37a546bed383d06b40384
+  checksum: e6a765b2b7af709170344cc804392936613e06b6bdab46a04d264368d154bdadaaaf77de39e6e656bf728a060d7b4867d81e2464d791c0f37dd5b21aa9c7a6df
   languageName: node
   linkType: hard
 
