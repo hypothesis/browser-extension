@@ -9,14 +9,13 @@ if [ "$CURRENT_BRANCH" != "main" ]; then
   exit 1
 fi
 
-yarn add hypothesis@latest --dev
+# Update Hypothesis client and set the version of the extension to match the
+# client release.
+yarn add hypothesis --dev
 
 NEW_CLIENT_VERSION=$(node -p 'require("./package.json").devDependencies.hypothesis.match(/[0-9.]+/)[0]')
 TAG_NAME="v$NEW_CLIENT_VERSION"
 
-# Update Hypothesis client and set the version of the extension to match the
-# client release.
-yarn add hypothesis@latest --dev
 yarn version --no-git-tag-version --new-version "$NEW_CLIENT_VERSION"
 git commit -a -m "Update Hypothesis client to $NEW_CLIENT_VERSION"
 git tag "$TAG_NAME"
