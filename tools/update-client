@@ -16,7 +16,7 @@ yarn add hypothesis --dev
 NEW_CLIENT_VERSION=$(node -p 'require("./package.json").devDependencies.hypothesis.match(/[0-9.]+/)[0]')
 TAG_NAME="v$NEW_CLIENT_VERSION"
 
-yarn version --no-git-tag-version --new-version "$NEW_CLIENT_VERSION"
+yarn version "$NEW_CLIENT_VERSION"
 git commit -a -m "Update Hypothesis client to $NEW_CLIENT_VERSION"
 git tag "$TAG_NAME"
 
