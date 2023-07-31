@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <title>Hypothesis Extension Settings</title>
   <style>
+    label {
+      font-weight: bold;
+    }
+
     .hint {
       font-size: 90%;
     }
@@ -10,35 +15,40 @@
 </head>
 
 <body>
-  <main>
-    <input type="checkbox" id="badge">
-    <label for="badge">Enable extension badge</label>
-    <p class="hint">
-      By default, the extension button displays the number of annotations found
-      on the pages you visit. Disable this if you find the badge distracting or
-      if you do not wish the extension to make requests to the Hypothesis
-      service for this data.
-    </p>
-    <hr />
+  <main class="flex-col">
+    <div class="option">
+      <label for="badge">Enable extension badge</label>
+      <input type="checkbox" id="badge">
+      <p class="hint">
+        By default, the extension button displays the number of annotations found
+        on the pages you visit. Disable this if you find the badge distracting or
+        if you do not wish the extension to make requests to the Hypothesis
+        service for this data.
+      </p>
+    </div>
 
-    <input type="checkbox" id="activatedByDefault">
-    <label for="activatedByDefault">Activate extension by default</label>
-    <p class="hint">
-      Whether the extension is activated on all tabs, and all websites.
-    </p>
-    <hr />
+    <div class="option">
+      <label for="activatedByDefault">Activate extension by default</label>
+      <input type="checkbox" id="activatedByDefault">
+      <p class="hint">
+        Whether the extension is activated on all tabs, and all websites.
+      </p>
+    </div>
 
-    <label for="excludedUrls">Excluded URLs (regex)</label>
-    <textarea rows="6" name="excludedUrls" id="excludedUrls" style="width: 95%" placeholder="https://github\.com/.*"></textarea>
-    <p class="hint">
-      Websites that do not obey the option `Activate extension by default`.
-      The list can act as a blacklist or a whitelist, depending on the default behavior.
-      The website is only excluded when the regex fully matched the URL.
-    </p>
-    <hr />
+    <div class="option">
+      <label for="excludedUrls">Excluded URLs (regex)</label>
+      <textarea rows="6" name="excludedUrls" id="excludedUrls" style="width: 95%; margin: 1%; margin-top: 4%;"
+        placeholder="https://github\.com/.*"></textarea>
+      <p class="hint">
+        Websites that do not obey the option `Activate extension by default`.
+        The list can act as a blacklist or a whitelist, depending on the default behavior.
+        The website is only excluded when the regex fully matched the URL.
+      </p>
+    </div>
 
-    <button id="save">Save</button>
+    <button type="button" id="save">Save</button>
     <script src="options.js"></script>
   </main>
 </body>
+
 </html>
