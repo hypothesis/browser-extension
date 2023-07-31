@@ -46,7 +46,7 @@ export type State = {
  * The default H state for a new browser tab.
  */
 const DEFAULT_STATE: State = {
-  state: 'active',
+  state: 'inactive',
   annotationCount: 0,
   extensionSidebarInstalled: false,
   ready: false,

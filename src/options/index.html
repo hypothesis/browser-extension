@@ -14,12 +14,30 @@
     <input type="checkbox" id="badge">
     <label for="badge">Enable extension badge</label>
     <p class="hint">
-        By default, the extension button displays the number of annotations found
-        on the pages you visit. Disable this if you find the badge distracting or
-        if you do not wish the extension to make requests to the Hypothesis
-        service for this data.
+      By default, the extension button displays the number of annotations found
+      on the pages you visit. Disable this if you find the badge distracting or
+      if you do not wish the extension to make requests to the Hypothesis
+      service for this data.
     </p>
+    <hr />
 
+    <input type="checkbox" id="activatedByDefault">
+    <label for="activatedByDefault">Activate extension by default</label>
+    <p class="hint">
+      Whether the extension is activated on all tabs, and all websites.
+    </p>
+    <hr />
+
+    <label for="excludedUrls">Excluded URLs (regex)</label>
+    <textarea rows="6" name="excludedUrls" id="excludedUrls" style="width: 95%" placeholder="https://github\.com/.*"></textarea>
+    <p class="hint">
+      Websites that do not obey the option `Activate extension by default`.
+      The list can act as a blacklist or a whitelist, depending on the default behavior.
+      The website is only excluded when the regex fully matched the URL.
+    </p>
+    <hr />
+
+    <button id="save">Save</button>
     <script src="options.js"></script>
   </main>
 </body>

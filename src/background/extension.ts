@@ -328,7 +328,17 @@ export class Extension {
       if (!state.getState(tabId).ready) {
         return;
       }
-
+      
+      // Activate the extension on configured URLs.
+      const { activatedByDefault , excludedUrls } = await chromeAPI.storage.sync.get({
+        activatedByDefault: false,
+        excludedUrls: '',
+      });
+      const isExcluded = excludedUrls.split('\n').some((url: string) => tab.url?.match(`^${url}$`))
+      state.setState(tabId, {
+        state: activatedByDefault ^ isExcluded ? "active" : "inactive"
+      })
+      
       const isInstalled = state.getState(tabId).extensionSidebarInstalled;
       if (state.isTabActive(tabId) && !isInstalled) {
         // Optimistically set the state flag indicating that the sidebar has
