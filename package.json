@@ -44,7 +44,7 @@
     "karma-source-map-support": "^1.4.0",
     "mocha": "^10.2.0",
     "mustache": "^4.2.0",
-    "prettier": "3.0.1",
+    "prettier": "3.0.2",
     "rollup": "^3.28.0",
     "sinon": "^15.2.0",
     "typescript": "^5.1.6",
