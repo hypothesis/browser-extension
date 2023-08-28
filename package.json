@@ -47,7 +47,7 @@
     "prettier": "3.0.2",
     "rollup": "^3.28.1",
     "sinon": "^15.2.0",
-    "typescript": "^5.1.6",
+    "typescript": "^5.2.2",
     "web-ext": "^7.6.2"
   },
   "browserslist": "chrome 85, firefox 75",
