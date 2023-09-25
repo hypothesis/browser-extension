@@ -19,7 +19,7 @@
     "@rollup/plugin-node-resolve": "^15.2.1",
     "@types/chrome": "^0.0.246",
     "@typescript-eslint/eslint-plugin": "^6.7.2",
-    "@typescript-eslint/parser": "^6.7.0",
+    "@typescript-eslint/parser": "^6.7.2",
     "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-mockable-imports": "^2.0.1",
     "chai": "^4.3.8",
