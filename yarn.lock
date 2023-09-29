@@ -7026,7 +7026,7 @@ __metadata:
     rollup: ^3.29.3
     sinon: ^16.0.0
     typescript: ^5.2.2
-    web-ext: ^7.7.0
+    web-ext: ^7.8.0
   languageName: unknown
   linkType: soft
 
@@ -12904,9 +12904,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-ext@npm:^7.7.0":
-  version: 7.7.0
-  resolution: "web-ext@npm:7.7.0"
+"web-ext@npm:^7.8.0":
+  version: 7.8.0
+  resolution: "web-ext@npm:7.8.0"
   dependencies:
     "@babel/runtime": 7.21.0
     "@devicefarmer/adbkit": 3.2.3
@@ -12942,7 +12942,7 @@ __metadata:
     zip-dir: 2.0.0
   bin:
     web-ext: bin/web-ext.js
-  checksum: 523af2769bd69ec4771fb51637bbca29093ff6be7564570179c36ea51c9b7a7456a7c1be87ef8ce1edd6f01f1595cfec5ab301870bd3bf5cc6bab0126e95e7ef
+  checksum: 721cb15859e84f7e67dc1eaed4e77b8d87f11c8d5ff41d8382684eff2599897f0b7a07610e64fd546c853fb7d43ed21a25e45fc8ff04395c080cce82e1d7578e
   languageName: node
   linkType: hard
 
