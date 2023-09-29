@@ -6,3 +6,21 @@ updates:
     interval: weekly
     time: "10:00"
   open-pull-requests-limit: 10
+  groups:
+    babel:
+      patterns:
+        - '@babel/*'
+    eslint:
+      patterns:
+        - 'eslint*'
+        - '@typescript-eslint/*'
+    rollup:
+      patterns:
+        - 'rollup'
+        - '@rollup/*'
+    sentry:
+      patterns:
+        - '@sentry/*'
+    typescript-types:
+      patterns:
+        - '@types/*'
