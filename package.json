@@ -13,7 +13,7 @@
     "@babel/preset-typescript": "^7.23.2",
     "@rollup/plugin-alias": "^5.0.1",
     "@rollup/plugin-babel": "^6.0.4",
-    "@rollup/plugin-commonjs": "^25.0.5",
+    "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-multi-entry": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
@@ -45,7 +45,7 @@
     "mocha": "^10.2.0",
     "mustache": "^4.2.0",
     "prettier": "3.0.3",
-    "rollup": "^4.0.2",
+    "rollup": "^4.1.4",
     "sinon": "^16.1.0",
     "typescript": "^5.2.2",
     "web-ext": "^7.8.0"
