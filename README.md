@@ -39,20 +39,16 @@ The extension code has a test suite, which you can run using:
 
 Note that the browser extensions are for the most part just a wrapper around the
 [Hypothesis client][client]. Depending on what you're interested in working on,
-you may need to check out the client repository too. If you do that, you can get
-the browser extension repository to use your checked-out `client` repository by
-running
+you may need to check out the client repository too. Once you have checked out and
+built the Hypothesis client, you can use it by running the following command in
+the `browser-extension` repository:
 
-    yarn link
+    yarn link ../client
 
-in the `client` repository, and then
-
-    yarn link hypothesis
-
-in the `browser-extension` repository. After that, a call to `make build` will use the
-built client from the client repository. Please consult the client's
-documentation for instructions on building the client in a development
-environment.
+Where "../client" is the path to your Hypothesis client checkout. After that
+a call to `make build` will use the built client from the client repository.
+Please consult the client's documentation for instructions on building the
+client in a development environment.
 
 **Tip**: To **unlink** your dev browser extension from your dev client run
 `yarn unlink hypothesis` in your browser extension directory
