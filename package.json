@@ -17,7 +17,7 @@
     "@rollup/plugin-json": "^6.0.1",
     "@rollup/plugin-multi-entry": "^6.0.1",
     "@rollup/plugin-node-resolve": "^15.2.3",
-    "@types/chrome": "^0.0.249",
+    "@types/chrome": "^0.0.251",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
     "@typescript-eslint/parser": "^6.10.0",
     "babel-plugin-istanbul": "^6.1.1",
