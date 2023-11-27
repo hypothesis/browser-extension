@@ -11,7 +11,7 @@
     "@babel/core": "^7.23.3",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-typescript": "^7.23.3",
-    "@rollup/plugin-alias": "^5.0.1",
+    "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-json": "^6.0.1",
@@ -45,7 +45,7 @@
     "mocha": "^10.2.0",
     "mustache": "^4.2.0",
     "prettier": "3.1.0",
-    "rollup": "^4.5.0",
+    "rollup": "^4.6.0",
     "sinon": "^17.0.1",
     "typescript": "^5.2.2",
     "web-ext": "^7.8.0"
