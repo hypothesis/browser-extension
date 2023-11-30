@@ -1,14 +1,4 @@
-import {
-  getChromeAPI,
-  executeFunction,
-  executeScript,
-  getExtensionId,
-} from '../../src/background/chrome-api';
-
-// Helper defined at top level to simplify its stringified representation.
-function testFunc(a, b) {
-  return a + b;
-}
+import { getChromeAPI, getExtensionId } from '../../src/background/chrome-api';
 
 describe('chrome-api', () => {
   describe('getChromeAPI', () => {
@@ -49,7 +39,6 @@ describe('chrome-api', () => {
         tabs: {
           create: sinon.stub(),
           get: sinon.stub(),
-          executeScript: sinon.stub(),
           onCreated: fakeListener(),
           onReplaced: fakeListener(),
           onRemoved: fakeListener(),
@@ -137,94 +126,6 @@ describe('chrome-api', () => {
 
         assert.equal(actualFrames, frames);
       });
-    });
-  });
-
-  describe('executeFunction', () => {
-    let fakeChromeAPI;
-
-    beforeEach(() => {
-      fakeChromeAPI = {
-        tabs: {
-          executeScript: sinon.stub().resolves(['result']),
-        },
-      };
-    });
-
-    it('calls `chrome.tabs.executeScript` with stringified source', async () => {
-      const result = await executeFunction(
-        {
-          tabId: 1,
-          func: testFunc,
-          args: [1, 2],
-        },
-        fakeChromeAPI,
-      );
-      assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
-        frameId: undefined,
-        code: '(function testFunc(a, b) {\n  return a + b;\n})(1,2)',
-      });
-      assert.equal(result, 'result');
-    });
-
-    it('sets frame ID if provided', async () => {
-      const result = await executeFunction(
-        {
-          tabId: 1,
-          frameId: 2,
-          func: testFunc,
-          args: [1, 2],
-        },
-        fakeChromeAPI,
-      );
-      assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
-        frameId: 2,
-        code: '(function testFunc(a, b) {\n  return a + b;\n})(1,2)',
-      });
-      assert.equal(result, 'result');
-    });
-  });
-
-  describe('executeScript', () => {
-    let fakeChromeAPI;
-
-    beforeEach(() => {
-      fakeChromeAPI = {
-        tabs: {
-          executeScript: sinon.stub().resolves(['result']),
-        },
-      };
-    });
-
-    it('calls `chrome.tabs.executeScript` with files', async () => {
-      const result = await executeScript(
-        {
-          tabId: 1,
-          file: 'foo.js',
-        },
-        fakeChromeAPI,
-      );
-      assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
-        frameId: undefined,
-        file: 'foo.js',
-      });
-      assert.equal(result, 'result');
-    });
-
-    it('sets frame ID if provided', async () => {
-      const result = await executeScript(
-        {
-          tabId: 1,
-          frameId: 2,
-          file: 'foo.js',
-        },
-        fakeChromeAPI,
-      );
-      assert.calledWith(fakeChromeAPI.tabs.executeScript, 1, {
-        frameId: 2,
-        file: 'foo.js',
-      });
-      assert.deepEqual(result, 'result');
     });
   });
 
