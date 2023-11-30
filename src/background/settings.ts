@@ -8,7 +8,6 @@ export type Settings = {
   apiUrl: string;
   buildType: string;
   serviceUrl: string;
-  manifestV3?: boolean;
 };
 
 // nb. This will error if the build has not been run yet.
