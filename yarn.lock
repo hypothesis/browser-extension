@@ -1880,13 +1880,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.55.0":
-  version: 8.55.0
-  resolution: "@eslint/js@npm:8.55.0"
-  checksum: fa33ef619f0646ed15649b0c2e313e4d9ccee8425884bdbfc78020d6b6b64c0c42fa9d83061d0e6158e1d4274f03f0f9008786540e2efab8fcdc48082259908c
-  languageName: node
-  linkType: hard
-
 "@eslint/js@npm:8.56.0":
   version: 8.56.0
   resolution: "@eslint/js@npm:8.56.0"
@@ -2043,10 +2036,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdn/browser-compat-data@npm:5.4.3":
-  version: 5.4.3
-  resolution: "@mdn/browser-compat-data@npm:5.4.3"
-  checksum: ea449ca5ecde63eec223ed2a945b1fb966823e1a2a37ed3894d64ccd555695b69b6a135291438f7d297122adc19d99f60d86ee34d2f845cc49d7b3c064d162b5
+"@mdn/browser-compat-data@npm:5.5.4":
+  version: 5.5.4
+  resolution: "@mdn/browser-compat-data@npm:5.5.4"
+  checksum: a2a58c0961205772628d1700f7b7aafdc523ba566a2ffb4b4832e9da13bf91eb9049fc5218fadb2e64f0ef72433eb75ac23e2fffb42e079b615e3a5564ec8d00
   languageName: node
   linkType: hard
 
@@ -2747,34 +2740,34 @@ __metadata:
   languageName: node
   linkType: hard
 
-"addons-linter@npm:6.19.0":
-  version: 6.19.0
-  resolution: "addons-linter@npm:6.19.0"
+"addons-linter@npm:6.20.0":
+  version: 6.20.0
+  resolution: "addons-linter@npm:6.20.0"
   dependencies:
     "@fluent/syntax": 0.19.0
-    "@mdn/browser-compat-data": 5.4.3
+    "@mdn/browser-compat-data": 5.5.4
     addons-moz-compare: 1.3.0
-    addons-scanner-utils: 9.8.0
+    addons-scanner-utils: 9.9.0
     ajv: 8.12.0
     chalk: 4.1.2
     cheerio: 1.0.0-rc.12
     columnify: 1.6.0
     common-tags: 1.8.2
     deepmerge: 4.3.1
-    eslint: 8.55.0
+    eslint: 8.56.0
     eslint-plugin-no-unsanitized: 4.0.2
     eslint-visitor-keys: 3.4.3
     espree: 9.6.1
     esprima: 4.0.1
     fast-json-patch: 3.1.1
     glob: 10.3.10
-    image-size: 1.0.2
+    image-size: 1.1.1
     is-mergeable-object: 1.1.1
     jed: 1.1.1
     json-merge-patch: 1.0.2
     os-locale: 5.0.0
-    pino: 8.16.2
-    postcss: 8.4.32
+    pino: 8.17.2
+    postcss: 8.4.33
     relaxed-json: 1.0.3
     semver: 7.5.4
     sha.js: 2.4.11
@@ -2785,7 +2778,7 @@ __metadata:
     yauzl: 2.10.0
   bin:
     addons-linter: bin/addons-linter
-  checksum: 04a1ad6083186ae4f8bf0577e8923d73826b1d9a1db480bd1d93f5418e94c9618460e98e9c7c1970d4d4cc7d542cd45514563ebc04b5966a3f5d5f1737103bfb
+  checksum: 946ab3fcb66fb7dcc53b2224a7ae1f4cebf7732918dd887a26b9e35f48a636d021921bf06daddb2035a8cd9a14df3f1dd8656405e7bd3d694abea3e861957cc8
   languageName: node
   linkType: hard
 
@@ -2796,9 +2789,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"addons-scanner-utils@npm:9.8.0":
-  version: 9.8.0
-  resolution: "addons-scanner-utils@npm:9.8.0"
+"addons-scanner-utils@npm:9.9.0":
+  version: 9.9.0
+  resolution: "addons-scanner-utils@npm:9.9.0"
   dependencies:
     "@types/yauzl": 2.10.3
     common-tags: 1.8.2
@@ -2820,7 +2813,7 @@ __metadata:
       optional: true
     safe-compare:
       optional: true
-  checksum: 61cef04db6952964eda363601c7aff6a8a56b264804c2db375665148016a3ff7bfea25b0a9fdbafc8d08555ac5e57d3f6908b610a8c784694091a4bb69e2fb2d
+  checksum: 53101b1abcc8cc1fd8df0520966a9c473115668b98b7047f499306c108b410f1d2c198e2fcd4d97b12169243eef1e6ed645dd52131cc6d506bbf87bd5201039c
   languageName: node
   linkType: hard
 
@@ -5416,55 +5409,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.55.0":
-  version: 8.55.0
-  resolution: "eslint@npm:8.55.0"
-  dependencies:
-    "@eslint-community/eslint-utils": ^4.2.0
-    "@eslint-community/regexpp": ^4.6.1
-    "@eslint/eslintrc": ^2.1.4
-    "@eslint/js": 8.55.0
-    "@humanwhocodes/config-array": ^0.11.13
-    "@humanwhocodes/module-importer": ^1.0.1
-    "@nodelib/fs.walk": ^1.2.8
-    "@ungap/structured-clone": ^1.2.0
-    ajv: ^6.12.4
-    chalk: ^4.0.0
-    cross-spawn: ^7.0.2
-    debug: ^4.3.2
-    doctrine: ^3.0.0
-    escape-string-regexp: ^4.0.0
-    eslint-scope: ^7.2.2
-    eslint-visitor-keys: ^3.4.3
-    espree: ^9.6.1
-    esquery: ^1.4.2
-    esutils: ^2.0.2
-    fast-deep-equal: ^3.1.3
-    file-entry-cache: ^6.0.1
-    find-up: ^5.0.0
-    glob-parent: ^6.0.2
-    globals: ^13.19.0
-    graphemer: ^1.4.0
-    ignore: ^5.2.0
-    imurmurhash: ^0.1.4
-    is-glob: ^4.0.0
-    is-path-inside: ^3.0.3
-    js-yaml: ^4.1.0
-    json-stable-stringify-without-jsonify: ^1.0.1
-    levn: ^0.4.1
-    lodash.merge: ^4.6.2
-    minimatch: ^3.1.2
-    natural-compare: ^1.4.0
-    optionator: ^0.9.3
-    strip-ansi: ^6.0.1
-    text-table: ^0.2.0
-  bin:
-    eslint: bin/eslint.js
-  checksum: 83f82a604559dc1faae79d28fdf3dfc9e592ca221052e2ea516e1b379b37e77e4597705a16880e2f5ece4f79087c1dd13fd7f6e9746f794a401175519db18b41
-  languageName: node
-  linkType: hard
-
-"eslint@npm:^8.56.0":
+"eslint@npm:8.56.0, eslint@npm:^8.56.0":
   version: 8.56.0
   resolution: "eslint@npm:8.56.0"
   dependencies:
@@ -6212,9 +6157,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fx-runner@npm:1.3.0":
-  version: 1.3.0
-  resolution: "fx-runner@npm:1.3.0"
+"fx-runner@npm:1.4.0":
+  version: 1.4.0
+  resolution: "fx-runner@npm:1.4.0"
   dependencies:
     commander: 2.9.0
     shell-quote: 1.7.3
@@ -6224,7 +6169,7 @@ __metadata:
     winreg: 0.0.12
   bin:
     fx-runner: bin/fx-runner
-  checksum: cb74f06c8b938a01d996b8c5e9c47b30ec78d3f020f55c8651cb2178aa475139db216847c8162494f32d4c5d407f23f5db709677d031ace5a73b22fffd3ddfb5
+  checksum: 505cc0f5dd489888c1a403df64ba0f7ae5d65d9b7dd604533dc2c97d9db1a53be7e458dbee15bca2254cf23d36f5b598479ac934481edcf05cbf1dc110393504
   languageName: node
   linkType: hard
 
@@ -7034,7 +6979,7 @@ __metadata:
     rollup: ^4.9.4
     sinon: ^17.0.1
     typescript: ^5.3.3
-    web-ext: ^7.9.0
+    web-ext: ^7.10.0
   languageName: unknown
   linkType: soft
 
@@ -7084,14 +7029,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"image-size@npm:1.0.2":
-  version: 1.0.2
-  resolution: "image-size@npm:1.0.2"
+"image-size@npm:1.1.1":
+  version: 1.1.1
+  resolution: "image-size@npm:1.1.1"
   dependencies:
     queue: 6.0.2
   bin:
     image-size: bin/image-size.js
-  checksum: 01745fdb47f87cecf538e69c63f9adc5bfab30a345345c2de91105f3afbd1bfcfba1256af02bf3323077b33b0004469a837e077bf0cbb9c907e9c1e9e7547585
+  checksum: 23b3a515dded89e7f967d52b885b430d6a5a903da954fce703130bfb6069d738d80e6588efd29acfaf5b6933424a56535aa7bf06867e4ebd0250c2ee51f19a4a
   languageName: node
   linkType: hard
 
@@ -10114,16 +10059,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:8.16.2":
-  version: 8.16.2
-  resolution: "pino@npm:8.16.2"
+"pino@npm:8.17.2":
+  version: 8.17.2
+  resolution: "pino@npm:8.17.2"
   dependencies:
     atomic-sleep: ^1.0.0
     fast-redact: ^3.1.1
     on-exit-leak-free: ^2.1.0
     pino-abstract-transport: v1.1.0
     pino-std-serializers: ^6.0.0
-    process-warning: ^2.0.0
+    process-warning: ^3.0.0
     quick-format-unescaped: ^4.0.3
     real-require: ^0.2.0
     safe-stable-stringify: ^2.3.1
@@ -10131,7 +10076,7 @@ __metadata:
     thread-stream: ^2.0.0
   bin:
     pino: bin.js
-  checksum: 78d194112f09f82471ec7e0022bc114ddb833375d60236be40ac55bf8a8ae26b88c8780d54912687c7cd6d0321ba5b1a78ffa89c5e9d5855ef849c3b9273c7ab
+  checksum: fc769d3d7b1333de94d51815fbe2abc4a1cc07cb0252a399313e54e26c13da2c0a69b227c296bd95ed52660d7eaa993662a9bf270b7370d0f7553fdd38716b63
   languageName: node
   linkType: hard
 
@@ -10142,14 +10087,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:8.4.32":
-  version: 8.4.32
-  resolution: "postcss@npm:8.4.32"
+"postcss@npm:8.4.33":
+  version: 8.4.33
+  resolution: "postcss@npm:8.4.33"
   dependencies:
     nanoid: ^3.3.7
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
-  checksum: 220d9d0bf5d65be7ed31006c523bfb11619461d296245c1231831f90150aeb4a31eab9983ac9c5c89759a3ca8b60b3e0d098574964e1691673c3ce5c494305ae
+  checksum: 6f98b2af4b76632a3de20c4f47bf0e984a1ce1a531cf11adcb0b1d63a6cbda0aae4165e578b66c32ca4879038e3eaad386a6be725a8fb4429c78e3c1ab858fe9
   languageName: node
   linkType: hard
 
@@ -10183,10 +10128,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"process-warning@npm:^2.0.0":
-  version: 2.0.0
-  resolution: "process-warning@npm:2.0.0"
-  checksum: a2bb299835bced58e63cbe06a8fd6e048a648d3649e81b62c442b63112a3f0a86912e7b1a9c557daca30652232d3b0a7f1972fb87c36334e2a5a6f3d5c4a76c9
+"process-warning@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "process-warning@npm:3.0.0"
+  checksum: 1fc2eb4524041de3c18423334cc8b4e36bec5ad5472640ca1a936122c6e01da0864c1a4025858ef89aea93eabe7e77db93ccea225b10858617821cb6a8719efe
   languageName: node
   linkType: hard
 
@@ -12763,13 +12708,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-ext@npm:^7.9.0":
-  version: 7.9.0
-  resolution: "web-ext@npm:7.9.0"
+"web-ext@npm:^7.10.0":
+  version: 7.10.0
+  resolution: "web-ext@npm:7.10.0"
   dependencies:
     "@babel/runtime": 7.21.0
     "@devicefarmer/adbkit": 3.2.3
-    addons-linter: 6.19.0
+    addons-linter: 6.20.0
     bunyan: 1.8.15
     camelcase: 7.0.1
     chrome-launcher: 0.15.1
@@ -12778,7 +12723,7 @@ __metadata:
     es6-error: 4.1.1
     firefox-profile: 4.3.2
     fs-extra: 11.1.0
-    fx-runner: 1.3.0
+    fx-runner: 1.4.0
     import-fresh: 3.3.0
     jose: 4.13.1
     mkdirp: 1.0.4
@@ -12801,7 +12746,7 @@ __metadata:
     zip-dir: 2.0.0
   bin:
     web-ext: bin/web-ext.js
-  checksum: 35acba4f214f79a51e4aad7e25f662fbae0c9c05067cc3c6bfb1545b56a7dc78c1f427530c9495d323c4c5786a5731212297729c94cc92997ee2d3fea4d102b5
+  checksum: 12733825212d8ffb4b1665efbf86dba3606428ded279490ff372f63a1aa101afffd126ef3e5dc142ac087d5670b29365e99aa6310a7ac38c4383d1aa974862d3
   languageName: node
   linkType: hard
 
