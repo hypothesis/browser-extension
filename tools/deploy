@@ -6,10 +6,10 @@ CHROME_QA_EXT_ID=iahhmhdkmkifclacffbofcnmgkpalpoj
 CHROME_PROD_EXT_ID=bjfhmglciegochdpefhhlphglcehbmek
 
 upload_and_publish_chrome_qa_ext() {
-  # Upload and publish qa extension
-  CHROME_QA_EXT_ARCHIVE=dist/*-chrome-qa.zip
+  # Upload and publish staging extension
+  CHROME_QA_EXT_ARCHIVE=dist/*-chrome-staging.zip
   if [ ! -f $CHROME_QA_EXT_ARCHIVE ]; then
-    echo "Chrome qa extension has not been built."
+    echo "Chrome staging extension has not been built."
     exit 1
   fi
 
@@ -69,8 +69,8 @@ run_webext_sign() {
 sign_firefox_exts() {
   # Unpack the Firefox extensions ready for upload to addons.mozilla.org.
   FIREFOX_QA_EXT_ID="{b441de5f-18e6-40ad-a8c2-f1bd2d42cb01}"
-  rm -rf dist/firefox-qa
-  unzip -q dist/*-firefox-qa.xpi -d dist/firefox-qa
+  rm -rf dist/firefox-staging
+  unzip -q dist/*-firefox-staging.xpi -d dist/firefox-staging
 
   FIREFOX_PROD_EXT_ID="{32492fee-2d9f-49fe-b268-fe213f7019f0}"
   rm -rf dist/firefox-prod
@@ -78,19 +78,19 @@ sign_firefox_exts() {
 
   # Upload the Firefox extensions and wait for signing to complete.
   # This may take several minutes for each extension, so we do this for the
-  # QA and prod extensions in parallel.
-  run_webext_sign "$FIREFOX_QA_EXT_ID" dist/firefox-qa &
+  # staging and prod extensions in parallel.
+  run_webext_sign "$FIREFOX_QA_EXT_ID" dist/firefox-staging &
   qa_sign_pid=$!
 
   run_webext_sign "$FIREFOX_PROD_EXT_ID" dist/firefox-prod &
   prod_sign_pid=$!
 
-  echo "Waiting for Firefox QA signing to complete..."
+  echo "Waiting for Firefox staging signing to complete..."
   status=0
   wait $qa_sign_pid || status=$?
-  cat dist/firefox-qa/log.txt
+  cat dist/firefox-staging/log.txt
   if [[ $status -ne 0 ]]; then
-    echo "Signing Firefox QA extension failed"
+    echo "Signing Firefox staging extension failed"
     exit 1
   fi
 
@@ -106,7 +106,7 @@ sign_firefox_exts() {
   echo "Successfully signed Firefox extensions"
 }
 
-echo "Uploading and publishing Chrome (QA) extension..."
+echo "Uploading and publishing Chrome (staging) extension..."
 upload_and_publish_chrome_qa_ext
 
 echo "Uploading Chrome (prod) extension..."

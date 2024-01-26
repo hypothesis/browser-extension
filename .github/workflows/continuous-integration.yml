@@ -43,9 +43,9 @@ jobs:
     - name: Build packages
       run: |
         make clean # Remove assets from test step
-        make build SETTINGS_FILE=settings/chrome-qa.json dist/ci-chrome-qa.zip
+        make build SETTINGS_FILE=settings/chrome-staging.json dist/ci-chrome-staging.zip
         make build SETTINGS_FILE=settings/chrome-prod.json dist/ci-chrome-prod.zip
-        make build SETTINGS_FILE=settings/firefox-qa.json dist/ci-firefox-qa.xpi
+        make build SETTINGS_FILE=settings/firefox-staging.json dist/ci-firefox-staging.xpi
         make build SETTINGS_FILE=settings/firefox-prod.json dist/ci-firefox-prod.xpi
     - name: Archive packages
       uses: actions/upload-artifact@v3

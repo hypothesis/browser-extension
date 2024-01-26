@@ -1,10 +1,10 @@
 {
-  "buildType": "qa",
+  "buildType": "staging",
 
-  "apiUrl": "https://qa.hypothes.is/api/",
+  "apiUrl": "https://staging.hypothes.is/api/",
   "authDomain": "hypothes.is",
-  "bouncerUrl": "https://qa.hyp.is/",
-  "serviceUrl": "https://qa.hypothes.is/",
+  "bouncerUrl": "https://staging.hyp.is/",
+  "serviceUrl": "https://staging.hypothes.is/",
 
   "oauthClientId": "92b42e3c-7793-11e7-8e17-cb2151436a1f",
 
