@@ -25,8 +25,8 @@ const badgeThemes: Record<string, { defaultText: string; color: string }> = {
     defaultText: 'DEV',
     color: '#5BCF59', // Emerald green
   },
-  qa: {
-    defaultText: 'QA',
+  staging: {
+    defaultText: 'STG',
     color: '#EDA061', // Porche orange-pink
   },
 };

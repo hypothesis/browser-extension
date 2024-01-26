@@ -436,7 +436,7 @@ describe('SidebarInjector', () => {
         try {
           await injector.injectIntoTab({
             id: 1,
-            url: 'https://qa-lms.ca.hypothes.is/lti_launches',
+            url: 'https://staging-lms.ca.hypothes.is/lti_launches',
           });
         } catch (err) {
           error = err;

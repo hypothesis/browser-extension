@@ -223,7 +223,7 @@ export class SidebarInjector {
 
     function isLMSAssignmentURL(url: string) {
       const { origin } = new URL(url);
-      // Matches origins like `lms.hypothes.is`, `qa-lms.hypothes.is`, `lms.ca.hypothes.is`.
+      // Matches origins like `lms.hypothes.is`, `staging-lms.hypothes.is`, `lms.ca.hypothes.is`.
       return /\blms\b/.test(origin) && origin.endsWith('.hypothes.is');
     }
 

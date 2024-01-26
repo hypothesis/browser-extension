@@ -1,13 +1,13 @@
 {
-  "buildType": "qa",
+  "buildType": "staging",
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqjbEOhG+ZCl2Bl17m2ltNC+3uw0Fqv3Dzuja5vLnH1MLBRQG7L77pXtKCZgVgFJ2K+Kn0L0OqnMDcKEi5pUpNTi39b8twp1imDsoLO+L5XgpKYBtUgfR+T8OO2INjEgz0LDth0l26WmHNS377KZjSTsfPWNnLozXHHkETgug1lt9VzgcvSboiyZuwk23xHmiqnVpZtuqVAv4HdqFofHiNQn2fF7awsQxEYYNfuSk0Jp33XJkkadyrJ/dQ7vVFi0F0O//Oyaw3s4TD58frABxznusmKkjHZorJUrm2OaYbn/7TSUcG5fReQC08fXiMsFGUKxK01HfAwdmVUAmASL+NwIDAQAB",
 
-  "apiUrl": "https://qa.hypothes.is/api/",
+  "apiUrl": "https://staging.hypothes.is/api/",
   "authDomain": "hypothes.is",
-  "bouncerUrl": "https://qa.hyp.is/",
-  "serviceUrl": "https://qa.hypothes.is/",
+  "bouncerUrl": "https://staging.hyp.is/",
+  "serviceUrl": "https://staging.hypothes.is/",
 
-  "oauthClientId": "da545114-7792-11e7-90b4-b35c52774c7d",
+  "oauthClientId": "ca0ef8b2-bc24-11ee-b317-433c505e7e42",
 
   "sentryPublicDSN": "https://934d4f62912b47d8bb03c28ae6670cf8@app.getsentry.com/69811",
 
