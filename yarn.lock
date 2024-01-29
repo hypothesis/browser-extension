@@ -2036,10 +2036,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdn/browser-compat-data@npm:5.5.4":
-  version: 5.5.4
-  resolution: "@mdn/browser-compat-data@npm:5.5.4"
-  checksum: a2a58c0961205772628d1700f7b7aafdc523ba566a2ffb4b4832e9da13bf91eb9049fc5218fadb2e64f0ef72433eb75ac23e2fffb42e079b615e3a5564ec8d00
+"@mdn/browser-compat-data@npm:5.5.7":
+  version: 5.5.7
+  resolution: "@mdn/browser-compat-data@npm:5.5.7"
+  checksum: ca244b40992b61e54e40bb1c733b737eb3fe0212ba80b988572de90cb10c5fa67574756303ed1c2664650ad00d1d1748164911a147e733018859a853e13e7013
   languageName: node
   linkType: hard
 
@@ -2740,12 +2740,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"addons-linter@npm:6.20.0":
-  version: 6.20.0
-  resolution: "addons-linter@npm:6.20.0"
+"addons-linter@npm:6.21.0":
+  version: 6.21.0
+  resolution: "addons-linter@npm:6.21.0"
   dependencies:
     "@fluent/syntax": 0.19.0
-    "@mdn/browser-compat-data": 5.5.4
+    "@mdn/browser-compat-data": 5.5.7
     addons-moz-compare: 1.3.0
     addons-scanner-utils: 9.9.0
     ajv: 8.12.0
@@ -2778,7 +2778,7 @@ __metadata:
     yauzl: 2.10.0
   bin:
     addons-linter: bin/addons-linter
-  checksum: 946ab3fcb66fb7dcc53b2224a7ae1f4cebf7732918dd887a26b9e35f48a636d021921bf06daddb2035a8cd9a14df3f1dd8656405e7bd3d694abea3e861957cc8
+  checksum: de2c1fff3a12569e8b1d5d3ad50ce2dea96066e49b4ceec1dd33c4ad8674880f2faf3ec6cc6c8dd484de698e26d1909e789f825d06c079f5df9496bbac8826ae
   languageName: node
   linkType: hard
 
@@ -6979,7 +6979,7 @@ __metadata:
     rollup: ^4.9.6
     sinon: ^17.0.1
     typescript: ^5.3.3
-    web-ext: ^7.10.0
+    web-ext: ^7.11.0
   languageName: unknown
   linkType: soft
 
@@ -12708,13 +12708,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-ext@npm:^7.10.0":
-  version: 7.10.0
-  resolution: "web-ext@npm:7.10.0"
+"web-ext@npm:^7.11.0":
+  version: 7.11.0
+  resolution: "web-ext@npm:7.11.0"
   dependencies:
     "@babel/runtime": 7.21.0
     "@devicefarmer/adbkit": 3.2.3
-    addons-linter: 6.20.0
+    addons-linter: 6.21.0
     bunyan: 1.8.15
     camelcase: 7.0.1
     chrome-launcher: 0.15.1
@@ -12746,7 +12746,7 @@ __metadata:
     zip-dir: 2.0.0
   bin:
     web-ext: bin/web-ext.js
-  checksum: 12733825212d8ffb4b1665efbf86dba3606428ded279490ff372f63a1aa101afffd126ef3e5dc142ac087d5670b29365e99aa6310a7ac38c4383d1aa974862d3
+  checksum: 6fc4963710d435823233a70314cf088a2c8f66b4ad2cbedc57723f8487126029b05c01275dc57472de8c2785d90c1e527fc5aed68d083ef4d1291bb528719eb7
   languageName: node
   linkType: hard
 
