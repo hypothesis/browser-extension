@@ -43,7 +43,7 @@
     "mocha": "^10.2.0",
     "mustache": "^4.2.0",
     "prettier": "3.2.5",
-    "rollup": "^4.9.6",
+    "rollup": "^4.10.0",
     "sinon": "^17.0.1",
     "typescript": "^5.3.3",
     "web-ext": "^7.11.0"
