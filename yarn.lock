@@ -4763,6 +4763,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"diff@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "diff@npm:5.2.0"
+  checksum: 12b63ca9c36c72bafa3effa77121f0581b4015df18bc16bac1f8e263597735649f1a173c26f7eba17fb4162b073fee61788abe49610e6c70a2641fe1895443fd
+  languageName: node
+  linkType: hard
+
 "dir-glob@npm:^3.0.1":
   version: 3.0.1
   resolution: "dir-glob@npm:3.0.1"
@@ -6992,7 +6999,7 @@ __metadata:
     babel-plugin-mockable-imports: ^2.0.1
     chai: ^5.1.0
     chrome-webstore-upload-cli: ^3.1.0
-    diff: ^5.1.0
+    diff: ^5.2.0
     eslint: ^8.56.0
     eslint-config-hypothesis: ^2.6.0
     eslint-plugin-mocha: ^10.2.0
