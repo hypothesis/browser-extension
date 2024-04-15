@@ -5,9 +5,8 @@
  * `app.html` file.
  */
 
-'use strict';
-
-const path = require('path');
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 function appSettings(settings) {
   let result = {};
@@ -37,7 +36,9 @@ if (process.argv.length !== 3) {
   process.exit(1);
 }
 
-const settings = require(path.join(process.cwd(), process.argv[2]));
+const settings = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), process.argv[2])),
+);
 
 console.log(
   JSON.stringify({

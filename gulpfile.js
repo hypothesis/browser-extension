@@ -2,11 +2,9 @@
 /* eslint-env node */
 // @ts-nocheck
 
-'use strict';
+import { spawn } from 'node:child_process';
 
-const { spawn } = require('child_process');
-
-const { parallel, watch } = require('gulp');
+import * as gulp from 'gulp';
 
 function build(cb) {
   const make = spawn('make', ['build'], { stdio: 'inherit' });
@@ -20,11 +18,11 @@ function build(cb) {
 }
 
 function watchClient() {
-  watch('node_modules/hypothesis', { events: 'all' }, build);
+  gulp.watch('node_modules/hypothesis', { events: 'all' }, build);
 }
 
 function watchSrc() {
-  watch('src', { events: 'all' }, build);
+  gulp.watch('src', { events: 'all' }, build);
 }
 
-exports.watch = parallel(build, watchClient, watchSrc);
+export const watch = gulp.parallel(build, watchClient, watchSrc);
