@@ -3981,9 +3981,9 @@ __metadata:
   linkType: hard
 
 "chrome-webstore-upload@npm:^3.0.0":
-  version: 3.0.2
-  resolution: "chrome-webstore-upload@npm:3.0.2"
-  checksum: 165fb736eacfeed6b6fab3fabc76eb30848aa7feb07b1be3f2ac79fcde91a26a05910815e9948acaadd57f6e097722ab0b3739bf9ef9c06afe065c85643b9ed0
+  version: 3.0.3
+  resolution: "chrome-webstore-upload@npm:3.0.3"
+  checksum: ac16516b4c00d8c34dc3a7939a66df673fd4ff7ec2d41400fe365f62728dff063c1cc7518d0ad5722237c22e8d3c5b38df1175e645a710d48818be668a98b3fc
   languageName: node
   linkType: hard
 
