@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * Return the checkbox that toggles whether badge requests are sent.
  */

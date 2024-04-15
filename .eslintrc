@@ -35,9 +35,6 @@
         "tests/karma.config.cjs",
 
         // Entry points which currently get loaded as non-module scripts.
-        "src/help/index.js",
-        "src/pdfjs-init.js",
-        "src/options/options.js",
         "src/unload-client.js"
       ],
       "parserOptions": {
