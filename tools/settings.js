@@ -5,10 +5,11 @@
  * file and the package environment.
  */
 
-'use strict';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
-const path = require('path');
-const gitDescribeSync = require('git-describe').gitDescribeSync;
+import gitDescribe from 'git-describe';
+const { gitDescribeSync } = gitDescribe;
 
 // Suppress (expected) EPIPE errors on STDOUT
 process.stdout.on('error', err => {
@@ -50,7 +51,9 @@ if (process.argv.length !== 3) {
   process.exit(1);
 }
 
-const settings = require(path.join(process.cwd(), process.argv[2]));
+const settings = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), process.argv[2])),
+);
 const settingsOut = {
   ...settings,
   ...getVersion(settings.buildType),

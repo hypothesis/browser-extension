@@ -32,8 +32,7 @@
   "overrides": [
     {
       "files": [
-        "gulpfile.js",
-        "tests/karma.config.js",
+        "tests/karma.config.cjs",
 
         // Entry points which currently get loaded as non-module scripts.
         "src/help/index.js",
@@ -46,7 +45,7 @@
       }
     },
     {
-      "files": ["gulpfile.js", "tests/karma.config.js"],
+      "files": ["tests/karma.config.cjs"],
       "rules": {
         "@typescript-eslint/no-var-requires": "off"
       }

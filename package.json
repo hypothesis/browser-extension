@@ -2,6 +2,7 @@
   "name": "hypothesis-browser-extension",
   "version": "1.1483.0",
   "private": true,
+  "type": "module",
   "description": "Annotate with anyone, anywhere.",
   "license": "BSD-2-Clause",
   "homepage": "https://hypothes.is",
@@ -50,7 +51,7 @@
   },
   "browserslist": "chrome 85, firefox 75",
   "scripts": {
-    "test": "rollup -c rollup-tests.config.mjs && karma start tests/karma.config.js --single-run",
+    "test": "rollup -c rollup-tests.config.mjs && karma start tests/karma.config.cjs --single-run",
     "typecheck": "tsc --build src/tsconfig.json"
   },
   "packageManager": "yarn@3.6.1"
