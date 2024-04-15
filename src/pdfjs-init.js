@@ -1,5 +1,3 @@
-'use strict';
-
 /* global PDFViewerApplication */
 
 // This script is run once PDF.js has loaded and it configures the viewer

@@ -1,5 +1,3 @@
-'use strict';
-
 // Detect the current OS and show approprite help.
 chrome.runtime.getPlatformInfo(info => {
   const opts = /** @type {NodeListOf<HTMLElement>} */ (
