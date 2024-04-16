@@ -51,7 +51,7 @@
   },
   "browserslist": "chrome 85, firefox 75",
   "scripts": {
-    "test": "rollup -c rollup-tests.config.mjs && karma start tests/karma.config.cjs --single-run",
+    "test": "rollup -c rollup-tests.config.js && karma start tests/karma.config.cjs --single-run",
     "typecheck": "tsc --build src/tsconfig.json"
   },
   "packageManager": "yarn@3.6.1"
