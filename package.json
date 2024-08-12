@@ -41,7 +41,7 @@
     "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
     "karma-source-map-support": "^1.4.0",
-    "mocha": "^10.7.0",
+    "mocha": "^10.7.3",
     "mustache": "^4.2.0",
     "prettier": "3.3.3",
     "rollup": "^4.20.0",
