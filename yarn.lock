@@ -6891,7 +6891,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     git-describe: ^4.1.1
     gulp: ^5.0.0
-    hypothesis: ^1.1514.0
+    hypothesis: ^1.1515.0
     is-equal-shallow: ^0.1.3
     karma: ^6.4.4
     karma-chrome-launcher: ^3.2.0
@@ -6909,10 +6909,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hypothesis@npm:^1.1514.0":
-  version: 1.1514.0
-  resolution: "hypothesis@npm:1.1514.0"
-  checksum: 8e14fb82d0a5bf98e8c5203f369c9d95f094e2fe12b358ac49126ea990809b662df54e791f8f17fd24111824c1c6f826651177768d8144007a01e216dee129fe
+"hypothesis@npm:^1.1515.0":
+  version: 1.1515.0
+  resolution: "hypothesis@npm:1.1515.0"
+  checksum: 387b4089be71d2b1358c2b8686e62924e0d0b9be27cc09ab3fdb687912545a723b21738d645e2f9845dcca2e8a63948b6a525ffa36bdc6a98b8403fc71bdc253
   languageName: node
   linkType: hard
 
