@@ -1,6 +1,8 @@
 import { detectContentType } from '../../src/background/detect-content-type';
 
 describe('detectContentType', () => {
+  const sandbox = sinon.createSandbox();
+
   let el;
   beforeEach(() => {
     el = document.createElement('div');
@@ -9,6 +11,8 @@ describe('detectContentType', () => {
 
   afterEach(() => {
     el.parentElement.removeChild(el);
+
+    sandbox.restore();
   });
 
   it('returns HTML by default', () => {
@@ -18,6 +22,27 @@ describe('detectContentType', () => {
 
   it('returns "PDF" if Google Chrome PDF viewer is present', () => {
     el.innerHTML = '<embed type="application/pdf"></embed>';
+    assert.deepEqual(detectContentType(), { type: 'PDF' });
+  });
+
+  it('returns "PDF" if Chrome\'s OOPIF PDF viewer is present', () => {
+    const fakeOpenOrClosedShadowRoot = sinon.stub();
+    sandbox.stub(window, 'chrome').value({
+      dom: {
+        openOrClosedShadowRoot: fakeOpenOrClosedShadowRoot,
+      },
+    });
+
+    const dummyElement = document.createElement('div');
+    const pdfViewer = document.createElement('iframe');
+    pdfViewer.setAttribute('type', 'application/pdf');
+    const fakeBodyShadowRoot = dummyElement.attachShadow({ mode: 'open' });
+    fakeBodyShadowRoot.append(pdfViewer);
+
+    fakeOpenOrClosedShadowRoot
+      .withArgs(document.body)
+      .returns(fakeBodyShadowRoot);
+
     assert.deepEqual(detectContentType(), { type: 'PDF' });
   });
 
