@@ -34,6 +34,30 @@ export function detectContentType(
     if (document_.querySelector('embed[type="application/pdf"]')) {
       return { type: 'PDF' };
     }
+
+    // Detect Chrome's PDF viewer when it is using out-of-process iframes
+    // ("OOPIF") instead of `<embed>`.
+    //
+    // In this case the DOM has a structure like:
+    //
+    // ```
+    // <body>
+    //   # closed shadow root
+    //    - <iframe type="application/pdf" ...></frame>
+    // </body>
+    // ```
+    //
+    // See https://github.com/hypothesis/support/issues/145#issuecomment-2330193036.
+    if (typeof chrome !== 'undefined') {
+      const bodyShadow = chrome.dom?.openOrClosedShadowRoot(document.body);
+      if (
+        bodyShadow &&
+        bodyShadow.querySelector('iframe[type="application/pdf"]')
+      ) {
+        return { type: 'PDF' };
+      }
+    }
+
     return null;
   }
 
