@@ -16,8 +16,9 @@ type Callback<Result> = (r: Result) => void;
  * This is exposed for testing. Consumers should use {@link chromeAPI}.
  */
 export function getChromeAPI(chrome = globalThis.chrome) {
-  // In the test environment, the `chrome` global may not exist.
-  if (typeof chrome === 'undefined') {
+  // In the test environment, the `chrome` global may not exist or may not
+  // be the expected object.
+  if (typeof chrome === 'undefined' || !chrome.extension) {
     // The `as never` causes this branch to be ignored when TS determines the
     // return type of this function.
     return null as never;
