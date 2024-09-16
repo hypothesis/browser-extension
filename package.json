@@ -45,7 +45,7 @@
     "mustache": "^4.2.0",
     "prettier": "3.3.3",
     "rollup": "^4.21.3",
-    "sinon": "^18.0.0",
+    "sinon": "^19.0.2",
     "typescript": "^5.5.4",
     "web-ext": "^7.12.0"
   },
