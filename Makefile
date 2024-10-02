@@ -3,7 +3,7 @@ SETTINGS_FILE := settings/chrome-dev.json
 ROLLUP := node_modules/.bin/rollup
 ESLINT := node_modules/.bin/eslint
 MUSTACHE := node_modules/.bin/mustache
-PRETTIER := node_modules/.bin/prettier
+PRETTIER := node node_modules/.bin/prettier
 
 .PHONY: default
 default: help
