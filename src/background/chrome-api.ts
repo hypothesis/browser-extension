@@ -73,7 +73,7 @@ export function getChromeAPI(chrome = globalThis.chrome) {
     },
 
     scripting: {
-      executeScript: chrome.scripting?.executeScript,
+      executeScript: chrome.scripting.executeScript,
     },
 
     storage: {

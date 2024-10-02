@@ -47,6 +47,10 @@ describe('chrome-api', () => {
           update: sinon.stub(),
         },
 
+        scripting: {
+          executeScript: sinon.stub(),
+        },
+
         storage: {
           sync: {
             get: sinon.stub(),
