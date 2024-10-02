@@ -68,13 +68,16 @@ describe('chrome-api', () => {
             continue;
           }
 
+          const expectedResult = {};
+          if (!syncAPIs.has(method)) {
+            method.resolves(expectedResult);
+          }
+
           const arg = {};
           let result = chromeAPI[namespace][methodName](arg);
           assert.calledWith(method, arg);
 
           if (!syncAPIs.has(method)) {
-            const expectedResult = {};
-            method.yield(expectedResult);
             assert.equal(await result, expectedResult);
           }
         }
@@ -84,8 +87,8 @@ describe('chrome-api', () => {
     it('wrapped methods reject if an error occurs', async () => {
       const chromeAPI = getChromeAPI(fakeChrome);
 
-      fakeChrome.runtime.lastError = new Error('Something went wrong');
-      fakeChrome.tabs.get.yields(null);
+      const expectedError = new Error('Something went wrong');
+      fakeChrome.tabs.get.rejects(expectedError);
 
       let error;
       try {
@@ -94,7 +97,7 @@ describe('chrome-api', () => {
         error = e;
       }
 
-      assert.equal(error, fakeChrome.runtime.lastError);
+      assert.equal(error, expectedError);
     });
 
     describe('APIs that require optional permissions', () => {
@@ -119,7 +122,7 @@ describe('chrome-api', () => {
         // Simulate the "webNavigation" permission being granted, which will
         // make the `chrome.webNavigation` property accessible.
         fakeChrome.webNavigation = {
-          getAllFrames: sinon.stub().yields(frames),
+          getAllFrames: sinon.stub().resolves(frames),
         };
 
         const actualFrames = await chromeAPI.webNavigation.getAllFrames();
