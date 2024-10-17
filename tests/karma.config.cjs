@@ -1,6 +1,5 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 'use strict';
-
-/* global __dirname */
 
 const path = require('path');
 
