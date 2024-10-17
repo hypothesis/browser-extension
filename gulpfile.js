@@ -1,5 +1,3 @@
-/* eslint-disable no-console */
-/* eslint-env node */
 // @ts-nocheck
 
 import { spawn } from 'node:child_process';

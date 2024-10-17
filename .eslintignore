@@ -1,9 +1,0 @@
-build/**
-dist/*
-**/vendor/**/*.js
-
-# TODO - Lint these files
-rollup*.config.js
-
-# Ignore PDF.js build
-src/chrome/content
