@@ -32,7 +32,7 @@ function delay(ms) {
 }
 
 describe('Extension', () => {
-  let sandbox = sinon.createSandbox();
+  const sandbox = sinon.createSandbox();
   let ext;
   let fakeChromeAPI;
   let fakeErrors;

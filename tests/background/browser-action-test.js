@@ -157,7 +157,7 @@ describe('BrowserAction', () => {
 
   describe('build type', () => {
     beforeEach(() => {
-      let fakeSettings = {
+      const fakeSettings = {
         buildType: 'staging',
       };
       $imports.$mock({

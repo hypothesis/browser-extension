@@ -64,8 +64,8 @@ describe('chrome-api', () => {
 
       const chromeAPI = getChromeAPI(fakeChrome);
 
-      for (let namespace of Object.keys(fakeChrome)) {
-        for (let methodName of Object.keys(fakeChrome[namespace])) {
+      for (const namespace of Object.keys(fakeChrome)) {
+        for (const methodName of Object.keys(fakeChrome[namespace])) {
           const method = fakeChrome[namespace][methodName];
           if (typeof method !== 'function') {
             // Skip listeners `on<Event>` and nested namespaces (eg. `storage.sync.get`).
@@ -78,7 +78,7 @@ describe('chrome-api', () => {
           }
 
           const arg = {};
-          let result = chromeAPI[namespace][methodName](arg);
+          const result = chromeAPI[namespace][methodName](arg);
           assert.calledWith(method, arg);
 
           if (!syncAPIs.has(method)) {
