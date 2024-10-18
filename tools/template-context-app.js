@@ -9,7 +9,7 @@ import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 function appSettings(settings) {
-  let result = {};
+  const result = {};
   result.apiUrl = settings.apiUrl;
   result.assetRoot = '/client/';
   result.authDomain = settings.authDomain;
