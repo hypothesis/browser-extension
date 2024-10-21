@@ -24,7 +24,7 @@
     "chai": "^5.1.1",
     "chrome-webstore-upload-cli": "^3.3.1",
     "diff": "^7.0.0",
-    "eslint": "^9.12.0",
+    "eslint": "^9.13.0",
     "eslint-config-hypothesis": "^3.1.0",
     "eslint-plugin-mocha": "^10.5.0",
     "git-describe": "^4.1.1",
