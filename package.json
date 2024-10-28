@@ -44,7 +44,7 @@
     "rollup": "^4.24.2",
     "sinon": "^19.0.2",
     "typescript": "^5.6.3",
-    "typescript-eslint": "^8.10.0",
+    "typescript-eslint": "^8.11.0",
     "web-ext": "^7.12.0"
   },
   "browserslist": "chrome 85, firefox 75",
