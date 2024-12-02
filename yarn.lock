@@ -2314,13 +2314,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:^0.0.284":
-  version: 0.0.284
-  resolution: "@types/chrome@npm:0.0.284"
+"@types/chrome@npm:^0.0.287":
+  version: 0.0.287
+  resolution: "@types/chrome@npm:0.0.287"
   dependencies:
     "@types/filesystem": "*"
     "@types/har-format": "*"
-  checksum: 370bd93f4640c958aff25bffceb57ce0a40b3f527e61f6cbe0a247d6b70bd4574eb439a9b81d722aa5a6041483412359b7ab9ed742930ca269e0735198931d5e
+  checksum: 13b993d35bc3e3cbeb64a99ddb6c88a74544e1562255603e27890482f06ec7172bc1a6e972a48b4d42beded2fbdf8ffe7e054456e4e661bef646c16d9ec042d9
   languageName: node
   linkType: hard
 
@@ -5987,7 +5987,7 @@ __metadata:
     "@rollup/plugin-json": ^6.1.0
     "@rollup/plugin-multi-entry": ^6.0.1
     "@rollup/plugin-node-resolve": ^15.3.0
-    "@types/chrome": ^0.0.284
+    "@types/chrome": ^0.0.287
     babel-plugin-istanbul: ^7.0.0
     babel-plugin-mockable-imports: ^2.0.1
     chai: ^5.1.2
