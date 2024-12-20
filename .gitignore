@@ -20,3 +20,6 @@ settings/*custom*.json
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# TypeScript cache
+*.tsbuildinfo
