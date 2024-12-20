@@ -3,6 +3,14 @@ import { Extension } from './extension';
 import type { ExternalMessage } from './messages';
 
 /**
+ * Link to survey to show users after extension is uninstalled.
+ *
+ * See https://github.com/hypothesis/product-backlog/issues/1599.
+ */
+export const uninstallURL =
+  'https://docs.google.com/forms/d/e/1FAIpQLSd250Bi4xvxxvL-SgajHRmk8K1LMLZLGRoYkp6WSwT8PDTlLA/viewform?usp=sf_link';
+
+/**
  * Initialize the extension's Service Worker / background page.
  *
  * This is exported for use in tests.
@@ -66,6 +74,9 @@ export async function init() {
       chromeAPI.runtime.reload(),
     );
   });
+
+  // Show survey to users after they uninstall extension.
+  chromeAPI.runtime.setUninstallURL(uninstallURL);
 
   await initialized;
 }
