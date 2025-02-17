@@ -5782,10 +5782,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^15.14.0":
-  version: 15.14.0
-  resolution: "globals@npm:15.14.0"
-  checksum: fa993433a01bf4a118904fbafbcff34db487fce83f73da75fb4a8653afc6dcd72905e6208c49bab307ff0980928273d0ecd1cfc67e1a4782dabfbd92c234ab68
+"globals@npm:^15.15.0":
+  version: 15.15.0
+  resolution: "globals@npm:15.15.0"
+  checksum: a2a92199a112db00562a2f85eeef2a7e3943e171f7f7d9b17dfa9231e35fd612588f3c199d1509ab1757273467e413b08c80424cf6e399e96acdaf93deb3ee88
   languageName: node
   linkType: hard
 
@@ -6141,7 +6141,7 @@ __metadata:
     eslint-config-hypothesis: ^3.1.0
     eslint-plugin-mocha: ^10.5.0
     git-describe: ^4.1.1
-    globals: ^15.14.0
+    globals: ^15.15.0
     gulp: ^5.0.0
     hypothesis: ^1.1573.0
     is-equal-shallow: ^0.1.3
