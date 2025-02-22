@@ -42,7 +42,7 @@ This, for example, will build a production extension: one that talks to the main
 
 > These instructions assume you have the `h` service running locally already.
 > For instructions how to set up a client with your `h` server, see
-> https://h-client.readthedocs.io/en/latest/developers/developing/#running-the-client-from-h*
+> https://h.readthedocs.io/projects/client/en/latest/developers/developing.html#running-the-client-from-h*
 
 1. [Create an OAuthClient](http://localhost:5000/admin/oauthclients)
    for the extension to use in your local instance of `h`, using the following values:
