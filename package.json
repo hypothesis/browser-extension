@@ -43,7 +43,7 @@
     "prettier": "3.5.1",
     "rollup": "^4.34.8",
     "sinon": "^19.0.2",
-    "typescript": "^5.7.3",
+    "typescript": "^5.8.2",
     "typescript-eslint": "^8.24.0",
     "web-ext": "^7.12.0"
   },
