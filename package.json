@@ -41,7 +41,7 @@
     "mocha": "^11.1.0",
     "mustache": "^4.2.0",
     "prettier": "3.5.3",
-    "rollup": "^4.36.0",
+    "rollup": "^4.37.0",
     "sinon": "^19.0.2",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.27.0",
