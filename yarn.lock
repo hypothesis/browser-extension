@@ -3862,9 +3862,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chrome-webstore-upload-cli@npm:^3.3.1":
-  version: 3.3.1
-  resolution: "chrome-webstore-upload-cli@npm:3.3.1"
+"chrome-webstore-upload-cli@npm:^3.3.2":
+  version: 3.3.2
+  resolution: "chrome-webstore-upload-cli@npm:3.3.2"
   dependencies:
     chrome-webstore-upload: ^3.1.0
     junk: ^4.0.1
@@ -3873,7 +3873,7 @@ __metadata:
     yazl: ^2.5.1
   bin:
     chrome-webstore-upload: cli.js
-  checksum: 39c9052db02cfc9131f1b6f9fd67a83c3bc65b52f34311744d921acc13351a7b2c800a85d7614ef7c6b770270062a92a70ee881c16094fbdc5b905958c88dfd7
+  checksum: 4509ed644c48130d897d6f53c038cb513019b977ddbcfa72427801916b8269f67e6294c45b2825e8de687f8fe5a183898f8cde3ded7ffa6da1d7bb647049d460
   languageName: node
   linkType: hard
 
@@ -6280,7 +6280,7 @@ __metadata:
     babel-plugin-istanbul: ^7.0.0
     babel-plugin-mockable-imports: ^2.0.1
     chai: ^5.2.0
-    chrome-webstore-upload-cli: ^3.3.1
+    chrome-webstore-upload-cli: ^3.3.2
     diff: ^7.0.0
     eslint: ^9.23.0
     eslint-config-hypothesis: ^3.2.0
