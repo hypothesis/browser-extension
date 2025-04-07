@@ -24,7 +24,7 @@
     "chai": "^5.2.0",
     "chrome-webstore-upload-cli": "^3.3.2",
     "diff": "^7.0.0",
-    "eslint": "^9.23.0",
+    "eslint": "^9.24.0",
     "eslint-config-hypothesis": "^3.2.0",
     "eslint-plugin-mocha": "^10.5.0",
     "git-describe": "^4.1.1",
@@ -44,7 +44,7 @@
     "rollup": "^4.38.0",
     "sinon": "^20.0.0",
     "typescript": "^5.8.2",
-    "typescript-eslint": "^8.28.0",
+    "typescript-eslint": "^8.29.0",
     "web-ext": "^7.12.0"
   },
   "browserslist": "chrome 85, firefox 75",
