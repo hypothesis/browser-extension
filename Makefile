@@ -108,4 +108,5 @@ sure: checkformatting lint test
 
 node_modules/.uptodate: package.json yarn.lock
 	yarn install
+	yarn playwright install chromium
 	@touch $@

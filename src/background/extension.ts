@@ -302,7 +302,9 @@ export class Extension {
       state.clearTab(removedTabId);
 
       const tab = await chromeAPI.tabs.get(addedTabId);
-      updateAnnotationCountIfEnabled(addedTabId, tab.url!);
+      if (tab?.url) {
+        updateAnnotationCountIfEnabled(addedTabId, tab.url);
+      }
     }
 
     function onTabCreated(tab: chrome.tabs.Tab) {

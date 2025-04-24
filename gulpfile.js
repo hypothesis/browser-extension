@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { runTests } from '@hypothesis/frontend-build/tests';
 
 import { spawn } from 'node:child_process';
 
@@ -24,3 +25,13 @@ function watchSrc() {
 }
 
 export const watch = gulp.parallel(build, watchClient, watchSrc);
+
+// Unit and integration testing tasks.
+gulp.task('test', () =>
+  runTests({
+    bootstrapFile: 'tests/bootstrap.js',
+    vitestConfig: 'vitest.config.js',
+    rollupConfig: 'rollup-tests.config.js',
+    testsPattern: 'tests/**/*-test.js',
+  }),
+);
