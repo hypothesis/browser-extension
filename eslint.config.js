@@ -1,24 +1,24 @@
+import vitest from '@vitest/eslint-plugin';
 import hypothesisBase from 'eslint-config-hypothesis/base';
 import hypothesisTS from 'eslint-config-hypothesis/ts';
 import globals from 'globals';
+import { globalIgnores, defineConfig } from 'eslint/config';
 
-export default [
-  {
-    ignores: [
-      '.yalc/**/*',
-      '.yarn/**/*',
-      'build/**/*',
-      'dist/**/*',
-      '**/vendor/**/*.js',
-      '**/coverage/**/*',
-      'docs/_build/*',
-      // TODO - Lint these files
-      'rollup*.config.js',
-    ],
-  },
+export default defineConfig(
+  globalIgnores([
+    '.yalc/**/*',
+    '.yarn/**/*',
+    'build/**/*',
+    'dist/**/*',
+    '**/vendor/**/*.js',
+    '**/coverage/**/*',
+    'docs/_build/*',
+    // TODO - Lint these files
+    'rollup*.config.js',
+  ]),
 
-  ...hypothesisBase,
-  ...hypothesisTS,
+  hypothesisBase,
+  hypothesisTS,
 
   {
     languageOptions: {
@@ -41,22 +41,6 @@ export default [
     },
   },
 
-  // CommonJS scripts which run in Node
-  {
-    files: ['tests/karma.config.cjs'],
-    rules: {
-      strict: ['error', 'global'],
-    },
-    languageOptions: {
-      parserOptions: {
-        sourceType: 'script',
-      },
-      globals: {
-        ...globals.node,
-      },
-    },
-  },
-
   // ESM scripts which run in Node
   {
     files: ['tools/*.js'],
@@ -69,4 +53,14 @@ export default [
       },
     },
   },
-];
+
+  // Tests
+  {
+    files: ['**/*-test.js'],
+    languageOptions: {
+      globals: {
+        ...vitest.environments.env.globals,
+      },
+    },
+  },
+);

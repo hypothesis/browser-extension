@@ -81,9 +81,8 @@ export async function init() {
   await initialized;
 }
 
-// nb. We use `globalThis` for the global object because it is `window` in Karma
-// tests but `self` in the real extension's Service Worker.
-const inTests = '__karma__' in globalThis;
+// Vitest sets NODE_ENV to test
+const inTests = process.env.NODE_ENV === 'test';
 if (!inTests) {
   init();
 }

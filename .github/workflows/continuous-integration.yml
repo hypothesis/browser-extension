@@ -21,7 +21,7 @@ jobs:
         path: node_modules
         key: ${{ runner.os }}-node_modules-${{ hashFiles('yarn.lock') }}
     - name: Install
-      run: yarn install --immutable
+      run: yarn install --immutable && yarn playwright install chromium
     - name: Format
       run: make checkformatting
     - name: Lint & typecheck

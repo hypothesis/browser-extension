@@ -27,23 +27,27 @@ describe('detectContentType', () => {
 
   it('returns "PDF" if Chrome\'s OOPIF PDF viewer is present', () => {
     const fakeOpenOrClosedShadowRoot = sinon.stub();
-    sandbox.stub(window, 'chrome').value({
+    vi.stubGlobal('chrome', {
       dom: {
         openOrClosedShadowRoot: fakeOpenOrClosedShadowRoot,
       },
     });
 
-    const dummyElement = document.createElement('div');
-    const pdfViewer = document.createElement('iframe');
-    pdfViewer.setAttribute('type', 'application/pdf');
-    const fakeBodyShadowRoot = dummyElement.attachShadow({ mode: 'open' });
-    fakeBodyShadowRoot.append(pdfViewer);
+    try {
+      const dummyElement = document.createElement('div');
+      const pdfViewer = document.createElement('iframe');
+      pdfViewer.setAttribute('type', 'application/pdf');
+      const fakeBodyShadowRoot = dummyElement.attachShadow({ mode: 'open' });
+      fakeBodyShadowRoot.append(pdfViewer);
 
-    fakeOpenOrClosedShadowRoot
-      .withArgs(document.body)
-      .returns(fakeBodyShadowRoot);
+      fakeOpenOrClosedShadowRoot
+        .withArgs(document.body)
+        .returns(fakeBodyShadowRoot);
 
-    assert.deepEqual(detectContentType(), { type: 'PDF' });
+      assert.deepEqual(detectContentType(), { type: 'PDF' });
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it('returns "PDF" if Firefox PDF viewer is present', () => {
