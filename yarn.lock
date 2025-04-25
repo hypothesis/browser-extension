@@ -6279,7 +6279,7 @@ __metadata:
     git-describe: ^4.1.1
     globals: ^16.0.0
     gulp: ^5.0.0
-    hypothesis: ^1.1623.0
+    hypothesis: ^1.1624.0
     is-equal-shallow: ^0.1.3
     karma: ^6.4.4
     karma-chrome-launcher: ^3.2.0
@@ -6298,10 +6298,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hypothesis@npm:^1.1623.0":
-  version: 1.1623.0
-  resolution: "hypothesis@npm:1.1623.0"
-  checksum: 2aed1ec1fdcec741cb4d07d5d040047c35a7dc2a7741c12dd69678c1c60338fbde56bf0862cb09279bc2d22fea4fe25a8c036e959881864bfb3f039ef2037b41
+"hypothesis@npm:^1.1624.0":
+  version: 1.1624.0
+  resolution: "hypothesis@npm:1.1624.0"
+  checksum: 8de06616ced54b775449d279346fbedfc578a73c8ed47b1fb099fc51528ce9fa40364889fe555acc60c2c9393ef891dafc60fa106a9ea06a925d8164fa1ede8f
   languageName: node
   linkType: hard
 
