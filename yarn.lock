@@ -2772,13 +2772,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ansi-colors@npm:^4.1.3":
-  version: 4.1.3
-  resolution: "ansi-colors@npm:4.1.3"
-  checksum: a9c2ec842038a1fabc7db9ece7d3177e2fe1c5dc6f0c51ecfbf5f39911427b89c00b5dc6b8bd95f82a26e9b16aaae2e83d45f060e98070ce4d1333038edceb0e
-  languageName: node
-  linkType: hard
-
 "ansi-regex@npm:^3.0.0":
   version: 3.0.0
   resolution: "ansi-regex@npm:3.0.0"
@@ -3552,6 +3545,15 @@ __metadata:
     fsevents:
       optional: true
   checksum: d2f29f499705dcd4f6f3bbed79a9ce2388cf530460122eed3b9c48efeab7a4e28739c6551fd15bec9245c6b9eeca7a32baa64694d64d9b6faeb74ddb8c4a413d
+  languageName: node
+  linkType: hard
+
+"chokidar@npm:^4.0.1":
+  version: 4.0.3
+  resolution: "chokidar@npm:4.0.3"
+  dependencies:
+    readdirp: ^4.0.1
+  checksum: a8765e452bbafd04f3f2fad79f04222dd65f43161488bb6014a41099e6ca18d166af613d59a90771908c1c823efa3f46ba36b86ac50b701c20c1b9908c5fe36e
   languageName: node
   linkType: hard
 
@@ -6010,7 +6012,7 @@ __metadata:
     karma-mocha: ^2.0.1
     karma-mocha-reporter: ^2.2.5
     karma-source-map-support: ^1.4.0
-    mocha: ^11.1.0
+    mocha: ^11.2.2
     mustache: ^4.2.0
     prettier: 3.5.3
     rollup: ^4.40.1
@@ -7471,13 +7473,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mocha@npm:^11.1.0":
-  version: 11.1.0
-  resolution: "mocha@npm:11.1.0"
+"mocha@npm:^11.2.2":
+  version: 11.2.2
+  resolution: "mocha@npm:11.2.2"
   dependencies:
-    ansi-colors: ^4.1.3
     browser-stdout: ^1.3.1
-    chokidar: ^3.5.3
+    chokidar: ^4.0.1
     debug: ^4.3.5
     diff: ^5.2.0
     escape-string-regexp: ^4.0.0
@@ -7488,6 +7489,7 @@ __metadata:
     log-symbols: ^4.1.0
     minimatch: ^5.1.6
     ms: ^2.1.3
+    picocolors: ^1.1.1
     serialize-javascript: ^6.0.2
     strip-json-comments: ^3.1.1
     supports-color: ^8.1.1
@@ -7498,7 +7500,7 @@ __metadata:
   bin:
     _mocha: bin/_mocha
     mocha: bin/mocha.js
-  checksum: 23dfebb98ee777b280752eb6bef84300a8f3da3278c34163630e05e6aa48f551ee4b41218f32de8a83b96d95b112a22835b2e2702aa6b13caa32885fb15c0068
+  checksum: ac012ac2413e1705077a30e9b7d0172095ccc027fea54da0d84688754b42c2bca32dc24aaff2502ea869f53901d2b970b5a0697cf32b19433f350f89196d6e47
   languageName: node
   linkType: hard
 
@@ -8476,6 +8478,13 @@ __metadata:
   dependencies:
     abort-controller: ^3.0.0
   checksum: ff2bb513af6fb43618c8360211b5b9052e25a59e6626d3669c7ba060d021dfffa43c43832e11b18acd6aac15b057c6deae1c41004c1731688c95c455ad02f982
+  languageName: node
+  linkType: hard
+
+"readdirp@npm:^4.0.1":
+  version: 4.1.2
+  resolution: "readdirp@npm:4.1.2"
+  checksum: 3242ee125422cb7c0e12d51452e993f507e6ed3d8c490bc8bf3366c5cdd09167562224e429b13e9cb2b98d4b8b2b11dc100d3c73883aa92d657ade5a21ded004
   languageName: node
   linkType: hard
 
