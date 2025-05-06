@@ -1560,16 +1560,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hypothesis/frontend-build@npm:^3.2.3":
-  version: 3.2.3
-  resolution: "@hypothesis/frontend-build@npm:3.2.3"
+"@hypothesis/frontend-build@npm:^4.0.0":
+  version: 4.0.0
+  resolution: "@hypothesis/frontend-build@npm:4.0.0"
   dependencies:
     commander: ^13.0.0
     fancy-log: ^2.0.0
     glob: ^11.0.0
   peerDependencies:
     autoprefixer: ^10.3.7
-    karma: ^6.3.4
     postcss: ^8.3.9
     rollup: ^4.0.2
     sass: ^1.43.2
@@ -1578,17 +1577,13 @@ __metadata:
   peerDependenciesMeta:
     autoprefixer:
       optional: true
-    karma:
-      optional: true
     postcss:
       optional: true
     sass:
       optional: true
     tailwindcss:
       optional: true
-    vitest:
-      optional: true
-  checksum: 169d58e9cc38e72305691ffdde5a3f1908507ac2457705b62dda8a310c081cf36ffd4b9c2ab19defddd23612ebb53c51bfe928a18a5544cd4200b426f03163d7
+  checksum: eeebc9a32a56e8352c526d5e9293523c1ce6ac47eae723f88e7e09c9c0da506d8c3377d4f867b8f7b8d1c99a6d31251fb2479d76e5a283b29ce11dbc7681e467
   languageName: node
   linkType: hard
 
@@ -4619,12 +4614,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-config-hypothesis@npm:^3.2.0":
-  version: 3.2.0
-  resolution: "eslint-config-hypothesis@npm:3.2.0"
+"eslint-config-hypothesis@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "eslint-config-hypothesis@npm:3.3.1"
   peerDependencies:
+    "@vitest/eslint-plugin": ">=1.1.43"
     eslint-plugin-jsx-a11y: ">=6.10.0"
-    eslint-plugin-mocha: ">=10.4.0"
     eslint-plugin-react: ">=7.34.0"
     eslint-plugin-react-hooks: ">=5.0.0"
     globals: ">=15.11.0"
@@ -4638,20 +4633,7 @@ __metadata:
       optional: true
     typescript-eslint:
       optional: true
-  checksum: 7ba53dc87aead515952dc2c0e40f5c390fbd759aefabe9e282a807fdd8d6c315f1b64a0ba743907ce9f33d18dd060ed7010b91850b15df26edf89a3cb9db30dc
-  languageName: node
-  linkType: hard
-
-"eslint-plugin-mocha@npm:^10.5.0":
-  version: 10.5.0
-  resolution: "eslint-plugin-mocha@npm:10.5.0"
-  dependencies:
-    eslint-utils: ^3.0.0
-    globals: ^13.24.0
-    rambda: ^7.4.0
-  peerDependencies:
-    eslint: ">=7.0.0"
-  checksum: 07fc975c7768b19de4d2883307177f10e94b6318a4971dbc3c52edcea01977a59a54b85fe564974e43b29b12b821b06afd48d95b631e84d203c44676778aa019
+  checksum: b67c85bb9f36f941ed47400208b799a8821e908b762c6096e81b88da10827c11bd95b5fb0dc9385e4723ef97181f8eeb33591b1928a40f272ff7b33efcb4d0ee
   languageName: node
   linkType: hard
 
@@ -4684,28 +4666,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-utils@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "eslint-utils@npm:3.0.0"
-  dependencies:
-    eslint-visitor-keys: ^2.0.0
-  peerDependencies:
-    eslint: ">=5"
-  checksum: 0668fe02f5adab2e5a367eee5089f4c39033af20499df88fe4e6aba2015c20720404d8c3d6349b6f716b08fdf91b9da4e5d5481f265049278099c4c836ccb619
-  languageName: node
-  linkType: hard
-
 "eslint-visitor-keys@npm:4.0.0":
   version: 4.0.0
   resolution: "eslint-visitor-keys@npm:4.0.0"
   checksum: 5c09f89cf29d87cdbfbac38802a880d3c2e65f8cb61c689888346758f1e24a4c7f6caefeac9474dfa52058a99920623599bdb00516976a30134abeba91275aa2
-  languageName: node
-  linkType: hard
-
-"eslint-visitor-keys@npm:^2.0.0":
-  version: 2.1.0
-  resolution: "eslint-visitor-keys@npm:2.1.0"
-  checksum: e3081d7dd2611a35f0388bbdc2f5da60b3a3c5b8b6e928daffff7391146b434d691577aa95064c8b7faad0b8a680266bcda0a42439c18c717b80e6718d7e267d
   languageName: node
   linkType: hard
 
@@ -5815,7 +5779,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"globals@npm:^13.19.0, globals@npm:^13.24.0":
+"globals@npm:^13.19.0":
   version: 13.24.0
   resolution: "globals@npm:13.24.0"
   dependencies:
@@ -6202,7 +6166,7 @@ __metadata:
     "@babel/core": ^7.27.1
     "@babel/preset-env": ^7.27.1
     "@babel/preset-typescript": ^7.27.1
-    "@hypothesis/frontend-build": ^3.2.3
+    "@hypothesis/frontend-build": ^4.0.0
     "@hypothesis/frontend-testing": ^1.6.0
     "@rollup/plugin-alias": ^5.1.1
     "@rollup/plugin-babel": ^6.0.4
@@ -6220,8 +6184,7 @@ __metadata:
     chrome-webstore-upload-cli: ^3.3.2
     diff: ^7.0.0
     eslint: ^9.26.0
-    eslint-config-hypothesis: ^3.2.0
-    eslint-plugin-mocha: ^10.5.0
+    eslint-config-hypothesis: ^3.3.1
     git-describe: ^4.1.1
     globals: ^16.0.0
     gulp: ^5.0.0
@@ -8770,13 +8733,6 @@ __metadata:
   version: 1.0.0
   resolution: "railroad-diagrams@npm:1.0.0"
   checksum: 9e312af352b5ed89c2118edc0c06cef2cc039681817f65266719606e4e91ff6ae5374c707cc9033fe29a82c2703edf3c63471664f97f0167c85daf6f93496319
-  languageName: node
-  linkType: hard
-
-"rambda@npm:^7.4.0":
-  version: 7.5.0
-  resolution: "rambda@npm:7.5.0"
-  checksum: ad608a9a4160d0b6b0921047cea1329276bf239ff58d439135288712dcdbbf0df47c76591843ad249d89e7c5a9109ce86fe099aa54aef0dc0aa92a9b4dd1b8eb
   languageName: node
   linkType: hard
 
