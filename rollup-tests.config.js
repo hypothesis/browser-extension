@@ -4,6 +4,7 @@ import { babel } from '@rollup/plugin-babel';
 import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import multi from '@rollup/plugin-multi-entry';
+import replace from '@rollup/plugin-replace';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 export default {
@@ -49,6 +50,10 @@ export default {
           },
         ],
       ],
+    }),
+    replace({
+      preventAssignment: true,
+      EXTENSION_TESTS: 'true',
     }),
     nodeResolve({ extensions: ['.js', '.ts'] }),
     commonjs(),

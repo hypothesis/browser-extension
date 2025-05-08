@@ -81,8 +81,11 @@ export async function init() {
   await initialized;
 }
 
+// Set by Rollup in tests
+declare const EXTENSION_TESTS: undefined | string;
+
 // Vitest sets NODE_ENV to test
-const inTests = process.env.NODE_ENV === 'test';
+const inTests = typeof EXTENSION_TESTS !== 'undefined';
 if (!inTests) {
   init();
 }
