@@ -1881,6 +1881,21 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-replace@npm:^6.0.2":
+  version: 6.0.2
+  resolution: "@rollup/plugin-replace@npm:6.0.2"
+  dependencies:
+    "@rollup/pluginutils": ^5.0.1
+    magic-string: ^0.30.3
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0||^3.0.0||^4.0.0
+  peerDependenciesMeta:
+    rollup:
+      optional: true
+  checksum: ef1af8d8cfca3ecf95c85bbcccf6fea3619343f6fc7c48b23ece6485a21622b74ab093a971ffc177af04468aef45c278d3b8a82f7a426d2c25da1061923cf943
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-virtual@npm:^3.0.0":
   version: 3.0.1
   resolution: "@rollup/plugin-virtual@npm:3.0.1"
@@ -6174,6 +6189,7 @@ __metadata:
     "@rollup/plugin-json": ^6.1.0
     "@rollup/plugin-multi-entry": ^6.0.1
     "@rollup/plugin-node-resolve": ^16.0.1
+    "@rollup/plugin-replace": ^6.0.2
     "@types/chrome": ^0.0.319
     "@vitest/browser": ^3.1.2
     "@vitest/coverage-istanbul": ^3.1.2
