@@ -2559,9 +2559,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-istanbul@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "@vitest/coverage-istanbul@npm:3.1.2"
+"@vitest/coverage-istanbul@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@vitest/coverage-istanbul@npm:3.1.3"
   dependencies:
     "@istanbuljs/schema": ^0.1.3
     debug: ^4.4.0
@@ -2574,8 +2574,8 @@ __metadata:
     test-exclude: ^7.0.1
     tinyrainbow: ^2.0.0
   peerDependencies:
-    vitest: 3.1.2
-  checksum: d85c6d59aa1dd70a3fc4988f0ed5aa5b4ecce156465c81715a33d20bf307086e74f79c5fa675d571f7a72779e50d94d328ce65c50976ec33882bf061f963a108
+    vitest: 3.1.3
+  checksum: 2528fad16f951016d8105cc3c7dea6b8e6240f8223f4fcc4c90760bb130658cd70553563d4f2043925c8152f665f585a72fa98e47dbce76e20d06274c9429a90
   languageName: node
   linkType: hard
 
@@ -6364,7 +6364,7 @@ __metadata:
     "@rollup/plugin-replace": ^6.0.2
     "@types/chrome": ^0.0.321
     "@vitest/browser": ^3.1.2
-    "@vitest/coverage-istanbul": ^3.1.2
+    "@vitest/coverage-istanbul": ^3.1.3
     "@vitest/eslint-plugin": ^1.1.44
     babel-plugin-istanbul: ^7.0.0
     babel-plugin-mockable-imports: ^2.0.1
