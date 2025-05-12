@@ -44,7 +44,7 @@
     "sinon": "^20.0.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.0",
-    "vitest": "^3.1.2",
+    "vitest": "^3.1.3",
     "web-ext": "^7.12.0"
   },
   "browserslist": "chrome 85, firefox 75",
