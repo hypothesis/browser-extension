@@ -4179,6 +4179,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"diff@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "diff@npm:8.0.1"
+  checksum: bc6f6aa7f9e9c573255db1a7465e3f1f4e3eaeffc579a317489643e1c7ae6b22c819aa3e309380988ff4497d771daf1abf0aa0a92afa347b7011cd525e7388d4
+  languageName: node
+  linkType: hard
+
 "discontinuous-range@npm:1.0.0":
   version: 1.0.0
   resolution: "discontinuous-range@npm:1.0.0"
@@ -6147,7 +6154,7 @@ __metadata:
     babel-plugin-mockable-imports: ^2.0.1
     chai: ^5.2.0
     chrome-webstore-upload-cli: ^3.3.2
-    diff: ^7.0.0
+    diff: ^8.0.1
     eslint: ^9.27.0
     eslint-config-hypothesis: ^3.3.1
     git-describe: ^4.1.1
