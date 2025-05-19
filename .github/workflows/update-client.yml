@@ -23,16 +23,3 @@ jobs:
         git config --global user.email "hypothesis@users.noreply.github.com"
         tools/update-client
         echo "ref=$(git rev-parse HEAD)" >> $GITHUB_OUTPUT
-
-  # Release a new version of the extension with the updated client.
-  #
-  # Pushes to the main branch normally trigger this workflow automatically,
-  # but the push by the update-client job doesn't due to GitHub Actions restrictions.
-  # See https://docs.github.com/en/actions/using-workflows/triggering-a-workflow#triggering-a-workflow-from-a-workflow.
-  release:
-    needs: update-client
-    uses: ./.github/workflows/release.yml
-    name: Release extension
-    secrets: inherit
-    with:
-      ref: ${{ needs.update-client.outputs.ref }}
