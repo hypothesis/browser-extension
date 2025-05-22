@@ -64,6 +64,9 @@ build/manifest.json: src/manifest.json.mustache build/settings.json
 build/client/build: node_modules/hypothesis/build/manifest.json
 	@mkdir -p $@
 	cp -R node_modules/hypothesis/build/* $@
+	@# Replace boot template with extension-specific URLs.
+	node tools/render-boot-template.js $@/boot-template.js $@/boot.js
+	rm $@/boot-template.js
 	@# We can't leave the client manifest in the build or the Chrome Web Store
 	@# will complain.
 	rm $@/manifest.json
