@@ -6419,7 +6419,7 @@ __metadata:
     is-equal-shallow: ^0.1.3
     mustache: ^4.2.0
     playwright: ^1.53.1
-    prettier: 3.5.3
+    prettier: 3.6.0
     rollup: ^4.44.0
     sinon: ^21.0.0
     typescript: ^5.8.3
@@ -8724,12 +8724,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.5.3":
-  version: 3.5.3
-  resolution: "prettier@npm:3.5.3"
+"prettier@npm:3.6.0":
+  version: 3.6.0
+  resolution: "prettier@npm:3.6.0"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 61e97bb8e71a95d8f9c71f1fd5229c9aaa9d1e184dedb12399f76aa802fb6fdc8954ecac9df25a7f82ee7311cf8ddbd06baf5507388fc98e5b44036cc6a88a1b
+  checksum: 4ff40e82092565b05165c527b5ba3e9f6de6b785c81297e79665e881d9409a922ddf43b222440a90678a840133b498ed3e9af5c7c2106119c9552bda0f79dfeb
   languageName: node
   linkType: hard
 
