@@ -32,7 +32,7 @@
     "eslint": "^9.29.0",
     "eslint-config-hypothesis": "^3.3.1",
     "git-describe": "^4.1.1",
-    "globals": "^16.2.0",
+    "globals": "^16.3.0",
     "gulp": "^5.0.1",
     "hypothesis": "^1.1665.0",
     "is-equal-shallow": "^0.1.3",
