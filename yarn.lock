@@ -2463,13 +2463,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/chrome@npm:^0.0.328":
-  version: 0.0.328
-  resolution: "@types/chrome@npm:0.0.328"
+"@types/chrome@npm:^0.0.329":
+  version: 0.0.329
+  resolution: "@types/chrome@npm:0.0.329"
   dependencies:
     "@types/filesystem": "*"
     "@types/har-format": "*"
-  checksum: ce981371de579f438a5079c158c54d6f466997fe8247e1d350e2a06185931d4b5c4f33ab302c32594aad58c21798d995f6eda72b85ebe283668250c653d1eb5b
+  checksum: 6a07d910f2531e91fc7c9b58b29d40d83179a4155bc4a9d7043f8954b8b15de63aec1d144dd91b0f7294d0f838f9598626363c4f4fdf1f63fa087319bacdbcce
   languageName: node
   linkType: hard
 
@@ -6475,7 +6475,7 @@ __metadata:
     "@rollup/plugin-multi-entry": ^6.0.1
     "@rollup/plugin-node-resolve": ^16.0.1
     "@rollup/plugin-replace": ^6.0.2
-    "@types/chrome": ^0.0.328
+    "@types/chrome": ^0.0.329
     "@vitest/browser": ^3.2.4
     "@vitest/coverage-istanbul": ^3.2.4
     "@vitest/eslint-plugin": ^1.3.3
