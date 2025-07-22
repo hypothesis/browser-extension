@@ -249,7 +249,7 @@ export class Extension {
      */
     const onTabUpdated = (
       tabId: number,
-      { status }: chrome.tabs.TabChangeInfo,
+      { status }: chrome.tabs.OnUpdatedInfo,
       tab: chrome.tabs.Tab,
     ) => {
       // `url` property is included because manifest has the `tabs` permission
