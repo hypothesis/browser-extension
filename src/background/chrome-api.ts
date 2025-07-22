@@ -126,10 +126,9 @@ export async function executeScript(
   { tabId, frameId, file }: ExecuteScriptOptions,
   chromeAPI_ = chromeAPI,
 ): Promise<unknown> {
-  const target: chrome.scripting.InjectionTarget = { tabId };
-  if (frameId) {
-    target.frameIds = [frameId];
-  }
+  const target: chrome.scripting.InjectionTarget = frameId
+    ? { tabId, frameIds: [frameId] }
+    : { tabId };
   const results = await chromeAPI_.scripting.executeScript({
     target,
     files: [file],
@@ -158,10 +157,9 @@ export async function executeFunction<Args extends unknown[], Result>(
   { tabId, frameId, func, args }: ExecuteFunctionOptions<Args, Result>,
   chromeAPI_ = chromeAPI,
 ): Promise<Result> {
-  const target: chrome.scripting.InjectionTarget = { tabId };
-  if (frameId) {
-    target.frameIds = [frameId];
-  }
+  const target: chrome.scripting.InjectionTarget = frameId
+    ? { tabId, frameIds: [frameId] }
+    : { tabId };
   const results = await chromeAPI_.scripting.executeScript({
     target,
     func,
