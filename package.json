@@ -41,7 +41,7 @@
     "prettier": "3.6.2",
     "rollup": "^4.46.2",
     "sinon": "^21.0.0",
-    "typescript": "^5.8.3",
+    "typescript": "^5.9.2",
     "typescript-eslint": "^8.38.0",
     "vitest": "^3.2.4",
     "web-ext": "^7.12.0"
