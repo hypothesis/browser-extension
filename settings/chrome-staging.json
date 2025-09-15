@@ -3,7 +3,7 @@
   "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqjbEOhG+ZCl2Bl17m2ltNC+3uw0Fqv3Dzuja5vLnH1MLBRQG7L77pXtKCZgVgFJ2K+Kn0L0OqnMDcKEi5pUpNTi39b8twp1imDsoLO+L5XgpKYBtUgfR+T8OO2INjEgz0LDth0l26WmHNS377KZjSTsfPWNnLozXHHkETgug1lt9VzgcvSboiyZuwk23xHmiqnVpZtuqVAv4HdqFofHiNQn2fF7awsQxEYYNfuSk0Jp33XJkkadyrJ/dQ7vVFi0F0O//Oyaw3s4TD58frABxznusmKkjHZorJUrm2OaYbn/7TSUcG5fReQC08fXiMsFGUKxK01HfAwdmVUAmASL+NwIDAQAB",
 
   "apiUrl": "https://staging.hypothes.is/api/",
-  "authDomain": "hypothes.is",
+  "authDomain": "staging.hypothes.is",
   "bouncerUrl": "https://staging.hyp.is/",
   "serviceUrl": "https://staging.hypothes.is/",
 
