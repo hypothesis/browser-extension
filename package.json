@@ -44,7 +44,7 @@
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.46.0",
     "vitest": "^3.2.4",
-    "web-ext": "^7.12.0"
+    "web-ext": "^9.0.0"
   },
   "browserslist": "chrome 85, firefox 75",
   "scripts": {
