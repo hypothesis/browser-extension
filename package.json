@@ -9,9 +9,9 @@
   "bugs": "https://github.com/hypothesis/browser-extension/issues",
   "repository": "hypothesis/browser-extension",
   "devDependencies": {
-    "@babel/core": "^7.28.4",
-    "@babel/preset-env": "^7.28.3",
-    "@babel/preset-typescript": "^7.27.1",
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
     "@hypothesis/frontend-build": "^5.1.0",
     "@hypothesis/frontend-testing": "^1.8.0",
     "@rollup/plugin-alias": "^5.1.1",
