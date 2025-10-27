@@ -1877,9 +1877,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hypothesis/frontend-build@npm:^5.0.2":
-  version: 5.0.2
-  resolution: "@hypothesis/frontend-build@npm:5.0.2"
+"@hypothesis/frontend-build@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@hypothesis/frontend-build@npm:5.1.0"
   dependencies:
     commander: ^14.0.0
     fancy-log: ^2.0.0
@@ -1890,7 +1890,7 @@ __metadata:
     rollup: ^4.0.2
     sass: ^1.43.2
     tailwindcss: ^3.0.11 || ^4.1.0
-    vitest: ^3.1.1
+    vitest: ^3.1.1 || ^4.0.1
   peerDependenciesMeta:
     "@tailwindcss/postcss":
       optional: true
@@ -1900,7 +1900,7 @@ __metadata:
       optional: true
     tailwindcss:
       optional: true
-  checksum: 81be91a4c67ed103c0e058b7b19f00370b7becb57f0bd5084fe0b2518819df75f790421d0e247a21ece01d78cb0a94918b585559cad52e2b782555257db2ba95
+  checksum: 38131aa73178f74a03689ca6eeb1307c835143cecb1e0c1632d8a6a10591bd46a153da87f37dd8b21d03eaf7ab0ec86b5898dc56fda4cb2034c8a8760baf760d
   languageName: node
   linkType: hard
 
@@ -6110,7 +6110,7 @@ __metadata:
     "@babel/core": ^7.28.4
     "@babel/preset-env": ^7.28.3
     "@babel/preset-typescript": ^7.27.1
-    "@hypothesis/frontend-build": ^5.0.2
+    "@hypothesis/frontend-build": ^5.1.0
     "@hypothesis/frontend-testing": ^1.7.2
     "@rollup/plugin-alias": ^5.1.1
     "@rollup/plugin-babel": ^6.1.0
