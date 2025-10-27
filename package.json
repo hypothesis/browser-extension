@@ -13,7 +13,7 @@
     "@babel/preset-env": "^7.28.3",
     "@babel/preset-typescript": "^7.27.1",
     "@hypothesis/frontend-build": "^5.1.0",
-    "@hypothesis/frontend-testing": "^1.7.2",
+    "@hypothesis/frontend-testing": "^1.8.0",
     "@rollup/plugin-alias": "^5.1.1",
     "@rollup/plugin-babel": "^6.1.0",
     "@rollup/plugin-commonjs": "^28.0.9",
