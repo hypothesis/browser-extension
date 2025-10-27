@@ -2033,10 +2033,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@mdn/browser-compat-data@npm:7.1.7":
-  version: 7.1.7
-  resolution: "@mdn/browser-compat-data@npm:7.1.7"
-  checksum: 8282d349f5949613c6e5c7c0bee6b56e49197231b4c61ba242a032805bbf6bd791750a64739e3edc61af6ebb00eca5a557db9452eac4f421980bc356e6d58648
+"@mdn/browser-compat-data@npm:7.1.15":
+  version: 7.1.15
+  resolution: "@mdn/browser-compat-data@npm:7.1.15"
+  checksum: 16939ae5d8e7dfd8584dd0dfadf3e161914f79828b6b8e6b137c5f172fa31bdaf3dc99c7ae092c858f8b999e3bf688422e39ee421b7d4a738b53ba4b2cb697de
   languageName: node
   linkType: hard
 
@@ -3056,13 +3056,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"addons-linter@npm:8.0.0":
-  version: 8.0.0
-  resolution: "addons-linter@npm:8.0.0"
+"addons-linter@npm:8.4.0":
+  version: 8.4.0
+  resolution: "addons-linter@npm:8.4.0"
   dependencies:
     "@fluent/syntax": 0.19.0
     "@fregante/relaxed-json": 2.0.0
-    "@mdn/browser-compat-data": 7.1.7
+    "@mdn/browser-compat-data": 7.1.15
     addons-moz-compare: 1.3.0
     addons-scanner-utils: 9.13.0
     ajv: 8.17.1
@@ -3079,15 +3079,15 @@ __metadata:
     fast-json-patch: 3.1.1
     image-size: 2.0.2
     json-merge-patch: 1.0.2
-    pino: 9.11.0
-    semver: 7.7.2
+    pino: 9.13.0
+    semver: 7.7.3
     source-map-support: 0.5.21
     upath: 2.0.1
     yargs: 17.7.2
     yauzl: 2.10.0
   bin:
     addons-linter: bin/addons-linter
-  checksum: 1ab51c2ddd9c5d177a7a47e6103749438a3983be299c2a81ee79ea7cbccff0aa6602dc5d66821815993ce4eb22d869f428575a92fd0dc83d424e79a5219942df
+  checksum: a0a74e4875bb60cff1f3f568723ee0c01d62f66204c10a95047d1528a94cd68cb321759aa01dfd9c61dbf9bae8707a6d69278ebf2826ad070d46ec2dee8c54bb
   languageName: node
   linkType: hard
 
@@ -5216,13 +5216,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-redact@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "fast-redact@npm:3.1.1"
-  checksum: e486cc9990b5c9724f39bf4e392c1b250c8fd5e8c0145be80c73de3461fc390babe7b48f35746b50bf3cbcd917e093b5685ae66295162c7d9b686a761d48e989
-  languageName: node
-  linkType: hard
-
 "fast-uri@npm:^3.0.1":
   version: 3.1.0
   resolution: "fast-uri@npm:3.1.0"
@@ -6142,7 +6135,7 @@ __metadata:
     typescript: ^5.9.3
     typescript-eslint: ^8.46.1
     vitest: ^3.2.4
-    web-ext: ^9.0.0
+    web-ext: ^9.1.0
   languageName: unknown
   linkType: soft
 
@@ -8055,12 +8048,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pino@npm:9.11.0":
-  version: 9.11.0
-  resolution: "pino@npm:9.11.0"
+"pino@npm:9.12.0":
+  version: 9.12.0
+  resolution: "pino@npm:9.12.0"
   dependencies:
     atomic-sleep: ^1.0.0
-    fast-redact: ^3.1.1
     on-exit-leak-free: ^2.1.0
     pino-abstract-transport: ^2.0.0
     pino-std-serializers: ^7.0.0
@@ -8068,11 +8060,33 @@ __metadata:
     quick-format-unescaped: ^4.0.3
     real-require: ^0.2.0
     safe-stable-stringify: ^2.3.1
+    slow-redact: ^0.3.0
     sonic-boom: ^4.0.1
     thread-stream: ^3.0.0
   bin:
     pino: bin.js
-  checksum: f84809737a9b3eb14b1348680f57672818501b75f4f5bd9e6c68d0b77260325f3728731cb567032a37c51b8c91d72e880992f46494d2f95f68b392f08c73f556
+  checksum: 0c0fb78164639aae553d838ba7fd9700d0a7d4188ecf6cf4fa242444f27a32aad8b5b09553e9bf656c685a6938e21111f84a1e4e2c85bab6795aaa383ad29b3e
+  languageName: node
+  linkType: hard
+
+"pino@npm:9.13.0":
+  version: 9.13.0
+  resolution: "pino@npm:9.13.0"
+  dependencies:
+    atomic-sleep: ^1.0.0
+    on-exit-leak-free: ^2.1.0
+    pino-abstract-transport: ^2.0.0
+    pino-std-serializers: ^7.0.0
+    process-warning: ^5.0.0
+    quick-format-unescaped: ^4.0.3
+    real-require: ^0.2.0
+    safe-stable-stringify: ^2.3.1
+    slow-redact: ^0.3.0
+    sonic-boom: ^4.0.1
+    thread-stream: ^3.0.0
+  bin:
+    pino: bin.js
+  checksum: 9ad64b51ea92c101e83ff9eb7a92038ff6708968bb6134e83023dd4fcbd4dc7d271dc6eb3522871e04c77b051c0e95eddfdfab45a9acad482c77c0f09fe5c248
   languageName: node
   linkType: hard
 
@@ -8844,12 +8858,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:7.7.2":
-  version: 7.7.2
-  resolution: "semver@npm:7.7.2"
+"semver@npm:7.7.3, semver@npm:^7.6.3":
+  version: 7.7.3
+  resolution: "semver@npm:7.7.3"
   bin:
     semver: bin/semver.js
-  checksum: dd94ba8f1cbc903d8eeb4dd8bf19f46b3deb14262b6717d0de3c804b594058ae785ef2e4b46c5c3b58733c99c83339068203002f9e37cfe44f7e2cc5e3d2f621
+  checksum: f013a3ee4607857bcd3503b6ac1d80165f7f8ea94f5d55e2d3e33df82fce487aa3313b987abf9b39e0793c83c9fc67b76c36c067625141a9f6f704ae0ea18db2
   languageName: node
   linkType: hard
 
@@ -8877,15 +8891,6 @@ __metadata:
   bin:
     semver: bin/semver.js
   checksum: 586b825d36874007c9382d9e1ad8f93888d8670040add24a28e06a910aeebd673a2eb9e3bf169c6679d9245e66efb9057e0852e70d9daa6c27372aab1dda7104
-  languageName: node
-  linkType: hard
-
-"semver@npm:^7.6.3":
-  version: 7.7.3
-  resolution: "semver@npm:7.7.3"
-  bin:
-    semver: bin/semver.js
-  checksum: f013a3ee4607857bcd3503b6ac1d80165f7f8ea94f5d55e2d3e33df82fce487aa3313b987abf9b39e0793c83c9fc67b76c36c067625141a9f6f704ae0ea18db2
   languageName: node
   linkType: hard
 
@@ -9060,6 +9065,13 @@ __metadata:
     mrmime: ^2.0.0
     totalist: ^3.0.0
   checksum: 4139140b452aec0caf6f630f37e4ff403420adcba81d9242fbe78fc34836f5c408aa4b9c6430139f8d2f6b9f26f0e6e61b8b17cac9eed1d24fd6412cfcb0ed7d
+  languageName: node
+  linkType: hard
+
+"slow-redact@npm:^0.3.0":
+  version: 0.3.2
+  resolution: "slow-redact@npm:0.3.2"
+  checksum: 7c5264f93a309684a3a2622d0017af024174f31b4b82921b19791d8a707e8bc5dca56918df685dada23ccc84fbe2cc0cc954a739989c9167d5f60c05fa639f22
   languageName: node
   linkType: hard
 
@@ -10144,13 +10156,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"web-ext@npm:^9.0.0":
-  version: 9.0.0
-  resolution: "web-ext@npm:9.0.0"
+"web-ext@npm:^9.1.0":
+  version: 9.1.0
+  resolution: "web-ext@npm:9.1.0"
   dependencies:
     "@babel/runtime": 7.28.4
     "@devicefarmer/adbkit": 3.3.8
-    addons-linter: 8.0.0
+    addons-linter: 8.4.0
     camelcase: 8.0.0
     chrome-launcher: 1.2.0
     debounce: 1.2.1
@@ -10165,7 +10177,7 @@ __metadata:
     node-notifier: 10.0.1
     open: 10.2.0
     parse-json: 8.3.0
-    pino: 9.11.0
+    pino: 9.12.0
     promise-toolbox: 0.21.0
     source-map-support: 0.5.21
     strip-bom: 5.0.0
@@ -10177,7 +10189,7 @@ __metadata:
     zip-dir: 2.0.0
   bin:
     web-ext: bin/web-ext.js
-  checksum: 42ae65a73ed42214f076338260b6b276136b38a526488c2b8681a910d007047959b45918af31e985f8a56edacf7613049f70cf71bcd8459c8b667cd9eff5c89c
+  checksum: fab78c76f35c24c6d5c68b8f8a4b17825c3b59242719df2a430793a83056dfab2d99c7c0b91241c8eddfb9bf06fa8f0a071521f553f75a1e235dcecf089266f7
   languageName: node
   linkType: hard
 
