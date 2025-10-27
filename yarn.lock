@@ -6297,7 +6297,7 @@ __metadata:
     git-describe: ^4.1.1
     globals: ^16.4.0
     gulp: ^5.0.1
-    hypothesis: ^1.1719.0
+    hypothesis: ^1.1720.0
     is-equal-shallow: ^0.1.3
     mustache: ^4.2.0
     playwright: ^1.56.1
@@ -6311,10 +6311,10 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"hypothesis@npm:^1.1719.0":
-  version: 1.1719.0
-  resolution: "hypothesis@npm:1.1719.0"
-  checksum: 7f562b90b0b13f28772cfff51ca73e60df87649fdeeecae12b43a898975d981c5a034409c79d266d7f61dc0876535bae027217225fed05397689522fd6a658de
+"hypothesis@npm:^1.1720.0":
+  version: 1.1720.0
+  resolution: "hypothesis@npm:1.1720.0"
+  checksum: f71dcf5621bbcb166fa22e022b31ae6676e1602ef263c18f9a66c46abb7d8f162182d87f920d40286ccd19a9a9241550084dde43da24e7af6e04f1e6e4a723b4
   languageName: node
   linkType: hard
 
