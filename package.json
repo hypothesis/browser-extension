@@ -43,7 +43,7 @@
     "rollup": "^4.53.2",
     "sinon": "^21.0.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.46.3",
+    "typescript-eslint": "^8.47.0",
     "vitest": "^4.0.8",
     "web-ext": "^9.1.0"
   },
