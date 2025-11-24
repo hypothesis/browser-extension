@@ -28,7 +28,7 @@
     "@vitest/eslint-plugin": "^1.4.2",
     "babel-plugin-istanbul": "^7.0.1",
     "babel-plugin-mockable-imports": "^2.0.1",
-    "chai": "^6.2.0",
+    "chai": "^6.2.1",
     "chrome-webstore-upload-cli": "^3.5.0",
     "eslint": "^9.39.1",
     "eslint-config-hypothesis": "^3.3.1",

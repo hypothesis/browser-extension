@@ -3759,6 +3759,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"chai@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "chai@npm:6.2.1"
+  checksum: 92afe77561dbd667649d70c71958f7294fab0c1d0b740eefec9fbc11cc295c8db2be95e9f7c6d067ac3e5db0d29c172ca674d8b5598ea76883eb9cf8a61430a8
+  languageName: node
+  linkType: hard
+
 "chalk@npm:4.1.2, chalk@npm:^4.0.0, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
@@ -6071,7 +6078,7 @@ __metadata:
     "@vitest/eslint-plugin": ^1.4.2
     babel-plugin-istanbul: ^7.0.1
     babel-plugin-mockable-imports: ^2.0.1
-    chai: ^6.2.0
+    chai: ^6.2.1
     chrome-webstore-upload-cli: ^3.5.0
     eslint: ^9.39.1
     eslint-config-hypothesis: ^3.3.1
