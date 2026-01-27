@@ -2644,23 +2644,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sinonjs/fake-timers@npm:^13.0.5":
-  version: 13.0.5
-  resolution: "@sinonjs/fake-timers@npm:13.0.5"
+"@sinonjs/fake-timers@npm:^15.1.0":
+  version: 15.1.0
+  resolution: "@sinonjs/fake-timers@npm:15.1.0"
   dependencies:
     "@sinonjs/commons": ^3.0.1
-  checksum: b1c6ba87fadb7666d3aa126c9e8b4ac32b2d9e84c9e5fd074aa24cab3c8342fd655459de014b08e603be1e6c24c9f9716d76d6d2a36c50f59bb0091be61601dd
+  checksum: 8efe24a0e6dd9eaa2c408531c1c518780520234af0d9ee4f2cb5a0fa8050047350d8f460294921990fbd6cb58a571875a79134f5e1e83ea6c4a7bc82d6b050d1
   languageName: node
   linkType: hard
 
-"@sinonjs/samsam@npm:^8.0.1":
-  version: 8.0.2
-  resolution: "@sinonjs/samsam@npm:8.0.2"
+"@sinonjs/samsam@npm:^8.0.3":
+  version: 8.0.3
+  resolution: "@sinonjs/samsam@npm:8.0.3"
   dependencies:
     "@sinonjs/commons": ^3.0.1
-    lodash.get: ^4.4.2
     type-detect: ^4.1.0
-  checksum: 7dc24a388ea108e513c88edaaacf98cf4ebcbda8c715551b02954ce50db0e26d6071d98ba9594e737da7fe750079a2af94633d7d46ff1481cb940383b441f29b
+  checksum: ba07d44a4efc3c409cdee0d03b407640bf196787e286b0c9933fec0f1aed5837adab5dcb3bf2dc9519fdc6b02890e6f95f8ba26938a6537da8dd58d723a65a6e
   languageName: node
   linkType: hard
 
@@ -4447,10 +4446,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff@npm:^7.0.0":
-  version: 7.0.0
-  resolution: "diff@npm:7.0.0"
-  checksum: 5db0d339476b18dfbc8a08a7504fbcc74789eec626c8d20cf2cdd1871f1448962888128f4447c8f50a1e41a80decfe5e8489c375843b8cf1d42b7c2b611da4e1
+"diff@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "diff@npm:8.0.2"
+  checksum: 0d5556beff9aa688117ef79b1c88eb663df9959bc59946122330932c01e8db5529f914dcc87bf00fd1fecbca75731e6be7c8fabe1e34e10d6557e0536b7c856c
   languageName: node
   linkType: hard
 
@@ -6162,7 +6161,7 @@ __metadata:
     playwright: ^1.57.0
     prettier: 3.7.4
     rollup: ^4.53.3
-    sinon: ^21.0.0
+    sinon: ^21.0.1
     typescript: ^5.9.3
     typescript-eslint: ^8.48.1
     vitest: ^4.0.15
@@ -7131,13 +7130,6 @@ __metadata:
   version: 4.4.0
   resolution: "lodash.flattendeep@npm:4.4.0"
   checksum: 8521c919acac3d4bcf0aaf040c1ca9cb35d6c617e2d72e9b4d51c9a58b4366622cd6077441a18be626c3f7b28227502b3bf042903d447b056ee7e0b11d45c722
-  languageName: node
-  linkType: hard
-
-"lodash.get@npm:^4.4.2":
-  version: 4.4.2
-  resolution: "lodash.get@npm:4.4.2"
-  checksum: e403047ddb03181c9d0e92df9556570e2b67e0f0a930fcbbbd779370972368f5568e914f913e93f3b08f6d492abc71e14d4e9b7a18916c31fa04bd2306efe545
   languageName: node
   linkType: hard
 
@@ -9055,16 +9047,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"sinon@npm:^21.0.0":
-  version: 21.0.0
-  resolution: "sinon@npm:21.0.0"
+"sinon@npm:^21.0.1":
+  version: 21.0.1
+  resolution: "sinon@npm:21.0.1"
   dependencies:
     "@sinonjs/commons": ^3.0.1
-    "@sinonjs/fake-timers": ^13.0.5
-    "@sinonjs/samsam": ^8.0.1
-    diff: ^7.0.0
+    "@sinonjs/fake-timers": ^15.1.0
+    "@sinonjs/samsam": ^8.0.3
+    diff: ^8.0.2
     supports-color: ^7.2.0
-  checksum: 09fd1b8ca981592dd31cac56deaf9abbde3b767d04523fc91b7fa8efd0bd49e1cde71c012aa309a6b6e9cd689be58e3d6f2d0b37db8fd67612cd894cd96eaeb1
+  checksum: d0da218eb1b7e2adf149fc383a41618a4a0c738c6df2b9d61a73fe5a6380dcbbfe1b973f9a93257ba68d099fb325ad375269584f218f55ec8a8ceb74a41e4b9b
   languageName: node
   linkType: hard
 
