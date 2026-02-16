@@ -30,7 +30,7 @@
     "babel-plugin-mockable-imports": "^2.0.1",
     "chai": "^6.2.1",
     "chrome-webstore-upload-cli": "^3.5.0",
-    "eslint": "^9.39.1",
+    "eslint": "^10.0.0",
     "eslint-config-hypothesis": "^3.3.1",
     "git-describe": "^4.1.1",
     "globals": "^16.5.0",
@@ -43,7 +43,7 @@
     "rollup": "^4.53.3",
     "sinon": "^21.0.0",
     "typescript": "^5.9.3",
-    "typescript-eslint": "^8.48.1",
+    "typescript-eslint": "^8.55.0",
     "vitest": "^4.0.15",
     "web-ext": "^9.2.0"
   },
