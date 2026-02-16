@@ -40,7 +40,7 @@
     "mustache": "^4.2.0",
     "playwright": "^1.57.0",
     "prettier": "3.7.4",
-    "rollup": "^4.53.3",
+    "rollup": "^4.57.1",
     "sinon": "^21.0.0",
     "typescript": "^5.9.3",
     "typescript-eslint": "^8.48.1",
