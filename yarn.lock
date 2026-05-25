@@ -3062,9 +3062,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/eslint-plugin@npm:^1.6.17":
-  version: 1.6.17
-  resolution: "@vitest/eslint-plugin@npm:1.6.17"
+"@vitest/eslint-plugin@npm:^1.6.18":
+  version: 1.6.18
+  resolution: "@vitest/eslint-plugin@npm:1.6.18"
   dependencies:
     "@typescript-eslint/scope-manager": ^8.58.0
     "@typescript-eslint/utils": ^8.58.0
@@ -3080,7 +3080,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: fde49049fa9b5168a1f98296becb28cd3df5686223b0a3f3a1cdf85c48d3cda851d869f471137c66e27b2d434f10cf4e96d3a0c869f3d822cd74b1da701105be
+  checksum: 6e3fcfab21c5a5f0649ddb688596abb01f54c31dd09ba420e176cd18d0a4d0368a31541d425ad74cd51ab76d9e7d537606e811c35b9c4d1faa4128cb7d52d58d
   languageName: node
   linkType: hard
 
@@ -6086,7 +6086,7 @@ __metadata:
     "@vitest/browser": ^4.1.7
     "@vitest/browser-playwright": ^4.1.7
     "@vitest/coverage-istanbul": ^4.1.7
-    "@vitest/eslint-plugin": ^1.6.17
+    "@vitest/eslint-plugin": ^1.6.18
     babel-plugin-istanbul: ^7.0.1
     babel-plugin-mockable-imports: ^2.0.1
     chai: ^6.2.2

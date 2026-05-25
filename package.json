@@ -25,7 +25,7 @@
     "@vitest/browser": "^4.1.7",
     "@vitest/browser-playwright": "^4.1.7",
     "@vitest/coverage-istanbul": "^4.1.7",
-    "@vitest/eslint-plugin": "^1.6.17",
+    "@vitest/eslint-plugin": "^1.6.18",
     "babel-plugin-istanbul": "^7.0.1",
     "babel-plugin-mockable-imports": "^2.0.1",
     "chai": "^6.2.2",
