@@ -26,7 +26,7 @@
     "@vitest/browser-playwright": "^4.1.7",
     "@vitest/coverage-istanbul": "^4.1.7",
     "@vitest/eslint-plugin": "^1.6.17",
-    "babel-plugin-istanbul": "^7.0.1",
+    "babel-plugin-istanbul": "^8.0.0",
     "babel-plugin-mockable-imports": "^2.0.1",
     "chai": "^6.2.2",
     "chrome-webstore-upload-cli": "^3.5.0",
