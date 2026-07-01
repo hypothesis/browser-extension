@@ -16,11 +16,24 @@ import rawSettings from '../../build/settings.json';
 /**
  * Configuration data for the extension.
  */
-const settings: Settings = {
-  ...rawSettings,
+const raw = rawSettings as Record<string, unknown>;
 
-  // Ensure API url does not end with '/'
-  apiUrl: rawSettings.apiUrl.replace(/\/$/, ''),
+function isValidSettings(obj: Record<string, unknown>): obj is Record<keyof Settings, unknown> {
+  return (
+    typeof obj.apiUrl === 'string' &&
+    typeof obj.buildType === 'string' &&
+    typeof obj.serviceUrl === 'string'
+  );
+}
+
+if (!isValidSettings(raw)) {
+  throw new Error('Invalid settings.json structure');
+}
+
+const settings: Settings = {
+  apiUrl: raw.apiUrl.replace(/\/$/, ''),
+  buildType: raw.buildType,
+  serviceUrl: raw.serviceUrl,
 };
 
 export default settings;
